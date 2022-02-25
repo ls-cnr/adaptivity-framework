@@ -1,0 +1,164 @@
+
+
+body {
+  font-size: 20px;
+  }
+#credits{
+  	position: fixed;
+    bottom: 2px;
+    right: 50%;
+}
+h3{
+	text-align: center;
+}
+
+img {
+    max-width: 100%;
+    max-height: 100vh;
+    height: auto;
+}
+
+#titleText{
+	text-align: center;
+    font-weight: bold;
+    font-size: 33px;
+}
+#developerDiv{
+	text-align: center;
+    font-weight: bold;
+}
+
+#superVisionerDiv{
+	text-align: center;
+    font-weight: bold;
+}
+
+#people{
+	text-align-last: center;
+}
+#examples {
+    background: none!important;
+    border: none;
+    margin-right: 5px;
+    margin-top: 15px;
+    font-size: 13px;
+    border-bottom: 1px solid #444;
+    cursor: pointer;
+}
+
+#divUpload{
+	margin-left: 5%;
+    margin-right: 5%;
+    margin-bottom: 2%;
+    margin-top: 2%;
+}
+	
+
+#fileInput{
+	margin-left: 34%;
+    margin-right: 10%;
+}
+
+#divResults{
+	margin-left: 5%;
+    margin-right: 5%;
+    margin-bottom: 2%;
+    margin-top: 2%;	
+}
+
+textarea {
+    overflow-y: scroll;
+    margin-right: 11%;
+    margin-bottom: 2%;
+    margin-top: 2%;
+    font-size: 15px;
+}
+
+#my_file {
+    display: none;
+}
+
+#get_file {
+    background: #f9f9f9;
+    border: 1px solid #999;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px;
+    cursor: pointer;
+}
+#customfileupload
+{
+    display: inline;
+    background-color: #fff;
+    font-size: 14px;
+    padding: 10px 30px 10px 30px;
+    margin-left: 10px;
+    width: 250px;
+    border: 1px solid #999;
+    box-shadow: inset 1px 1px 5px #ccc;
+    -webkit-box-shadow: inset 1px 1px 5px #ccc;
+    -moz-box-shadow: inset 0px 0px 4px #ccc;
+    -ms-box-shadow: inset 0px 0px 4px #ccc;
+    -o-box-shadow: inset 0px 0px 4px #ccc;
+    z-index: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+ul.tab {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+}
+
+/* Float the list items side by side */
+ul.tab li {float: left;}
+
+/* Style the links inside the list items */
+ul.tab li a {
+    display: inline-block;
+    color: black;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    transition: 0.3s;
+    font-size: 17px;
+}
+
+/* Change background color of links on hover */
+ul.tab li a:hover {
+    background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+ul.tab li a:focus, .active {
+    background-color: #ccc;
+}
+
+ul.tab li a: .active {
+    background-color: #ccc;
+}
+
+
+/* Style the tab content */
+.tabcontent {
+    display: none;
+    padding: 6px 12px;
+    -webkit-animation: fadeEffect 1s;
+    animation: fadeEffect 1s;
+}
+
+@-webkit-keyframes fadeEffect {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+@keyframes fadeEffect {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>BPMN2GOALS</title>
+<link rel="stylesheet" href="css/style.css">
+
+
+<script type="text/javascript" src="js/script.js"></script>
+ <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+</head>
+<body>
+
+
+<a href="http://ecos.pa.icar.cnr.it/" ><img src="img/ECOSICAR.png" style="align:center;    margin-left: 20% ; margin-top: 10px; margin-bottom: 50px;" /></a> 
+<p id="titleText">BPMN2Goal: a tool for extracting implicit goals from a BPMN2.0 business process</p>
+<br>
+<div id="divUpload">
+<fieldset>
+  <legend>BPMN2Goal Execution:</legend>
+	<br>
+	<label>Quick examples: try some process by OMG: </label>
+	
+	<br>
+	<input type="button" id="examples" value="eMail Voting" onclick="readLocalFile('./process/email_voting_example.bpmn','./img/testCase/email_voting_pic.jpg')"/>
+	<input type="button" id="examples" value="Book Management" onclick="readLocalFile('./process/book_management_example.bpmn','./img/testCase/book_management_pic.jpeg')"/>
+	<input type="button" id="examples" value="Incident Management" onclick="readLocalFile('./process/incident_management_example.bpmn','./img/testCase/incident_management_pic.jpeg')"/>
+	<input type="button" id="examples" value="Hardware Retailer" onclick="readLocalFile('./process/hardware_retailer_example.bpmn','./img/testCase/hardware_retailer_pic.jpeg')"/>
+	<input type="button" id="examples" value="Book Writing" onclick="readLocalFile('./process/book_writing_example.bpmn','./img/testCase/book_writing_pic.jpeg')"/>
+	<input type="button" id="examples" value="Procurement" onclick="readLocalFile('./process/procurement_example.bpmn','./img/testCase/procurement_all_pic.jpg')"/>
+	<br>
+	<br>
+	<br>
+	<label>or... upload your bpmn 2.0 process: </label>
+
+  <div id="fileInput">
+  
+		<input type="button" id="get_file" value="Upload BPMN 2.0 XMI File" onclick="clickFile()"/>
+	    <!-- <label>XMI: </label>
+	    <div id="customfileupload">Select a file</div> -->
+		<input type="file" id="my_file" onchange="uploadXMIFile()"/>
+	
+  </div>
+  
+  
+	
+</fieldset>
+</div>
+
+<div id="divResults">
+<fieldset>
+  <legend>Process</legend>
+
+	<div><img id="bpmn_image" src="" /></div>
+
+
+  <ul class="tab">
+  <li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'BPMN')">BPMN (source)</a></li>
+  <li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'GOALSPEC')" id="goalSPecTab">GOALSPEC (result)</a></li>
+  </ul>
+  
+   <div id="BPMN" class="tabcontent">
+    <p>This is the content of the uploaded file</p>
+	<textarea cols="115" rows="50" id="bpmnTextArea"></textarea>
+   </div>
+
+  <div id="GOALSPEC" class="tabcontent">
+   <p>This is the result of the BPM2Goal transformation</p>
+	<textarea cols="115" rows="50" id="goalsTextArea"></textarea>
+  </div>
+  
+</fieldset>
+</div>
+
+<input type="button" id="credits" value="CREDITS" onclick="popupDialog()"/>
+	<div id="dialog" title="CREDITS" style="display: none;">
+ 	<div id="developerDiv">
+		Development:
+		</div>
+		<br>
+		<div id="people">
+		Fabio Garofalo, Antonella Cavaleri
+		</div>
+		<br>
+		<div id="superVisionerDiv">
+		Supervision:
+		</div>
+		<br>
+		<div id="people">
+		Luca Sabatucci, Massimo Cossentino
+	</div> 
+ 	</div>
+</body>
+</html>
+
+
