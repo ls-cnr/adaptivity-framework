@@ -152,7 +152,7 @@ task launchAgents (type: JavaExec, dependsOn: 'classes') {
         mkdir 'log'
     }
     mainClass = 'jacamo.infra.JaCaMoLauncher'
-    args 'MUSA.jcm'
+    args 'src/main/jacamo/MUSA.jcm'
     classpath sourceSets.main.runtimeClasspath
 }
 
