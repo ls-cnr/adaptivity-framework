@@ -8,19 +8,19 @@
 
 plugins {
     id 'scala'
+    id 'java'
     id 'java-library'
     //id 'maven-publish'
 
-    id 'java-library'
     id 'war'
 }
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
-        vendor = JvmVendorSpec.ADOPTOPENJDK
-    }
-}
+//java {
+//    toolchain {
+//        languageVersion = JavaLanguageVersion.of(17)
+//        vendor = JvmVendorSpec.ADOPTOPENJDK
+//    }
+//}
 
 archivesBaseName = 'adaptivity-framework'
 version = '1.0.0'
@@ -41,9 +41,9 @@ repositories {
     // MOISE with exceptions
     maven { url "https://moise-exceptions.sourceforge.io/maven2" }
 
-    flatDir {
-       dirs 'lib'
-    }
+//    flatDir {
+//       dirs 'lib'
+//    }
 
 }
 
@@ -55,17 +55,6 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.scalatest:scalatest_2.13:3.2.9'
     testImplementation 'org.scalatestplus:junit-4-13_2.13:3.2.2.0'
-
-
-    // This dependency is used internally, and not exposed to consumers on their own compile classpath.
-    //    implementation 'com.google.guava:guava:30.1.1-jre'
-
-    // Use Scalatest for testing our library
-    // Need scala-xml at test runtime
-    //testRuntimeOnly 'org.scala-lang.modules:scala-xml_2.13:1.2.0'
-
-    // This dependency is exported to consumers, that is to say found on their compile classpath.
-    //api 'org.apache.commons:commons-math3:3.6.1'
 
     // Use Jacamo and MOISE with Exceptions
     implementation group: 'org.jacamo',   name: 'jacamo',           version: '0.8'
@@ -91,18 +80,30 @@ configurations.all {
 sourceSets {
     main {
         java {
-            srcDir 'lib/src/main/jacamo/env'
-            srcDir 'lib/src/main/jacamo/agt'
-            srcDir 'lib/src/main/jacamo/org'
+          srcDirs = []
         }
         scala {
-            srcDir 'lib/src/main/jacamo/scalaenv'
+            srcDir 'src/main/scala'
+            srcDir 'src/main/jacamo/scalaenv'
+            srcDir 'src/main/java'
+            srcDir 'src/main/jacamo/env'
+            srcDir 'src/main/jacamo/agt'
+            srcDir 'src/main/jacamo/org'
         }
-        resources {
-            srcDir 'lib/src/main/resources'
-            srcDir 'lib/src/main/webapp'
+//        resources {
+//            srcDir 'src/main/resources'
+//            srcDir 'src/main/webapp'
+//        }
+    }
+    test {
+      java {
+        srcDirs = []
+      }
+        scala {
+            srcDirs 'src/test/scala'
         }
     }
+
 }
 
 
@@ -136,7 +137,7 @@ task uberJarJacamo(type: Jar, dependsOn: 'classes') {
     }
 }
 
-cleanJacamo {
+clean {
     delete 'bin'
     delete 'build'
     delete 'log'
