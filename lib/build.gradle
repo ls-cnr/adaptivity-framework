@@ -143,6 +143,9 @@ clean {
     delete 'log'
 }
 
+task wrapper(type: Wrapper){
+    gradleVersion = '7.2'
+}
 
 
 task launchAgents (type: JavaExec, dependsOn: 'classes') {
@@ -163,3 +166,5 @@ task runGoalExtractor (type: JavaExec, dependsOn: 'classes') {
     //args 'MUSA.jcm'
     classpath sourceSets.main.runtimeClasspath
 }
+
+
