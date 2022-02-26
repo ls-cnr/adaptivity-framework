@@ -218,7 +218,7 @@ object WTSGraph {
 	}
 
 	private def update_wts_labelling(wts: WTSGraph, focus: RawState, new_frontier: Set[RawFrontierItem], new_transitions: Set[RawWTSArc], new_perturbations: Set[RawWTSArc], qos : RawState => Float, invariants:List[RawPredicate]) : WTSLabelling = {
-		var check_full_solution_condition = false
+		var check_full_solution_condition = true
 
 /*
 		// ** list of Frontier and Terminal nodes **
@@ -243,22 +243,27 @@ object WTSGraph {
 			val updated_metric = node.score
 			val updated_label = StateLabel(updated_sup,is_exit,!is_exit,is_exit,is_exit,updated_metric)
 
-			if (is_exit)
-				check_full_solution_condition=true
+			//if (is_exit)
+				//check_full_solution_condition=true
 
 			updated_node_labelling = updated_node_labelling + (node.rete_memory.current -> updated_label)
 		}
 
 		var full_solution = false
-		if (check_full_solution_condition) {
-			full_solution = true
-			for (l<-updated_node_labelling.values) {
-				if (l.is_terminal && !l.is_exit)
-					full_solution=false
-				if (l.is_frontier && !l.is_exit)
-					full_solution=false
-			}
-		}
+
+		//if (check_full_solution_condition) {
+		var local_frontier_nodes = wts.wts_labelling.nodes_labelling.filter(_._2.is_frontier)
+		if (local_frontier_nodes.isEmpty)
+			full_solution=true
+
+//			full_solution = true
+//			for (l<-updated_node_labelling.values) {
+//				if (l.is_terminal && !l.is_exit)
+//					full_solution=false
+//				if (l.is_frontier && !l.is_exit)
+//					full_solution=false
+//			}
+//		}
 
 		// Quality: delegate to specific function
 		val updated_quality = 0//calculate_quality_of_solution(wts,updated_frontier,updated_node_labelling,new_nodes,new_transitions,new_perturbations)

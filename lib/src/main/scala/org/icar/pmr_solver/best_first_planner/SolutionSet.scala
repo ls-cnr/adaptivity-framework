@@ -86,7 +86,7 @@ class SolutionSet(val rete_memory : RETEMemory, qos : RawState => Float, val ini
 	}
 
 
-	/* given a focus node and a set of expansions, it updates all the corresponsing WTS where the exp(s) apply */
+	/* given a focus node and a set of expansions, it updates all the corresponding WTS where the exp(s) apply */
 	def apply_expansions(focus : RawState, exp_due_to_system: List[RawExpansion], exp_due_to_environment: List[RawExpansion]): Unit = {
 		/* update the frontier */
 		for (e<-exp_due_to_system)
