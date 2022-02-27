@@ -26,6 +26,7 @@ case class RawEvoScenario(name: String, probability : Float, dest : RawFrontierI
 object Solver {
 	def apply(problem: Problem,domain: Domain,qos : RawState => Float) : Solver = {
 		val map = new HL2Raw_Map(domain)
+		//println(map.pretty_string())
 
 		val I = RawState.factory(map.state_of_world(problem.I.statements),domain.axioms,map)
 		val rete = RETEBuilder.factory(domain.axioms,map,I)
@@ -96,6 +97,11 @@ class Solver(rete:RETE,init_supervisor:RawGoalModelSupervisor,val available_acti
 		while (!complete && !TerminationDescription.check_termination(conf.termination,start_timestamp,n_iteration,opt_solution_set.get.full_wts.length)) {
 			iteration
 
+//			println("iteration"+n_iteration)
+//			for (wts <- opt_solution_set.get.wts_list)
+//				println( wts.to_graphviz(node => node.toString) )
+//			println("end of iteration"+n_iteration)
+
 			n_iteration += 1
 		}
 
@@ -131,7 +137,8 @@ class Solver(rete:RETE,init_supervisor:RawGoalModelSupervisor,val available_acti
 					exp_due_to_environment = generate_environment_expansion(focus_node_rete_memory,e,focus_node_supervisor) :: exp_due_to_environment
 				}
 
-				solution_set.apply_expansions(focus_node,exp_due_to_system,exp_due_to_environment)
+				if (!exp_due_to_system.isEmpty || !exp_due_to_environment.isEmpty)
+					solution_set.apply_expansions(focus_node,exp_due_to_system,exp_due_to_environment)
 			}
 		}
 	}

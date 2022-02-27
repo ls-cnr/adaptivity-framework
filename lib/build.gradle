@@ -174,3 +174,9 @@ task runPMRExample (type: JavaExec, dependsOn: 'classes') {
     classpath sourceSets.main.runtimeClasspath
 }
 
+task runAAL4E (type: JavaExec, dependsOn: 'classes') {
+    description 'example of pmr'
+    group 'execution'
+    mainClass = 'org.icar.pmr_solver.Test_Solver_AAL4E'
+    classpath sourceSets.main.runtimeClasspath
+}
