@@ -12,32 +12,32 @@ class WTS2Solution(wts:WTSGraph, I : StateOfWorld) {
 
   visit_node(wts.start, StartEvent())
 
-  def visit_node(wts_node: RawState, connect_from : WorkflowItem) : Unit = {
+  def visit_node(wts_node: RawState, connect_from : WorkflowItem, scenario:String="") : Unit = {
     if (!map.contains(wts_node)) {
       val outgoing = wts.transitions.filter(_.origin == wts_node) ++ wts.perturbations.filter(_.origin == wts_node)
       if (outgoing.size == 0) {
         // first element
-        addSequenceFlow(connect_from,EndEvent())
+        addSequenceFlow(connect_from,EndEvent(),scenario)
 
       } else if (outgoing.size == 1) {
         // standard task
         val tx = outgoing.head
         val item = visit_transition(tx)
         val ref_item = map(wts_node)
-        addSequenceFlow(connect_from, ref_item)
+        addSequenceFlow(connect_from, ref_item,scenario)
 
       } else {
         // task with many outcomes
         val item = visit_XOR(outgoing)
         val ref_item = map(wts_node)
-        addSequenceFlow(connect_from, ref_item)
+        addSequenceFlow(connect_from, ref_item,scenario)
       }
 
     } else {
         // loop
         val item = addMergeGateway
 
-        addSequenceFlow(connect_from,item)
+        addSequenceFlow(connect_from,item,scenario)
         val arrival_item = map(wts_node)
 
         map -= (wts_node)
@@ -65,7 +65,7 @@ class WTS2Solution(wts:WTSGraph, I : StateOfWorld) {
     addSequenceFlow(task_item,split_item)
 
     for (tx <- arcs) {
-      visit_node(tx.destination,split_item)
+      visit_node(tx.destination,split_item,tx.scenario_name)
     }
 
     task_item
