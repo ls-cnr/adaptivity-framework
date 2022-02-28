@@ -26,7 +26,6 @@ case class RawEvoScenario(name: String, probability : Float, dest : RawFrontierI
 object Solver {
 	def apply(problem: Problem,domain: Domain,qos : RawState => Float) : Solver = {
 		val map = new HL2Raw_Map(domain)
-		//println(map.pretty_string())
 
 		val I = RawState.factory(map.state_of_world(problem.I.statements),domain.axioms,map)
 		val rete = RETEBuilder.factory(domain.axioms,map,I)
@@ -57,34 +56,10 @@ object Solver {
 
 class Solver(rete:RETE,init_supervisor:RawGoalModelSupervisor,val available_actions:Array[RawAction],val available_perturb:Array[RawAction],qos : RawState => Float) {
 
-//class Solver(val problem: Problem,val domain: Domain,qos : RawState => Float) {
 	var opt_solution_set : Option[SolutionSet] = None;
-/*
-	val map = new HL2Raw_Map(domain)
-
-	val I = RawState.factory(map.state_of_world(problem.I.statements),domain.axioms,map)
-	val rete = RETEBuilder.factory(domain.axioms,map,I)
-	rete.execute
-
-	val specifications: Array[RawLTL] = for (g<-problem.goal_model.goals) yield map.ltl_formula(g)
-	val init_supervisor = RawGoalModelSupervisor.factory(rete.state,specifications)
-
-	val available_actions = (for (a<-problem.actions.sys_action) yield map.system_action(a)).flatten
-	val available_perturb = (for (a<-problem.actions.env_action) yield map.system_action(a)).flatten
-*/
-
 	var num_nodes : Int = 0
 	var elapsed : Long= 0
 
-/*
-	def init_actions(actions: Array[AbstractCapability]): Array[RawAction] = {
-		var list : List[RawAction] = List.empty
-		for (a<-problem.actions.sys_action)
-			list = map.system_action(a)  ::: list
-		list.toArray
-	}
-
-*/
 	/* solver loop with termination conditions */
 	def iterate_until_termination(conf : SolverConfiguration) : Int = {
 		num_nodes=0
@@ -101,12 +76,20 @@ class Solver(rete:RETE,init_supervisor:RawGoalModelSupervisor,val available_acti
 //			for (wts <- opt_solution_set.get.wts_list)
 //				println( wts.to_graphviz(node => node.toString) )
 //			println("end of iteration"+n_iteration)
+//			println()
 
 			n_iteration += 1
 		}
 
 		val end_timestamp: Long = System.currentTimeMillis
 		elapsed = end_timestamp-start_timestamp
+
+//		println("WTS list")
+//		for (wts <- opt_solution_set.get.wts_list)
+//			println( wts.to_graphviz(node => node.toString) )
+//		println("end of WTS list")
+//		println()
+
 		n_iteration
 	}
 

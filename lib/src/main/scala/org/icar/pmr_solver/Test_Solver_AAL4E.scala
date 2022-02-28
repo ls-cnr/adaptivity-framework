@@ -8,15 +8,19 @@ object Test_Solver_AAL4E extends App {
   def qos(n: RawState): Float = 0
 
   val dom_types: Array[DomainType] = Array(
-    StringEnum_DomainType("ROOM", Array("bedroom", "kitchen", "living_room","otherwise")),
+    StringEnum_DomainType("ROOM", Array("bedroom", "kitchen", "living_room")),
     StringEnum_DomainType("ENGAGEMENT", Array("social", "open_mind", "passive", "not_interested")),
     StringEnum_DomainType("ACTIVITY_TYPE", Array("social_activity", "cognitive_exercise", "entertainment", "nothing")),
     StringEnum_DomainType("ENT_CONTENT", Array("selected", "positive_reaction", "neutral_reaction", "negative_reaction")),
+    //StringEnum_DomainType("FOUND_OUTCOME", Array("found_in_room", "not_found", "found_otherwise")),
   )
 
   val preds: Array[DomainPredicate] = Array(
     DomainPredicate("user_location", List(
       DomainVariable("Position", "ROOM"),
+    )),
+    DomainPredicate("user_localization", List(
+      DomainConstant("otherwise"),
     )),
     DomainPredicate("user_engagement", List(
       DomainVariable("Engagement", "ENGAGEMENT"),
@@ -47,17 +51,17 @@ object Test_Solver_AAL4E extends App {
 
     pre = True(),
 
-    post = ExistQuantifier(
-      List(VariableTerm("Position")),
-      Predicate("user_location", List(VariableTerm("Position")))
-    ),
+    post = Disjunction(List(
+      ExistQuantifier(List(VariableTerm("Position")), Predicate("user_location", List(VariableTerm("Position")))),
+      GroundPredicate("user_localization",List(AtomTerm("otherwise")))
+    )),
 
     effects = Array(
       EvolutionGrounding("found", Array[EvoOperator](
         AddOperator(Predicate("user_location", List(VariableTerm("SearchPosition"))))
       )),
       EvolutionGrounding("not_found", Array[EvoOperator](
-        AddOperator(Predicate("user_location", List(AtomTerm("otherwise"))))
+        AddOperator(Predicate("user_localization", List(AtomTerm("otherwise"))))
       )),
     ),
 
@@ -183,7 +187,7 @@ object Test_Solver_AAL4E extends App {
     params = List.empty,
 
     pre = Disjunction(List(
-      GroundPredicate("user_location", List(AtomTerm("otherwise"))),
+      GroundPredicate("user_localization", List(AtomTerm("otherwise"))),
       GroundPredicate("user_engagement", List(AtomTerm("not_interested"))),
       GroundPredicate("performed", List(AtomTerm("social_activity"))),
       GroundPredicate("performed", List(AtomTerm("cognitive_exercise"))),
@@ -212,7 +216,7 @@ object Test_Solver_AAL4E extends App {
       GroundPredicate("activity_registered", List(AtomTerm("done"))),
 
       Disjunction(List(
-        GroundPredicate("user_location", List(AtomTerm("otherwise"))),
+        GroundPredicate("user_localization", List(AtomTerm("otherwise"))),
         GroundPredicate("user_engagement", List(AtomTerm("not_interested"))),
         GroundPredicate("performed", List(AtomTerm("social_activity"))),
         GroundPredicate("performed", List(AtomTerm("cognitive_exercise"))),
@@ -234,7 +238,7 @@ object Test_Solver_AAL4E extends App {
   println("Number of perturbations: " + solver.available_perturb.length)
 
   val its = solver.iterate_until_termination(SolverConfiguration(
-    IterationTermination(20),
+    IterationTermination(50),
     SolutionConfiguration(
       allow_self_loop = false,
       allow_cap_multiple_instance = true,
