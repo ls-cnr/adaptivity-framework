@@ -2,8 +2,8 @@ package org.icar.bpmn2goal
 
 import scala.collection.mutable.ArrayBuffer
 import scala.xml.{Elem, Node, NodeSeq, XML}
-import java.io.{InputStream}
-import org.icar.symbolic.{FormulaParser, GroundPredicate, HL_PredicateFormula, StateOfWorld, Conjunction}
+import java.io.InputStream
+import org.icar.symbolic.{Conjunction, FormulaParser, GoalSPEC, GroundPredicate, HL_PredicateFormula, StateOfWorld, True}
 
 
 
@@ -23,7 +23,7 @@ class bpmn_parser(is : InputStream) {
 
 
 
-	def goals_from_InputStream : List[GoalSPEC] = {
+	def goals_from_InputStream : Array[GoalSPEC] = {
 		var goals : List[GoalSPEC] = List.empty
 
 		if (w.isDefined) {
@@ -33,11 +33,11 @@ class bpmn_parser(is : InputStream) {
 				val task = i.asInstanceOf[Task]
 				val formula = wfstate.temporal_goal(i)
 				if (formula.isDefined)
-					goals = GoalSPEC(task.label.replaceAll(" ","_"),formula.get) :: goals
+					goals = GoalSPEC(task.label.replaceAll(" ","_"),True(),formula.get) :: goals
 			}
 		}
 
-		goals
+		goals.toArray
 	}
 
 	def initial_state : StateOfWorld = {

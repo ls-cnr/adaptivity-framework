@@ -68,6 +68,9 @@ sealed abstract class Term
 abstract class ConstantTerm extends Term {
 	override def hashCode(): Int = toString.hashCode
 }
+case class AnonymousTerm() extends Term {
+	override def toString: String = "_"
+}
 case class VariableTerm(name : String) extends Term {
 	override def toString: String = s"var($name)"
 }

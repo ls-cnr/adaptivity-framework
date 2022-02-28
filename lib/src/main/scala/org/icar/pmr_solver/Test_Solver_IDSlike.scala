@@ -3,7 +3,7 @@ package org.icar.pmr_solver
 
 import org.icar.pmr_solver.best_first_planner.{IterationTermination, SolutionConfiguration, Solver, SolverConfiguration, WTS2Solution, WTSGraph}
 import org.icar.sublevel.{HL2Raw_Map, RawState}
-import org.icar.symbolic.{AbstractCapability, AddOperator, AtomTerm, AvailableActions, Disjunction, Domain, DomainPredicate, DomainType, DomainVariable, EvoOperator, EvolutionGrounding, ExistQuantifier, Finally, GroundPredicate, LTLGoalSet, Predicate, Problem, RmvOperator, StateOfWorld, StringEnum_DomainType, VariableTerm}
+import org.icar.symbolic.{AbstractCapability, AddOperator, AtomTerm, AvailableActions, Disjunction, Domain, DomainPredicate, DomainType, DomainVariable, EvoOperator, EvolutionGrounding, ExistQuantifier, Finally, GoalModel, GoalSPEC, GroundPredicate, LTLGoalSet, Predicate, Problem, RmvOperator, StateOfWorld, StringEnum_DomainType, True, VariableTerm}
 
 
 // TO fix: state [registered(doc),rejected(doc),unavailable(doc),worked(doc)] is considered Exit?
@@ -151,9 +151,9 @@ object Test_Solver_IDSlike extends App {
 	val accepted = GroundPredicate("document", List(AtomTerm("tech_rep"),AtomTerm("accepted")))
 	val rejected = GroundPredicate("document", List(AtomTerm("tech_rep"),AtomTerm("rejected")))
 
-	val goalmodel = LTLGoalSet(Array(
+	val goalmodel = GoalModel(Array(
 
-		Finally(Disjunction(List(accepted,rejected)))
+		GoalSPEC("1",True(),Finally(Disjunction(List(accepted,rejected))))
 
 	))
 	val available = AvailableActions(sys_action,env_action)
@@ -187,12 +187,12 @@ object Test_Solver_IDSlike extends App {
 		println("Number of generated WTS: "+solver.opt_solution_set.get.wts_list.size)
 		println("Number of full WTS: "+solver.opt_solution_set.get.full_wts.size)
 		println("Number of partial WTS: "+solver.opt_solution_set.get.partial_wts.size)
-		println
+		println()
 		//println( solver.opt_solution_set.get.all_solutions_to_graphviz(node => node.toString) )
 
 		val wts: WTSGraph = solver.opt_solution_set.get.wts_list.head
 		val converter = new WTS2Solution(wts,initial)
-		println( converter.to_graphviz )
+		println( converter.to_graphviz() )
 
 	}
 

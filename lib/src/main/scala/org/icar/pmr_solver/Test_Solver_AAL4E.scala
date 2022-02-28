@@ -2,7 +2,7 @@ package org.icar.pmr_solver
 
 import org.icar.pmr_solver.best_first_planner.{IterationTermination, SolutionConfiguration, Solver, SolverConfiguration, WTS2Solution, WTSGraph}
 import org.icar.sublevel.{HL2Raw_Map, RawState}
-import org.icar.symbolic.{AbstractCapability, AddOperator, AtomTerm, AvailableActions, Conjunction, Disjunction, Domain, DomainConstant, DomainPredicate, DomainType, DomainVariable, EvoOperator, EvolutionGrounding, ExistQuantifier, Finally, GroundPredicate, LTLGoalSet, Predicate, Problem, RmvOperator, StateOfWorld, StringEnum_DomainType, True, VariableTerm}
+import org.icar.symbolic.{AbstractCapability, AddOperator, AtomTerm, AvailableActions, Conjunction, Disjunction, Domain, DomainConstant, DomainPredicate, DomainType, DomainVariable, EvoOperator, EvolutionGrounding, ExistQuantifier, Finally, GoalModel, GoalSPEC, GroundPredicate, Implication, LTLGoalSet, Predicate, Problem, RmvOperator, StateOfWorld, StringEnum_DomainType, True, VariableTerm}
 
 object Test_Solver_AAL4E extends App {
   def qos(n: RawState): Float = 0
@@ -225,8 +225,40 @@ object Test_Solver_AAL4E extends App {
     )))
   ))
 
+  val goalset2 = GoalModel(Array(
+    GoalSPEC("1",True(),Finally(Disjunction(List(
+        GroundPredicate("user_engagement", List(AtomTerm("not_interested"))),
+        GroundPredicate("user_engagement", List(AtomTerm("social"))),
+        GroundPredicate("user_engagement", List(AtomTerm("open_mind"))),
+        GroundPredicate("user_engagement", List(AtomTerm("passive"))),
+      )))),
+
+//    GoalSPEC("2",True(),Finally(Disjunction( List(
+//      GroundPredicate("performed", List(AtomTerm("social_activity"))),
+//      GroundPredicate("performed", List(AtomTerm("cognitive_exercise"))),
+//      GroundPredicate("performed", List(AtomTerm("entertainment"))),
+//    )))),
+
+    GoalSPEC("2.1",True(),
+      Implication(GroundPredicate("user_engagement", List(AtomTerm("social"))),Finally(GroundPredicate("performed", List(AtomTerm("social_activity")))))
+    ),
+    GoalSPEC("2.2",True(),
+      Implication(GroundPredicate("user_engagement", List(AtomTerm("open_mind"))),Finally(GroundPredicate("performed", List(AtomTerm("cognitive_exercise")))))
+    ),
+    GoalSPEC("2.3",True(),
+      Implication(GroundPredicate("user_engagement", List(AtomTerm("passive"))),Finally(GroundPredicate("performed", List(AtomTerm("entertainment"))))),
+    ),
+
+    GoalSPEC("3.1",True(),Implication(GroundPredicate("user_localization", List(AtomTerm("otherwise"))),Finally(GroundPredicate("activity_registered", List(AtomTerm("done")))))),
+    GoalSPEC("3.2",True(),Implication(GroundPredicate("user_engagement", List(AtomTerm("not_interested"))),Finally(GroundPredicate("activity_registered", List(AtomTerm("done")))))),
+    GoalSPEC("3.3",True(),Implication(GroundPredicate("performed", List(AtomTerm("social_activity"))),Finally(GroundPredicate("activity_registered", List(AtomTerm("done")))))),
+    GoalSPEC("3.4",True(),Implication(GroundPredicate("performed", List(AtomTerm("cognitive_exercise"))),Finally(GroundPredicate("activity_registered", List(AtomTerm("done")))))),
+    GoalSPEC("3.5",True(),Implication(GroundPredicate("performed", List(AtomTerm("entertainment"))),Finally(GroundPredicate("activity_registered", List(AtomTerm("done")))))),
+
+   ))
+
   val available = AvailableActions(sys_action, env_action)
-  val my_problem = Problem(initial, goalset, available)
+  val my_problem = Problem(initial, goalset2, available)
 
   /* the solver */
   val solver = Solver(my_problem, my_domain, qos)
@@ -259,9 +291,16 @@ object Test_Solver_AAL4E extends App {
 
     if (!solver.opt_solution_set.get.wts_list.isEmpty) {
       for (wts <- solver.opt_solution_set.get.full_wts) {
+        println(wts.to_graphviz(node => node.toString))
         val converter = new WTS2Solution(wts, initial)
         println(converter.to_graphviz())
       }
+      if (solver.opt_solution_set.get.full_wts.isEmpty)
+        for (wts <- solver.opt_solution_set.get.wts_list) {
+          println(wts.to_graphviz(node => node.toString))
+          val converter = new WTS2Solution(wts, initial)
+          println(converter.to_graphviz())
+        }
     }
   }
 }

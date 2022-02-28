@@ -1,10 +1,12 @@
 package org.icar.sublevel
 
+case class RawGoal(id:String,raw_ltl : RawLTL)
+
+
 trait RawPredicate
 case class RawVar(index:Int) extends RawPredicate with RawLTL
 case class RawTT() extends RawPredicate with RawLTL
 case class RawFF() extends RawPredicate with RawLTL
-
 
 trait RawLTL
 case class RawNext(op:RawLTL) extends RawLTL

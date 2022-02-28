@@ -2,20 +2,25 @@ package org.icar.sublevel
 
 case class RawLTLSupervisor(success : Boolean,next_ltl : RawLTL)
 
-case class RawGoalModelSupervisor(sups : Array[RawLTLSupervisor]) {
+case class RawGoalModelSupervisor(sups : Map[String,RawLTLSupervisor]) {
 
 	def check_exit_node : Boolean = {
 		var exit=true
 		for (s <- sups)
-			if (s.next_ltl != RawTT() || !s.success)
+			if (s._2.next_ltl != RawTT() || !s._2.success)
 				exit = false
+
+//		var exit=false
+//		for (s <- sups)
+//			if (s.next_ltl == RawTT() && s.success)
+//				exit = true
 
 		exit
 	}
 
 	def getNext(state:RawState) : RawGoalModelSupervisor = {
-		val array = for (ltl<-sups) yield compute_next(state,ltl.next_ltl)
-		RawGoalModelSupervisor(array)
+		val map = for (goal_map<-sups) yield goal_map._1 -> compute_next(state,goal_map._2.next_ltl)
+		RawGoalModelSupervisor(map)
 	}
 
 	private def compute_next(state : RawState, formula : RawLTL) : RawLTLSupervisor = {
@@ -64,24 +69,37 @@ case class RawGoalModelSupervisor(sups : Array[RawLTLSupervisor]) {
 				val b = r.asInstanceOf[RawLTL]
 				val next_a = compute_next(state,a)
 				val next_b = compute_next(state,b)
+
 				val a_test = next_a.success
 				val next_a_formula = next_a.next_ltl
+
 				val b_test = next_b.success
 				val next_b_formula = next_b.next_ltl
 
 				if (next_a_formula != RawTT() && next_b_formula != RawTT())
 					RawLTLSupervisor(a_test || b_test, RawDisj(next_a_formula, next_b_formula))
 
-				else if (next_b_formula != RawTT())
-					RawLTLSupervisor(a_test || b_test, next_b_formula)
-
-				else if (next_a_formula != RawTT())
-					RawLTLSupervisor(a_test || b_test, next_a_formula)
+//				else if (next_b_formula != RawTT())
+//					RawLTLSupervisor(a_test || b_test, next_b_formula)
+//
+//				else if (next_a_formula != RawTT())
+//					RawLTLSupervisor(a_test || b_test, next_a_formula)
 
 				else
 					RawLTLSupervisor(a_test || b_test, RawTT())
 
 			case RawNeg(RawDisj(a, b)) => compute_next(state,RawConj(RawNeg(a), RawNeg(b)))
+
+			case RawImpl(l, r) =>
+				val a = l.asInstanceOf[RawLTL]
+				val b = r.asInstanceOf[RawLTL]
+
+				val next_a = compute_next(state,a)
+				if (next_a.success) {
+					val next_b = compute_next(state,b)
+					RawLTLSupervisor(next_a.success && next_b.success, next_b.next_ltl)
+				} else
+					RawLTLSupervisor(true, RawImpl(l, r) )
 
 			case RawNext(f) =>
 				RawLTLSupervisor(true, f)
@@ -141,8 +159,12 @@ case class RawGoalModelSupervisor(sups : Array[RawLTLSupervisor]) {
 
 object RawGoalModelSupervisor {
 
-	def factory(init:RawState, goals: Array[RawLTL]) : RawGoalModelSupervisor= {
-		val zero: Array[RawLTLSupervisor] = for (g<-goals) yield RawLTLSupervisor(true,g)
-		RawGoalModelSupervisor(zero).getNext(init)
+	def factory(init:RawState, goals: Array[RawGoal]) : RawGoalModelSupervisor= {
+		var map : Map[String,RawLTLSupervisor] = Map.empty
+		for (g<-goals)
+			map += (g.id -> RawLTLSupervisor(true,g.raw_ltl))
+
+		//val zero: Array[RawLTLSupervisor] = for (g<-goals) yield RawLTLSupervisor(true,g.raw_ltl)
+		RawGoalModelSupervisor(map).getNext(init)
 	}
 }

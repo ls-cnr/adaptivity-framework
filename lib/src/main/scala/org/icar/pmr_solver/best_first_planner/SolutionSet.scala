@@ -3,24 +3,8 @@ package org.icar.pmr_solver.best_first_planner
 import org.icar.rete.RETEMemory
 import org.icar.sublevel.{RawGoalModelSupervisor, RawState}
 
-/******* NOTES AND COMMENTS ********/
-
-// Luca: general improvement: if two partial solutions terminates with the same state
-// and their last couple of actions are the same with inverse order
-// wI -A-> W1 -B-> W2
-// wI -B-> W1 -A-> W2
-// Then A and B can be parallelized:
-// wI -A||B-> W2
-// (see partial order reduction?)
-
-//Remember: if wI -A-> W1 -B-> WI i.e. create a loop without exit, then NOT valid solution
-
-// Luca: solved - defined a global frontier, avoiding at each iteration to browse all the existing WTS.
-
-
-
-
 /******* SOLUTIONS ********/
+// global frontier is a general list of nodes to be expended in all the existing WTS.
 class SolutionSet(val rete_memory : RETEMemory, qos : RawState => Float, val init_goal_sup : RawGoalModelSupervisor, conf : SolutionConfiguration) {
 	val initial_state = rete_memory.current
 	val initial_score = qos(initial_state)
@@ -29,13 +13,9 @@ class SolutionSet(val rete_memory : RETEMemory, qos : RawState => Float, val ini
 
 	private def init() : List[WTSGraph] = {
 		val exit = init_goal_sup.check_exit_node
-		//val frontier_set : Set[RawState] = if (!exit) Set(rete_memory.current) else Set.empty
-		//val terminal_set : Set[RawState] = if (exit) Set(initial_state) else Set.empty
 		val init_label = StateLabel(init_goal_sup,exit,!exit,exit,exit,0)
 
 		val labelling = WTSLabelling(
-			//frontier_set,
-			//terminal_set,
 			Map(initial_state->init_label),
 			0,
 			List.empty,
@@ -100,11 +80,13 @@ class SolutionSet(val rete_memory : RETEMemory, qos : RawState => Float, val ini
 
 		/* check if the expansion is appliable to all the WTS that are not complete */
 		var new_wts_list : List[WTSGraph] = List.empty
-		for (wts <- wts_list)
+		for (wts <- wts_list) {
 			if (wts.isFullSolution || !wts.nodes.contains(focus))
 				new_wts_list = wts :: new_wts_list
-			else
+
+			else //if (wts.nodes.contains(focus))
 				new_wts_list = WTSGraph.update_wts(wts,focus, exp_due_to_system,exp_due_to_environment,qos,conf) ::: new_wts_list
+		}
 
 		wts_list = new_wts_list //check_valid_paths(new_wts_list)
 	}

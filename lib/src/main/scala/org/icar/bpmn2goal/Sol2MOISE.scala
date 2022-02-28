@@ -2,18 +2,18 @@ package org.icar.bpmn2goal
 
 import org.icar.pmr_solver.best_first_planner.{IterationTermination, SolutionConfiguration, Solver, SolverConfiguration, WTSGraph}
 import org.icar.rete.RETEBuilder
-import org.icar.sublevel.{HL2Raw_Map, RawGoalModelSupervisor, RawLTL, RawState}
+import org.icar.sublevel.{HL2Raw_Map, RawGoal, RawGoalModelSupervisor, RawLTL, RawState}
 
 import java.io.FileInputStream
-import org.icar.symbolic.{AbstractCapability, AddOperator, AtomTerm, AvailableActions, Conjunction, Disjunction, Domain, DomainPredicate, DomainType, DomainVariable, EvoOperator, EvolutionGrounding, HL_LTLFormula, LTLGoalSet, Negation, Predicate, Problem, RmvOperator, Solution, SolutionTask, StateOfWorld, StringEnum_DomainType}
+import org.icar.symbolic.{AbstractCapability, AddOperator, AtomTerm, AvailableActions, Conjunction, Disjunction, Domain, DomainPredicate, DomainType, DomainVariable, EvoOperator, EvolutionGrounding, GoalModel, GoalSPEC, HL_LTLFormula, LTLGoalSet, Negation, Predicate, Problem, RmvOperator, Solution, SolutionTask, StateOfWorld, StringEnum_DomainType}
 
 import scala.xml.Elem
 
-case class GoalSPEC(id:String, formula : HL_LTLFormula)
+//case class GoalSPEC(id:String, formula : HL_LTLFormula)
 case class ServiceDescr(agent_id:String,abstractCapability: AbstractCapability)
 
 
-class Sol2MOISE(ontology: Domain, goals:List[GoalSPEC], yellowpage:List[ServiceDescr], initial : StateOfWorld) {
+class Sol2MOISE(ontology: Domain, goalmodel:GoalModel, yellowpage:List[ServiceDescr], initial : StateOfWorld) {
 	var group_num = 1
 	var scheme_num = 1
 	var mission_num = 1
@@ -56,7 +56,6 @@ class Sol2MOISE(ontology: Domain, goals:List[GoalSPEC], yellowpage:List[ServiceD
 		// result of PMR
 		def qos(n: RawState): Float = 0
 
-		val goalmodel = LTLGoalSet((for (g <- goals) yield g.formula).toArray)
 		val sys_action = (for (sd <- yellowpage) yield sd.abstractCapability).toArray
 		val available = AvailableActions(sys_action, Array.empty)
 
@@ -69,8 +68,11 @@ class Sol2MOISE(ontology: Domain, goals:List[GoalSPEC], yellowpage:List[ServiceD
 		val rete = RETEBuilder.factory(ontology.axioms, map, I)
 		rete.execute
 
-		val specifications: Array[RawLTL] = for (g <- the_problem.goal_model.goals) yield map.ltl_formula(g)
-		val init_supervisor = RawGoalModelSupervisor.factory(rete.state, specifications)
+		val specifications: Array[RawGoal] = for (g<-the_problem.goal_model.goals) yield map.goal_spec(g)
+		val init_supervisor = RawGoalModelSupervisor.factory(rete.state,specifications)
+
+		//val specifications: Array[RawLTL] = for (g <- the_problem.goal_model.goals) yield map.ltl_formula(g)
+		//val init_supervisor = RawGoalModelSupervisor.factory(rete.state, specifications)
 
 		val available_actions = (for (a <- the_problem.actions.sys_action) yield map.system_action(a)).flatten
 		val available_perturb = (for (a <- the_problem.actions.env_action) yield map.system_action(a)).flatten
@@ -267,7 +269,7 @@ object Sol2MOISETest extends App {
 
 	val yellowpage: List[ServiceDescr] = load_dummy_yellow_page()
 	val my_domain = load_dummy_domain()
-	val tool = new Sol2MOISE(my_domain, goals, yellowpage, initial)
+	val tool = new Sol2MOISE(my_domain, GoalModel(goals), yellowpage, initial)
 	val p = new scala.xml.PrettyPrinter(160, 4)
 
 	println(p.format(tool.moise_spec))

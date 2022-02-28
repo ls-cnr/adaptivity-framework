@@ -180,3 +180,10 @@ task runAAL4E (type: JavaExec, dependsOn: 'classes') {
     mainClass = 'org.icar.pmr_solver.Test_Solver_AAL4E'
     classpath sourceSets.main.runtimeClasspath
 }
+
+task testSup (type: JavaExec, dependsOn: 'classes') {
+    description 'test_supervisor'
+    group 'execution'
+    mainClass = 'org.icar.sublevel.test_RawSupervisor'
+    classpath sourceSets.main.runtimeClasspath
+}

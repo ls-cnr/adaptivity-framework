@@ -1,8 +1,8 @@
 package org.icar.pmr_solver.best_first_planner
 
-import org.icar.symbolic.{AvailableActions, Domain, LTLGoalSet, Problem}
+import org.icar.symbolic.{AvailableActions, Domain, GoalModel, LTLGoalSet, Problem}
 import org.icar.rete.{RETE, RETEBuilder, RETEMemory}
-import org.icar.sublevel.{HL2Raw_Map, RawAction, RawEvolution, RawGoalModelSupervisor, RawLTL, RawPredicate, RawState}
+import org.icar.sublevel.{HL2Raw_Map, RawAction, RawEvolution, RawGoal, RawGoalModelSupervisor, RawLTL, RawPredicate, RawState}
 
 /******* NOTES AND COMMENTS ********/
 // Luca: to implement:
@@ -31,7 +31,7 @@ object Solver {
 		val rete = RETEBuilder.factory(domain.axioms,map,I)
 		rete.execute
 
-		val specifications: Array[RawLTL] = for (g<-problem.goal_model.goals) yield map.ltl_formula(g)
+		val specifications: Array[RawGoal] = for (g<-problem.goal_model.goals) yield map.goal_spec(g)
 		val init_supervisor = RawGoalModelSupervisor.factory(rete.state,specifications)
 
 		val available_actions = (for (a<-problem.actions.sys_action) yield map.system_action(a)).flatten
@@ -40,11 +40,13 @@ object Solver {
 		new Solver(rete,init_supervisor,available_actions,available_perturb,qos)
 	}
 
-	def mixed_factory(goal_model:LTLGoalSet,actions:AvailableActions,I:RawState,domain: Domain,qos : RawState => Float) : Solver = {
+	def mixed_factory(goal_model:GoalModel,actions:AvailableActions,I:RawState,domain: Domain,qos : RawState => Float) : Solver = {
 		val map = new HL2Raw_Map(domain)
 		val rete = RETEBuilder.factory(domain.axioms,map,I)
 		rete.execute
-		val specifications: Array[RawLTL] = for (g<-goal_model.goals) yield map.ltl_formula(g)
+
+		val specifications: Array[RawGoal] = for (g<-goal_model.goals) yield map.goal_spec(g)
+		//val specifications: Array[RawLTL] = for (g<-goal_model.goals) yield map.ltl_formula(g)
 		val init_supervisor = RawGoalModelSupervisor.factory(rete.state,specifications)
 
 		val available_actions = (for (a<-actions.sys_action) yield map.system_action(a)).flatten

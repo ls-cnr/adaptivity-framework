@@ -2,7 +2,7 @@ package org.icar.pmr_solver.montecarlo
 
 import java.io.{File, PrintWriter}
 import org.icar.rete.{RETE, RETEMemory}
-import org.icar.sublevel.{R2S, RawAction, RawGoalModelSupervisor, RawLTL, RawState, RawTT}
+import org.icar.sublevel.{R2S, RawAction, RawGoal, RawGoalModelSupervisor, RawLTL, RawState, RawTT}
 
 class WTSTreeNode(val my_tree : WTSTree, val parent:WTSTreeNode, val state : RETEMemory, val supervisor : RawGoalModelSupervisor,val legal_actions : Array[RawAction]) {
 
@@ -27,7 +27,7 @@ class WTSTreeNode(val my_tree : WTSTree, val parent:WTSTreeNode, val state : RET
 	def isExit : Boolean = {
 		var exit=true
 		for (s <- supervisor.sups)
-			if (s.next_ltl != RawTT() || !s.success)
+			if (s._2.next_ltl != RawTT() || !s._2.success)
 				exit = false
 
 		exit
@@ -60,9 +60,9 @@ class WTSTreeNode(val my_tree : WTSTree, val parent:WTSTreeNode, val state : RET
 		new WTSTreeNode(my_tree,this,my_tree.rete.memory,next,updated_applicable_actions)
 	}
 
-	private def calculate_resistance(current: RawState, specifications: Array[RawLTL]): Float = {
+	private def calculate_resistance(current: RawState, specifications: Array[RawGoal]): Float = {
 		var r2s : Float = 0
-		for (s<-specifications) r2s += R2S.calculate_resistance(current,s)
+		for (s<-specifications) r2s += R2S.calculate_resistance(current,s.raw_ltl)
 
 		r2s
 	}
@@ -107,7 +107,7 @@ object WTSTreeNode {
 	}
 }
 
-class WTSTree(val rete : RETE, val available_actions : Array[RawAction], val specifications: Array[RawLTL]) {
+class WTSTree(val rete : RETE, val available_actions : Array[RawAction], val specifications: Array[RawGoal]) {
 	val root = generate_node()
 
 	def generate_node() : WTSTreeNode = {

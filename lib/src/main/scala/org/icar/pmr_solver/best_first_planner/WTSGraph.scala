@@ -3,7 +3,7 @@ package org.icar.pmr_solver.best_first_planner
 import java.io.{File, PrintWriter}
 import org.icar.symbolic.{CapabilityGrounding, EndEvent, HL_PredicateFormula, JoinGateway, SequenceFlow, Solution, SolutionTask, SplitGateway, StartEvent, StateOfWorld, True, WorkflowItem}
 import org.icar.rete.RETEMemory
-import org.icar.sublevel.{RawAction, RawGoalModelSupervisor, RawPredicate, RawState}
+import org.icar.sublevel.{RawAction, RawGoalModelSupervisor, RawPredicate, RawState, RawTT}
 
 
 /******* NOTES AND COMMENTS ********/
@@ -17,7 +17,8 @@ case class WTSLabelling(
 	                       nodes_labelling : Map[RawState,StateLabel],  // each node is associated to a set of properties
 	                       quality_of_solution : Float,     // global quality of the (partial) solution
 	                       invariants : List[RawPredicate],  // conditions that must hold in any new node
-	                       full_solution : Boolean
+	                       full_solution : Boolean,
+												 goal_sat_list : Set[String] = Set.empty
                        )
 
 case class StateLabel(
@@ -33,7 +34,7 @@ case class StateLabel(
 case class RawWTSArc(origin : RawState, destination : RawState, probability : Float, action: RawAction, scenario_name : String)
 
 case class WTSGraph(
-	                   start : RawState,
+										 start : RawState,
 	                   nodes : Set[RawState],
 	                   transitions : Set[RawWTSArc],
 	                   perturbations : Set[RawWTSArc],
@@ -43,8 +44,11 @@ case class WTSGraph(
 
 	def node_is_terminal(node: RawState) : Boolean = wts_labelling.nodes_labelling(node).is_terminal
 
-	def isFullSolution : Boolean = wts_labelling.full_solution
-	def isPartialSolution : Boolean = !isFullSolution
+	def isFullSolution : Boolean = {
+		wts_labelling.nodes_labelling(start).sup_array.sups.size == wts_labelling.goal_sat_list.size
+
+	}
+	def isPartialSolution : Boolean = !wts_labelling.full_solution
 
 	def to_graphviz(pretty_string: RawState => String) : String = {
 		var string = "digraph WTS {\n"
@@ -237,8 +241,14 @@ object WTSGraph {
 
 		// for each new node, calculate the new goal_supervisor_array, if it is exit_node, the updated_metric
 		//val focus_supervisor = wts.wts_labelling.labelling(focus).sup_array
+		var updated_goal_sat_list : Set[String] = wts.wts_labelling.goal_sat_list
 		for (node <- new_frontier) {
 			val updated_sup  = node.sup
+			//TO ADD: update goal_sat_list according to updated_sup
+			for (sup <- updated_sup.sups)
+				if (sup._2.next_ltl == RawTT() && sup._2.success)
+					updated_goal_sat_list += sup._1
+
 			val is_exit = updated_sup.check_exit_node
 			val updated_metric = node.score
 			val updated_label = StateLabel(updated_sup,is_exit,!is_exit,is_exit,is_exit,updated_metric)
@@ -269,7 +279,7 @@ object WTSGraph {
 		val updated_quality = 0//calculate_quality_of_solution(wts,updated_frontier,updated_node_labelling,new_nodes,new_transitions,new_perturbations)
 
 		val updated_invariants = wts.wts_labelling.invariants ::: invariants
-		WTSLabelling(updated_node_labelling, updated_quality.toFloat,updated_invariants,full_solution)
+		WTSLabelling(updated_node_labelling, updated_quality.toFloat,updated_invariants,full_solution,updated_goal_sat_list)
 	}
 
 
@@ -317,6 +327,8 @@ object WTSGraph {
 		(new_frontier,new_perturb)
 	}
 
+
+	// obsolete: use WTS2Solution class instead
 	def WTStoSolution(wts:WTSGraph, I : StateOfWorld) : Solution = {
 		var map:Map[RawState,WorkflowItem] = Map.empty
 		var wfitems: Set[WorkflowItem] = Set(StartEvent(),EndEvent())
