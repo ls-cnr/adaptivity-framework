@@ -14,17 +14,17 @@
 
 mas musaprova {
 
-	agent domain_manager: domain_manager.asl {
+	agent domain_manager: src/main/jacamo/agt/domain_manager.asl {
     	join					: musa_ws
 
   }
 
-	agent adaptation_manager: adaptation_manager.asl {
+	agent adaptation_manager: src/main/jacamo/agt/adaptation_manager.asl {
 				join					: musa_ws
 	}
 
 
-	agent monitor_manager: monitor_manager.asl {
+	agent monitor_manager: src/main/jacamo/agt/monitor_manager.asl {
 
     	join					: musa_ws
 			focus 				: musa_ws.environment_variables
@@ -34,14 +34,14 @@ mas musaprova {
 
 	}
 
-	agent solution_manager: solution_manager.asl {
+	agent solution_manager: src/main/jacamo/agt/solution_manager.asl {
     	join					: musa_ws
 			focus 				: musa_ws.abstract_solution_list
 			focus 				: musa_ws.worker_directory
 
 	}
 
-	agent prioritizer: prioritizer.asl  {
+	agent prioritizer: src/main/jacamo/agt/prioritizer.asl  {
 			join					: musa_ws
 			focus 				: musa_ws.abstract_solution_list
 			focus 				: musa_ws.concrete_solution_list
@@ -50,14 +50,14 @@ mas musaprova {
 
 		}
 
-	agent orchestration_manager: orchestration_manager.asl  {
+	agent orchestration_manager: src/main/jacamo/agt/orchestration_manager.asl  {
 	    	join					: musa_ws
 				focus 				: musa_ws.concrete_solution_list
 				focus 				: musa_ws.process_progress
 				focus 				: musa_ws.worker_directory
 	    }
 
-	agent goal_manager: goal_manager.asl  {
+	agent goal_manager: src/main/jacamo/agt/goal_manager.asl  {
 		    	join					: musa_ws
 					focus					: musa_ws.domain_assumption
 					focus					: musa_ws.environment_variables
@@ -66,20 +66,20 @@ mas musaprova {
 
 	}
 
-	agent perceptor1: perceptor.asl	{
+	agent perceptor1: src/main/jacamo/agt/perceptor.asl	{
     	join					: musa_ws
 			focus					: musa_ws.perceptor_directory
     }
-	agent perceptor2: perceptor.asl	{
+	agent perceptor2: src/main/jacamo/agt/perceptor.asl	{
 	    	join					: musa_ws
 				focus					: musa_ws.perceptor_directory
 	  }
 
-		agent validator: validator.asl	{
+		agent validator: src/main/jacamo/agt/validator.asl	{
 				join					: musa_ws
 
 		}
-		agent worker: worker.asl	{
+		agent worker: src/main/jacamo/agt/worker.asl	{
 			  join					: musa_ws
 		}
 
