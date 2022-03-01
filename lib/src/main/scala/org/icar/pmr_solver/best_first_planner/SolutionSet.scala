@@ -1,11 +1,11 @@
 package org.icar.pmr_solver.best_first_planner
 
 import org.icar.rete.RETEMemory
-import org.icar.sublevel.{RawGoalModelSupervisor, RawState}
+import org.icar.sublevel.{RawGoalSetSupervisor, RawState}
 
 /******* SOLUTIONS ********/
 // global frontier is a general list of nodes to be expended in all the existing WTS.
-class SolutionSet(val rete_memory : RETEMemory, qos : RawState => Float, val init_goal_sup : RawGoalModelSupervisor, conf : SolutionConfiguration) {
+class SolutionSet(val rete_memory : RETEMemory, qos : RawState => Float, val init_goal_sup : RawGoalSetSupervisor, conf : SolutionConfiguration) {
 	val initial_state = rete_memory.current
 	val initial_score = qos(initial_state)
 	var global_frontier : List[RawFrontierItem] = List( RawFrontierItem(initial_score,rete_memory,init_goal_sup) )

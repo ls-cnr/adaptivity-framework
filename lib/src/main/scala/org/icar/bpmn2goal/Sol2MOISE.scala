@@ -2,7 +2,7 @@ package org.icar.bpmn2goal
 
 import org.icar.pmr_solver.best_first_planner._
 import org.icar.rete.RETEBuilder
-import org.icar.sublevel.{HL2Raw_Map, RawGoal, RawGoalModelSupervisor, RawState}
+import org.icar.sublevel.{HL2Raw_Map, RawGoal, RawGoalSetSupervisor, RawState}
 import org.icar.symbolic._
 
 import java.io.FileInputStream
@@ -68,7 +68,7 @@ class Sol2MOISE(ontology: Domain, goalmodel:GoalModel, yellowpage:List[ServiceDe
 		rete.execute
 
 		val specifications: Array[RawGoal] = for (g<-the_problem.goal_model.goals) yield map.goal_spec(g)
-		val init_supervisor = RawGoalModelSupervisor.factory(rete.state,specifications)
+		val init_supervisor = RawGoalSetSupervisor.factory(rete.state,specifications)
 
 		//val specifications: Array[RawLTL] = for (g <- the_problem.goal_model.goals) yield map.ltl_formula(g)
 		//val init_supervisor = RawGoalModelSupervisor.factory(rete.state, specifications)

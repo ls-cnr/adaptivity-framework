@@ -3,7 +3,7 @@ package org.icar.pmr_solver.best_first_planner
 import java.io.{File, PrintWriter}
 import org.icar.symbolic.{CapabilityGrounding, EndEvent, HL_PredicateFormula, JoinGateway, SequenceFlow, Solution, SolutionTask, SplitGateway, StartEvent, StateOfWorld, True, WorkflowItem}
 import org.icar.rete.RETEMemory
-import org.icar.sublevel.{RawAction, RawGoalModelSupervisor, RawPredicate, RawState, RawTT}
+import org.icar.sublevel.{RawAction, RawGoalSetSupervisor, RawPredicate, RawState, RawTT}
 
 
 /******* NOTES AND COMMENTS ********/
@@ -22,12 +22,12 @@ case class WTSLabelling(
                        )
 
 case class StateLabel(
-	                     sup_array : RawGoalModelSupervisor,    // the node has a goal supervisor (sat state and next goal)
-	                     is_terminal: Boolean,                  // the node is terminal
-	                     is_frontier : Boolean,                 // the node is part of the frontier
-	                     is_exit : Boolean,                     // the node fully address all the goals
-	                     leads_to_exit : Boolean,               // not implemented: the node leads to an exit node
-	                     metric : Float                         // quality of the node (higher is better)
+											 sup_array : RawGoalSetSupervisor, // the node has a goal supervisor (sat state and next goal)
+											 is_terminal: Boolean, // the node is terminal
+											 is_frontier : Boolean, // the node is part of the frontier
+											 is_exit : Boolean, // the node fully address all the goals
+											 is_trigger : Boolean, // the node is trigger for some goal (by default, the first node of a WTS is always trigger for the root goal)
+											 metric : Float // quality of the node (higher is better)
                      )
 
 /******* WTS GRAPH ********/

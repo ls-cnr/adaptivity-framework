@@ -8,7 +8,7 @@ object test_RawSupervisor extends App {
   val w3 = RawState(Array(true,true,false,true))
 
   def test_var_fail : Unit = {
-    val sup1 = RawGoalModelSupervisor(Map("1"->RawLTLSupervisor(true,RawVar(2))))
+    val sup1 = RawGoalSetSupervisor(Map("1"->RawLTLFormula(true,RawVar(2))))
     println(sup1)
     val sup1_1 = sup1.getNext(w0)
     println(sup1_1)
@@ -20,7 +20,7 @@ object test_RawSupervisor extends App {
     println(sup1_4)
   }
   def test_var_success : Unit = {
-    val sup1 = RawGoalModelSupervisor(Map("1" -> RawLTLSupervisor(true, RawVar(1))))
+    val sup1 = RawGoalSetSupervisor(Map("1" -> RawLTLFormula(true, RawVar(1))))
     println(sup1)
     val sup1_1 = sup1.getNext(w2)
     println(sup1_1)
@@ -32,7 +32,7 @@ object test_RawSupervisor extends App {
     println(sup1_4)
   }
   def test_implication_fail : Unit = {
-    val sup1 = RawGoalModelSupervisor(Map("1" -> RawLTLSupervisor(true, RawImpl(RawVar(0),RawVar(3)))))
+    val sup1 = RawGoalSetSupervisor(Map("1" -> RawLTLFormula(true, RawImpl(RawVar(0),RawVar(3)))))
     println(sup1)
     val sup1_1 = sup1.getNext(w2)
     println(sup1_1)
@@ -44,7 +44,7 @@ object test_RawSupervisor extends App {
     println(sup1_4)
   }
   def test_implication_success : Unit = {
-    val sup1 = RawGoalModelSupervisor(Map("1" -> RawLTLSupervisor(true, RawImpl(RawVar(0),RawVar(1)))))
+    val sup1 = RawGoalSetSupervisor(Map("1" -> RawLTLFormula(true, RawImpl(RawVar(0),RawVar(1)))))
     println(sup1)
     val sup1_1 = sup1.getNext(w2)
     println(sup1_1)
@@ -56,7 +56,7 @@ object test_RawSupervisor extends App {
     println(sup1_4)
   }
   def test_finally_success : Unit = {
-    val sup1 = RawGoalModelSupervisor(Map("1" -> RawLTLSupervisor(true, RawFinally(RawVar(1)))) )
+    val sup1 = RawGoalSetSupervisor(Map("1" -> RawLTLFormula(true, RawFinally(RawVar(1)))) )
     println(sup1)
     val sup1_1 = sup1.getNext(w0)
     println(sup1_1)
@@ -68,7 +68,7 @@ object test_RawSupervisor extends App {
     println(sup1_4)
   }
   def test_globally_fail : Unit = {
-    val sup1 = RawGoalModelSupervisor(Map("1" -> RawLTLSupervisor(true, RawGlobally(RawVar(0)))) )
+    val sup1 = RawGoalSetSupervisor(Map("1" -> RawLTLFormula(true, RawGlobally(RawVar(0)))) )
     println(sup1)
     val sup1_1 = sup1.getNext(w0)
     println(sup1_1)
@@ -80,7 +80,7 @@ object test_RawSupervisor extends App {
     println(sup1_4)
   }
   def test_globally_success : Unit = {
-    val sup1 = RawGoalModelSupervisor(Map("1" -> RawLTLSupervisor(true, RawGlobally(RawNeg(RawVar(2)))) ))
+    val sup1 = RawGoalSetSupervisor(Map("1" -> RawLTLFormula(true, RawGlobally(RawNeg(RawVar(2)))) ))
     println(sup1)
     val sup1_1 = sup1.getNext(w0)
     println(sup1_1)
@@ -92,7 +92,7 @@ object test_RawSupervisor extends App {
     println(sup1_4)
   }
   def test_imply_finally_success : Unit = {
-    val sup1 = RawGoalModelSupervisor(Map("1" -> RawLTLSupervisor(true, RawImpl(RawVar(0),RawFinally(RawVar(3))) )))
+    val sup1 = RawGoalSetSupervisor(Map("1" -> RawLTLFormula(true, RawImpl(RawVar(0),RawFinally(RawVar(3))) )))
     println(sup1)
     val sup1_1 = sup1.getNext(w0)
     println(sup1_1)
@@ -104,7 +104,7 @@ object test_RawSupervisor extends App {
     println(sup1_4)
   }
   def test_disj_finally_success : Unit = {
-    val sup1 = RawGoalModelSupervisor(Map("1" -> RawLTLSupervisor(true, RawDisj(RawFinally(RawVar(1)),RawFinally(RawVar(3))) )))
+    val sup1 = RawGoalSetSupervisor(Map("1" -> RawLTLFormula(true, RawDisj(RawFinally(RawVar(1)),RawFinally(RawVar(3))) )))
     println(sup1)
     val sup1_1 = sup1.getNext(w0)
     println(sup1_1)
@@ -116,7 +116,7 @@ object test_RawSupervisor extends App {
     println(sup1_4)
   }
   def test_finally_disj_success : Unit = {
-    val sup1 = RawGoalModelSupervisor(Map("1" -> RawLTLSupervisor(true, RawFinally(RawDisj(RawVar(1),RawVar(3))) )))
+    val sup1 = RawGoalSetSupervisor(Map("1" -> RawLTLFormula(true, RawFinally(RawDisj(RawVar(1),RawVar(3))) )))
     println(sup1)
     val sup1_1 = sup1.getNext(w0)
     println(sup1_1)
@@ -128,7 +128,7 @@ object test_RawSupervisor extends App {
     println(sup1_4)
   }
   def test_conj_finally_success : Unit = {
-    val sup1 = RawGoalModelSupervisor(Map("1" -> RawLTLSupervisor(true, RawConj(RawFinally(RawVar(1)),RawFinally(RawVar(3))) )))
+    val sup1 = RawGoalSetSupervisor(Map("1" -> RawLTLFormula(true, RawConj(RawFinally(RawVar(1)),RawFinally(RawVar(3))) )))
     println(sup1)
     val sup1_1 = sup1.getNext(w0)
     println(sup1_1)
@@ -140,7 +140,7 @@ object test_RawSupervisor extends App {
     println(sup1_4)
   }
   def test_finally_conj_success : Unit = {
-    val sup1 = RawGoalModelSupervisor(Map("1" -> RawLTLSupervisor(true, RawFinally(RawConj(RawVar(1),RawVar(3))) )))
+    val sup1 = RawGoalSetSupervisor(Map("1" -> RawLTLFormula(true, RawFinally(RawConj(RawVar(1),RawVar(3))) )))
     println(sup1)
     val sup1_1 = sup1.getNext(w0)
     println(sup1_1)
@@ -152,7 +152,7 @@ object test_RawSupervisor extends App {
     println(sup1_4)
   }
   def test_finally_conj_fail : Unit = {
-    val sup1 = RawGoalModelSupervisor(Map("1" -> RawLTLSupervisor(true, RawFinally(RawConj(RawVar(1),RawVar(2))) )))
+    val sup1 = RawGoalSetSupervisor(Map("1" -> RawLTLFormula(true, RawFinally(RawConj(RawVar(1),RawVar(2))) )))
     println(sup1)
     val sup1_1 = sup1.getNext(w0)
     println(sup1_1)

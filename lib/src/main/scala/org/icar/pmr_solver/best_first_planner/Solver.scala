@@ -11,7 +11,7 @@ import org.icar.symbolic.{AvailableActions, Domain, GoalModel, Problem}
 
 
 /******* SYMBOLIC SOLVER ********/
-case class RawFrontierItem(score:Float, rete_memory:RETEMemory, sup:RawGoalModelSupervisor) extends Ordered[RawFrontierItem] {
+case class RawFrontierItem(score:Float, rete_memory:RETEMemory, sup:RawGoalSetSupervisor) extends Ordered[RawFrontierItem] {
 	override def compare(that: RawFrontierItem) = that.score compare this.score
 }
 
@@ -32,7 +32,7 @@ object Solver {
 		rete.execute
 
 		val specifications: Array[RawGoal] = for (g<-problem.goal_model.goals) yield map.goal_spec(g)
-		val init_supervisor = RawGoalModelSupervisor.factory(rete.state,specifications)
+		val init_supervisor = RawGoalSetSupervisor.factory(rete.state,specifications)
 
 		val available_actions = (for (a<-problem.actions.sys_action) yield map.system_action(a)).flatten
 		val available_perturb = (for (a<-problem.actions.env_action) yield map.system_action(a)).flatten
@@ -47,7 +47,7 @@ object Solver {
 
 		val specifications: Array[RawGoal] = for (g<-goal_model.goals) yield map.goal_spec(g)
 		//val specifications: Array[RawLTL] = for (g<-goal_model.goals) yield map.ltl_formula(g)
-		val init_supervisor = RawGoalModelSupervisor.factory(rete.state,specifications)
+		val init_supervisor = RawGoalSetSupervisor.factory(rete.state,specifications)
 
 		val available_actions = (for (a<-actions.sys_action) yield map.system_action(a)).flatten
 		val available_perturb = (for (a<-actions.env_action) yield map.system_action(a)).flatten
@@ -56,7 +56,7 @@ object Solver {
 	}
 }
 
-class Solver(rete:RETE,init_supervisor:RawGoalModelSupervisor,val available_actions:Array[RawAction],val available_perturb:Array[RawAction],qos : RawState => Float) {
+class Solver(rete:RETE, init_supervisor:RawGoalSetSupervisor, val available_actions:Array[RawAction], val available_perturb:Array[RawAction], qos : RawState => Float) {
 
 	var opt_solution_set : Option[SolutionSet] = None;
 	var num_nodes : Int = 0
@@ -104,7 +104,7 @@ class Solver(rete:RETE,init_supervisor:RawGoalModelSupervisor,val available_acti
 			if (somenodeinfrontier.isDefined) {
 				val focus_node_rete_memory: RETEMemory = somenodeinfrontier.get.rete_memory
 				val focus_node = focus_node_rete_memory.current
-				val focus_node_supervisor: RawGoalModelSupervisor = somenodeinfrontier.get.sup
+				val focus_node_supervisor: RawGoalSetSupervisor = somenodeinfrontier.get.sup
 
 				val actions : Array[RawAction] = applicable_capabilities(focus_node)
 				val envs = applicable_perturbations(focus_node)
@@ -132,7 +132,7 @@ class Solver(rete:RETE,init_supervisor:RawGoalModelSupervisor,val available_acti
 	private def applicable_capabilities(node : RawState) : Array[RawAction] = {for (a<-available_actions if node.satisfies(a.pre)) yield a}
 	private def applicable_perturbations(node : RawState) : Array[RawAction] = {for (a<-available_perturb if node.satisfies(a.pre)) yield a}
 
-	private def generate_system_expansion(start_rete_memory : RETEMemory, action : RawAction, su : RawGoalModelSupervisor) : RawExpansion = {
+	private def generate_system_expansion(start_rete_memory : RETEMemory, action : RawAction, su : RawGoalSetSupervisor) : RawExpansion = {
 		require(opt_solution_set.isDefined)
 
 		val source_node : RawState = start_rete_memory.current;
@@ -140,7 +140,7 @@ class Solver(rete:RETE,init_supervisor:RawGoalModelSupervisor,val available_acti
 		RawExpansion(action,source_node,trajectory,action.invariants)
 	}
 
-	private def generate_environment_expansion(start_rete_memory : RETEMemory, action : RawAction, su : RawGoalModelSupervisor) : RawExpansion = {
+	private def generate_environment_expansion(start_rete_memory : RETEMemory, action : RawAction, su : RawGoalSetSupervisor) : RawExpansion = {
 
 		val source_node = start_rete_memory.current
 
@@ -148,7 +148,7 @@ class Solver(rete:RETE,init_supervisor:RawGoalModelSupervisor,val available_acti
 		RawExpansion(action,source_node,trajectory,action.invariants)
 	}
 
-	private def calculate_evolution(start_rete_memory : RETEMemory, evo_description : RawEvolution, supervisor : RawGoalModelSupervisor) : RawEvoScenario = {
+	private def calculate_evolution(start_rete_memory : RETEMemory, evo_description : RawEvolution, supervisor : RawGoalSetSupervisor) : RawEvoScenario = {
 		require(opt_solution_set.isDefined)
 
 		rete.memory = start_rete_memory.copy

@@ -2,9 +2,9 @@ package org.icar.pmr_solver.montecarlo
 
 import java.io.{File, PrintWriter}
 import org.icar.rete.{RETE, RETEMemory}
-import org.icar.sublevel.{R2S, RawAction, RawGoal, RawGoalModelSupervisor, RawLTL, RawState, RawTT}
+import org.icar.sublevel.{R2S, RawAction, RawGoal, RawGoalSetSupervisor, RawLTL, RawState, RawTT}
 
-class WTSTreeNode(val my_tree : WTSTree, val parent:WTSTreeNode, val state : RETEMemory, val supervisor : RawGoalModelSupervisor,val legal_actions : Array[RawAction]) {
+class WTSTreeNode(val my_tree : WTSTree, val parent:WTSTreeNode, val state : RETEMemory, val supervisor : RawGoalSetSupervisor, val legal_actions : Array[RawAction]) {
 
 	val id = WTSTreeNode.next_id
 	val children : Array[Option[WTSTreeNode]] = Array.fill(legal_actions.length)(None)
@@ -62,7 +62,7 @@ class WTSTreeNode(val my_tree : WTSTree, val parent:WTSTreeNode, val state : RET
 
 	private def calculate_resistance(current: RawState, specifications: Array[RawGoal]): Float = {
 		var r2s : Float = 0
-		for (s<-specifications) r2s += R2S.calculate_resistance(current,s.raw_ltl)
+		for (s<-specifications) r2s += R2S.calculate_resistance(current,s.post)
 
 		r2s
 	}
@@ -111,7 +111,7 @@ class WTSTree(val rete : RETE, val available_actions : Array[RawAction], val spe
 	val root = generate_node()
 
 	def generate_node() : WTSTreeNode = {
-		val init_supervisor = RawGoalModelSupervisor.factory(rete.state,specifications)
+		val init_supervisor = RawGoalSetSupervisor.factory(rete.state,specifications)
 		val applicable_actions : Array[RawAction] = for (a<-available_actions if rete.state.satisfies(a.pre)) yield a
 		new WTSTreeNode(this,null,rete.memory,init_supervisor,applicable_actions)
 	}
