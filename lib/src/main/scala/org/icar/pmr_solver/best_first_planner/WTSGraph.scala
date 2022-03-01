@@ -1,5 +1,7 @@
 package org.icar.pmr_solver.best_first_planner
 
+import org.icar.pmr_solver.SolutionConfiguration
+
 import java.io.{File, PrintWriter}
 import org.icar.symbolic.{CapabilityGrounding, EndEvent, HL_PredicateFormula, JoinGateway, SequenceFlow, Solution, SolutionTask, SplitGateway, StartEvent, StateOfWorld, True, WorkflowItem}
 import org.icar.rete.RETEMemory

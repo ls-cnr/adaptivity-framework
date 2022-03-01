@@ -1,4 +1,4 @@
-package org.icar.pmr_solver.best_first_planner
+package org.icar.pmr_solver
 
 case class SolverConfiguration (termination : TerminationDescription,sol_conf : SolutionConfiguration)
 

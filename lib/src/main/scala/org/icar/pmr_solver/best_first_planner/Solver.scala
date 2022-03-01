@@ -1,5 +1,6 @@
 package org.icar.pmr_solver.best_first_planner
 
+import org.icar.pmr_solver.{SolverConfiguration, TerminationDescription}
 import org.icar.rete.{RETE, RETEBuilder, RETEMemory}
 import org.icar.sublevel._
 import org.icar.symbolic.{AvailableActions, Domain, GoalModel, Problem}

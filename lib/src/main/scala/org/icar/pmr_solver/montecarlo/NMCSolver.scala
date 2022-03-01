@@ -1,6 +1,6 @@
 package org.icar.pmr_solver.montecarlo
 
-import org.icar.pmr_solver.best_first_planner.TerminationDescription
+import org.icar.pmr_solver.TerminationDescription
 import org.icar.symbolic.{Domain, Problem}
 import org.icar.rete.RETEBuilder
 import org.icar.sublevel.{HL2Raw_Map, RawGoal, RawLTL, RawState}

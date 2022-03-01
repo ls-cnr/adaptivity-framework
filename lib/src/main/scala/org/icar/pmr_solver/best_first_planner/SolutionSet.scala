@@ -1,5 +1,6 @@
 package org.icar.pmr_solver.best_first_planner
 
+import org.icar.pmr_solver.SolutionConfiguration
 import org.icar.rete.RETEMemory
 import org.icar.sublevel.{RawGoalSetSupervisor, RawState}
 

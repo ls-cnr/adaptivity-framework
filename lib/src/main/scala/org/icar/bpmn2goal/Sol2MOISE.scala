@@ -1,5 +1,6 @@
 package org.icar.bpmn2goal
 
+import org.icar.pmr_solver.{IterationTermination, SolutionConfiguration, SolverConfiguration}
 import org.icar.pmr_solver.best_first_planner._
 import org.icar.rete.RETEBuilder
 import org.icar.sublevel.{HL2Raw_Map, RawGoal, RawGoalSetSupervisor, RawState}
