@@ -1,8 +1,8 @@
 package org.icar.pmr_solver.best_first_planner
 
-import org.icar.symbolic.{AvailableActions, Domain, GoalModel, LTLGoalSet, Problem}
 import org.icar.rete.{RETE, RETEBuilder, RETEMemory}
-import org.icar.sublevel.{HL2Raw_Map, RawAction, RawEvolution, RawGoal, RawGoalModelSupervisor, RawLTL, RawPredicate, RawState}
+import org.icar.sublevel._
+import org.icar.symbolic.{AvailableActions, Domain, GoalModel, Problem}
 
 /******* NOTES AND COMMENTS ********/
 // Luca: to implement:

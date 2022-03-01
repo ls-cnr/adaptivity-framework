@@ -3,6 +3,7 @@ package org.icar.rete
 import org.icar.sublevel.{HL2Raw_Map, RawState}
 import org.icar.symbolic.{Axiom, ConstantTerm, NegateCondition, Predicate, PredicateCondition, Rule, Term, VariableTerm}
 
+/* AnonymousTerm not yet supported */
 
 object RETEBuilder {
 	case class RETENodeDefinition(node:RETENode, terms: List[Term])
@@ -106,6 +107,7 @@ object RETEBuilder {
 						cons_term match {
 							case term: ConstantTerm => pn_inf_terms = Fix(term) :: pn_inf_terms
 							case VariableTerm(name) => pn_inf_terms = Match( search_first_occurrence(beta_terms,name)) :: pn_inf_terms
+							case _ =>
 						}
 
 					// create the pnode
@@ -136,6 +138,7 @@ object RETEBuilder {
 				case term: ConstantTerm =>
 				case VariableTerm(name) =>
 					if (name == var_name) occ = index
+				case _ =>
 			}
 			index += 1
 		}

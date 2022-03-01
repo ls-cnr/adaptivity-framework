@@ -1,8 +1,8 @@
 package org.icar.pmr_solver
 
-import org.icar.pmr_solver.best_first_planner.{IterationTermination, SolutionConfiguration, Solver, SolverConfiguration, WTS2Solution, WTSGraph}
+import org.icar.pmr_solver.best_first_planner._
 import org.icar.sublevel.{HL2Raw_Map, RawState}
-import org.icar.symbolic.{AbstractCapability, AddOperator, AtomTerm, AvailableActions, Conjunction, Disjunction, Domain, DomainConstant, DomainPredicate, DomainType, DomainVariable, EvoOperator, EvolutionGrounding, ExistQuantifier, Finally, GoalModel, GoalSPEC, GroundPredicate, Implication, LTLGoalSet, Predicate, Problem, RmvOperator, StateOfWorld, StringEnum_DomainType, True, VariableTerm}
+import org.icar.symbolic._
 
 object Test_Solver_AAL4E extends App {
   def qos(n: RawState): Float = 0
@@ -211,8 +211,8 @@ object Test_Solver_AAL4E extends App {
   /* the problem */
   val initial = StateOfWorld(List())
 
-  val goalset = LTLGoalSet(Array(
-    Finally(Conjunction(List(
+  val goalset = GoalModel(Array(
+    GoalSPEC("1",True(),Finally(Conjunction(List(
       GroundPredicate("activity_registered", List(AtomTerm("done"))),
 
       Disjunction(List(
@@ -222,7 +222,7 @@ object Test_Solver_AAL4E extends App {
         GroundPredicate("performed", List(AtomTerm("cognitive_exercise"))),
         GroundPredicate("performed", List(AtomTerm("entertainment"))),
       ))
-    )))
+    ))))
   ))
 
   val goalset2 = GoalModel(Array(

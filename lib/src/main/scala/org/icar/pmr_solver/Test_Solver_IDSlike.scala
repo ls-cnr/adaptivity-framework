@@ -1,9 +1,9 @@
 package org.icar.pmr_solver
 
 
-import org.icar.pmr_solver.best_first_planner.{IterationTermination, SolutionConfiguration, Solver, SolverConfiguration, WTS2Solution, WTSGraph}
+import org.icar.pmr_solver.best_first_planner._
 import org.icar.sublevel.{HL2Raw_Map, RawState}
-import org.icar.symbolic.{AbstractCapability, AddOperator, AtomTerm, AvailableActions, Disjunction, Domain, DomainPredicate, DomainType, DomainVariable, EvoOperator, EvolutionGrounding, ExistQuantifier, Finally, GoalModel, GoalSPEC, GroundPredicate, LTLGoalSet, Predicate, Problem, RmvOperator, StateOfWorld, StringEnum_DomainType, True, VariableTerm}
+import org.icar.symbolic._
 
 
 // TO fix: state [registered(doc),rejected(doc),unavailable(doc),worked(doc)] is considered Exit?

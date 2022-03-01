@@ -5,6 +5,9 @@ import org.icar.symbolic._
 import scala.collection.mutable.ArrayBuffer
 import scala.language.postfixOps
 
+/* AnonymousTerm not yet supported */
+
+
 /*
  * direct: predicate1 -> var_index (map)
  * inverse: var_index -> predicate1 (arraybuffer)

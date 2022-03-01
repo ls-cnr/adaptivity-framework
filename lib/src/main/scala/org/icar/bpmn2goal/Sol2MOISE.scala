@@ -1,12 +1,11 @@
 package org.icar.bpmn2goal
 
-import org.icar.pmr_solver.best_first_planner.{IterationTermination, SolutionConfiguration, Solver, SolverConfiguration, WTSGraph}
+import org.icar.pmr_solver.best_first_planner._
 import org.icar.rete.RETEBuilder
-import org.icar.sublevel.{HL2Raw_Map, RawGoal, RawGoalModelSupervisor, RawLTL, RawState}
+import org.icar.sublevel.{HL2Raw_Map, RawGoal, RawGoalModelSupervisor, RawState}
+import org.icar.symbolic._
 
 import java.io.FileInputStream
-import org.icar.symbolic.{AbstractCapability, AddOperator, AtomTerm, AvailableActions, Conjunction, Disjunction, Domain, DomainPredicate, DomainType, DomainVariable, EvoOperator, EvolutionGrounding, GoalModel, GoalSPEC, HL_LTLFormula, LTLGoalSet, Negation, Predicate, Problem, RmvOperator, Solution, SolutionTask, StateOfWorld, StringEnum_DomainType}
-
 import scala.xml.Elem
 
 //case class GoalSPEC(id:String, formula : HL_LTLFormula)

@@ -120,9 +120,9 @@ class WTS2Solution(wts:WTSGraph, I : StateOfWorld) {
     n match {
       case StartEvent() => "start"
       case EndEvent() => "end"
-      case SolutionTask(id, grounding) => id+"_"+grounding.unique_id
+      case SolutionTask(id, grounding) => s"${id}_${grounding.unique_id}"
       case JoinGateway(id) => "J"+id
-      case SplitGateway(id, outport) => "S"+id
+      case SplitGateway(id, outport) => s"S${id}"
     }
   }
   private def print_item_decoration(n: WorkflowItem): String = {
