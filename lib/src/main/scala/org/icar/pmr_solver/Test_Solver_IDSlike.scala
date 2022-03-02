@@ -161,15 +161,7 @@ object Test_Solver_IDSlike extends App {
 
 
 	/* the solver */
-	val solver = Solver(my_problem,my_domain,qos)
-
-	println("**Domain**")
-	println("Number of predicates: "+map.inverse.size)
-	println("Number of goals: "+goalmodel.goals.length)
-	println("Number of actions: "+solver.available_actions.length)
-	println("Number of perturbations: "+solver.available_perturb.length)
-
-	val its=solver.iterate_until_termination(SolverConfiguration(
+	val solver = Solver(my_problem,my_domain,qos,SolverConfiguration(
 		IterationTermination(20),
 		SolutionConfiguration(
 			allow_self_loop = false,
@@ -177,23 +169,27 @@ object Test_Solver_IDSlike extends App {
 			allow_loop = true,
 			allow_parallel_action = true)))
 
-	if (solver.opt_solution_set.isDefined) {
+	println("**Domain**")
+	println("Number of predicates: "+map.inverse.size)
+	println("Number of goals: "+goalmodel.goals.length)
+	println("Number of actions: "+solver.available_actions.length)
+	println("Number of perturbations: "+solver.available_perturb.length)
 
+	val its=solver.iterate_until_termination()
 
-		println("**Planning**")
-		println("Number of iterations: "+its)
+	println("**Planning**")
+	println("Number of iterations: "+its)
 
-		println("**Solutions**")
-		println("Number of generated WTS: "+solver.opt_solution_set.get.wts_list.size)
-		println("Number of full WTS: "+solver.opt_solution_set.get.full_wts.size)
-		println("Number of partial WTS: "+solver.opt_solution_set.get.partial_wts.size)
-		println()
-		//println( solver.opt_solution_set.get.all_solutions_to_graphviz(node => node.toString) )
+	println("**Solutions**")
+	println("Number of generated WTS: "+solver.solution_set.wts_list.size)
+	println("Number of full WTS: "+solver.solution_set.full_wts.size)
+	println("Number of partial WTS: "+solver.solution_set.partial_wts.size)
+	println()
+	//println( solver.opt_solution_set.get.all_solutions_to_graphviz(node => node.toString) )
 
-		val wts: WTSGraph = solver.opt_solution_set.get.wts_list.head
-		val converter = new WTS2Solution(wts,initial)
-		println( converter.to_graphviz() )
+	val wts: WTSGraph = solver.solution_set.wts_list.head
+	val converter = new WTS2Solution(wts,initial)
+	println( converter.to_graphviz() )
 
-	}
 
 }

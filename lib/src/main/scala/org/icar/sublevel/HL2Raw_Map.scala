@@ -241,7 +241,7 @@ class HL2Raw_Map(domain: Domain) {
 		predicate_quantifier(p,0,Map.empty)
 	}
 
-	def goal_spec(g: GoalSPEC) : RawGoal = RawGoal(g.id,ltl_formula(g.pre),ltl_formula(g.post))
+	def goal_spec(g: GoalSPEC) : RawGoal = RawGoal(g.id,predicate_formula(g.pre),ltl_formula(g.post))
 
 	def ltl_formula(f:HL_LTLFormula) : RawLTL = {
 		f match {

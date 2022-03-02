@@ -144,7 +144,7 @@ case class RawLTLFormula(success : Boolean, next_ltl : RawLTL) {
 
 
 /******* GOALSET SUPERVISOR ********/
-
+// this should replace RawLTLFormula inside RawGoalSetSupervisor
 case class RawGoalSPECSupervisor(id:String,pre:RawLTLFormula,post:RawLTLFormula)
 
 case class RawGoalSetSupervisor(sups : Map[String,RawLTLFormula]) {

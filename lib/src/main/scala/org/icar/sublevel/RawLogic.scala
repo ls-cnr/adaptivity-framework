@@ -1,6 +1,6 @@
 package org.icar.sublevel
 
-case class RawGoal(id:String,pre : RawLTL,post : RawLTL)
+case class RawGoal(id:String,pre : RawPredicate,post : RawLTL)
 
 
 trait RawPredicate

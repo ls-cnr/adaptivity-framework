@@ -69,37 +69,35 @@ class Sol2MOISE(ontology: Domain, goalmodel:GoalModel, yellowpage:List[ServiceDe
 		rete.execute
 
 		val specifications: Array[RawGoal] = for (g<-the_problem.goal_model.goals) yield map.goal_spec(g)
-		val init_supervisor = RawGoalSetSupervisor.factory(rete.state,specifications)
-
-		//val specifications: Array[RawLTL] = for (g <- the_problem.goal_model.goals) yield map.ltl_formula(g)
-		//val init_supervisor = RawGoalModelSupervisor.factory(rete.state, specifications)
 
 		val available_actions = (for (a <- the_problem.actions.sys_action) yield map.system_action(a)).flatten
 		val available_perturb = (for (a <- the_problem.actions.env_action) yield map.system_action(a)).flatten
 
-		val solver = new Solver(rete, init_supervisor, available_actions, available_perturb, qos)
+		val conf = SolverConfiguration(IterationTermination(20), SolutionConfiguration(allow_self_loop = false, allow_cap_multiple_instance = true, allow_loop = true, allow_parallel_action = true))
+		val solver = new Solver(rete, specifications, available_actions, available_perturb, qos,conf)
 
+		val its = solver.iterate_until_termination()
 
-		//val solver = Solver(the_problem,ontology,qos)
-		val its = solver.iterate_until_termination(SolverConfiguration(IterationTermination(20), SolutionConfiguration(allow_self_loop = false, allow_cap_multiple_instance = true, allow_loop = true, allow_parallel_action = true)))
-
-		if (solver.opt_solution_set.isDefined) {
 			println("**Planning**")
 			println("Number of iterations: " + its)
 
 			println("**WTS**")
-			println("Number of generated WTS: " + solver.opt_solution_set.get.wts_list.size)
-			println("Number of full WTS: " + solver.opt_solution_set.get.full_wts.size)
-			println("Number of partial WTS: " + solver.opt_solution_set.get.partial_wts.size)
+			println("Number of generated WTS: " + solver.solution_set.wts_list.size)
+			println("Number of full WTS: " + solver.solution_set.full_wts.size)
+			println("Number of partial WTS: " + solver.solution_set.partial_wts.size)
 			//println( solver.opt_solution_set.get.all_solutions_to_graphviz( _.toString ) )
 			//println( solver.opt_solution_set.get.all_solutions_to_graphviz( map.pretty_string ) )
 
-			val wts_list = solver.opt_solution_set.get.wts_list
+			val wts_list = solver.solution_set.wts_list
 
 
 			println("**Solutions**")
-			val solutions: List[Solution] = for (g <- wts_list) yield WTSGraph.WTStoSolution(g, initial)
-			//val first_sol: Solution = solutions.head
+			var solutions: List[Solution] = List.empty
+			for (wts <- wts_list) {
+				val converter = new WTS2Solution(wts, initial)
+				solutions = converter.toSolution :: solutions		//TODO controllare la conversione a Solution
+			}
+		//val first_sol: Solution = solutions.head
 
 			//println(first_sol.to_graphviz())
 
@@ -110,10 +108,7 @@ class Sol2MOISE(ontology: Domain, goalmodel:GoalModel, yellowpage:List[ServiceDe
 			// MOISE TEMPLATE
 
 			apply_rule__main_template(solutions)
-
-		} else {
-			<organisational-specification></organisational-specification>
-		}
+	//	else		<organisational-specification></organisational-specification>
 	}
 
 	def apply_rule__main_template(solutions: List[Solution]): Elem = {

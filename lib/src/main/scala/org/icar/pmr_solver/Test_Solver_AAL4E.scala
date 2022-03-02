@@ -212,17 +212,16 @@ object Test_Solver_AAL4E extends App {
   val initial = StateOfWorld(List())
 
   val goalset = GoalModel(Array(
-    GoalSPEC("1",True(),Finally(Conjunction(List(
-      GroundPredicate("activity_registered", List(AtomTerm("done"))),
-
-      Disjunction(List(
+    GoalSPEC("1",
+      pre = Disjunction(List(
         GroundPredicate("user_localization", List(AtomTerm("otherwise"))),
         GroundPredicate("user_engagement", List(AtomTerm("not_interested"))),
         GroundPredicate("performed", List(AtomTerm("social_activity"))),
         GroundPredicate("performed", List(AtomTerm("cognitive_exercise"))),
         GroundPredicate("performed", List(AtomTerm("entertainment"))),
-      ))
-    ))))
+      )),
+      post=Finally(GroundPredicate("activity_registered", List(AtomTerm("done")))
+   ))
   ))
 
   val goalset2 = GoalModel(Array(
@@ -233,27 +232,39 @@ object Test_Solver_AAL4E extends App {
         GroundPredicate("user_engagement", List(AtomTerm("passive"))),
       )))),
 
-//    GoalSPEC("2",True(),Finally(Disjunction( List(
-//      GroundPredicate("performed", List(AtomTerm("social_activity"))),
-//      GroundPredicate("performed", List(AtomTerm("cognitive_exercise"))),
-//      GroundPredicate("performed", List(AtomTerm("entertainment"))),
-//    )))),
-
-    GoalSPEC("2.1",True(),
-      Implication(GroundPredicate("user_engagement", List(AtomTerm("social"))),Finally(GroundPredicate("performed", List(AtomTerm("social_activity")))))
+    GoalSPEC("2.1",
+      pre=GroundPredicate("user_engagement", List(AtomTerm("social"))),
+      post=Finally(GroundPredicate("performed", List(AtomTerm("social_activity"))))
     ),
-    GoalSPEC("2.2",True(),
-      Implication(GroundPredicate("user_engagement", List(AtomTerm("open_mind"))),Finally(GroundPredicate("performed", List(AtomTerm("cognitive_exercise")))))
+    GoalSPEC("2.2",
+      pre=GroundPredicate("user_engagement", List(AtomTerm("open_mind"))),
+      post=Finally(GroundPredicate("performed", List(AtomTerm("cognitive_exercise"))))
     ),
-    GoalSPEC("2.3",True(),
-      Implication(GroundPredicate("user_engagement", List(AtomTerm("passive"))),Finally(GroundPredicate("performed", List(AtomTerm("entertainment"))))),
+    GoalSPEC("2.3",
+      pre=GroundPredicate("user_engagement", List(AtomTerm("passive"))),
+      post=Finally(GroundPredicate("performed", List(AtomTerm("entertainment"))))
     ),
 
-    GoalSPEC("3.1",True(),Implication(GroundPredicate("user_localization", List(AtomTerm("otherwise"))),Finally(GroundPredicate("activity_registered", List(AtomTerm("done")))))),
-    GoalSPEC("3.2",True(),Implication(GroundPredicate("user_engagement", List(AtomTerm("not_interested"))),Finally(GroundPredicate("activity_registered", List(AtomTerm("done")))))),
-    GoalSPEC("3.3",True(),Implication(GroundPredicate("performed", List(AtomTerm("social_activity"))),Finally(GroundPredicate("activity_registered", List(AtomTerm("done")))))),
-    GoalSPEC("3.4",True(),Implication(GroundPredicate("performed", List(AtomTerm("cognitive_exercise"))),Finally(GroundPredicate("activity_registered", List(AtomTerm("done")))))),
-    GoalSPEC("3.5",True(),Implication(GroundPredicate("performed", List(AtomTerm("entertainment"))),Finally(GroundPredicate("activity_registered", List(AtomTerm("done")))))),
+    GoalSPEC("3.1",
+      pre=GroundPredicate("user_localization", List(AtomTerm("otherwise"))),
+      post=Finally(GroundPredicate("activity_registered", List(AtomTerm("done"))))
+    ),
+    GoalSPEC("3.2",
+      pre=GroundPredicate("user_engagement", List(AtomTerm("not_interested"))),
+      post=Finally(GroundPredicate("activity_registered", List(AtomTerm("done"))))
+    ),
+    GoalSPEC("3.3",
+      pre=GroundPredicate("performed", List(AtomTerm("social_activity"))),
+      post=Finally(GroundPredicate("activity_registered", List(AtomTerm("done"))))
+    ),
+    GoalSPEC("3.4",
+      pre=GroundPredicate("performed", List(AtomTerm("cognitive_exercise"))),
+      post=Finally(GroundPredicate("activity_registered", List(AtomTerm("done"))))
+    ),
+    GoalSPEC("3.5",
+      pre=GroundPredicate("performed", List(AtomTerm("entertainment"))),
+      post=Finally(GroundPredicate("activity_registered", List(AtomTerm("done"))))
+    ),
 
    ))
 
@@ -261,15 +272,7 @@ object Test_Solver_AAL4E extends App {
   val my_problem = Problem(initial, goalset2, available)
 
   /* the solver */
-  val solver = Solver(my_problem, my_domain, qos)
-
-  println("**Domain**")
-  println("Number of predicates: " + map.inverse.size)
-  println("Number of goals: " + goalset.goals.length)
-  println("Number of actions: " + solver.available_actions.length)
-  println("Number of perturbations: " + solver.available_perturb.length)
-
-  val its = solver.iterate_until_termination(SolverConfiguration(
+  val solver = Solver(my_problem, my_domain, qos,SolverConfiguration(
     IterationTermination(50),
     SolutionConfiguration(
       allow_self_loop = false,
@@ -277,31 +280,38 @@ object Test_Solver_AAL4E extends App {
       allow_loop = true,
       allow_parallel_action = true)))
 
-  if (solver.opt_solution_set.isDefined) {
+  println("**Domain**")
+  println("Number of predicates: " + map.inverse.size)
+  println("Number of goals: " + goalset.goals.length)
+  println("Number of actions: " + solver.available_actions.length)
+  println("Number of perturbations: " + solver.available_perturb.length)
+
+  val its = solver.iterate_until_termination()
+
     println("**Planning**")
     println("Number of iterations: " + its)
     println()
 
     println("**Solutions**")
-    println("Number of generated WTS: " + solver.opt_solution_set.get.wts_list.size)
-    println("Number of full WTS: " + solver.opt_solution_set.get.full_wts.size)
-    println("Number of partial WTS: " + solver.opt_solution_set.get.partial_wts.size)
+    println("Number of generated WTS: " + solver.solution_set.wts_list.size)
+    println("Number of full WTS: " + solver.solution_set.full_wts.size)
+    println("Number of partial WTS: " + solver.solution_set.partial_wts.size)
     println()
     //println( solver.opt_solution_set.get.all_solutions_to_graphviz(node => node.toString) )
 
-    if (!solver.opt_solution_set.get.wts_list.isEmpty) {
-      for (wts <- solver.opt_solution_set.get.full_wts) {
-        println(wts.to_graphviz(node => node.toString))
-        val converter = new WTS2Solution(wts, initial)
-        println(converter.to_graphviz())
-      }
-      if (solver.opt_solution_set.get.full_wts.isEmpty)
-        for (wts <- solver.opt_solution_set.get.wts_list) {
-          println(wts.to_graphviz(node => node.toString))
-          val converter = new WTS2Solution(wts, initial)
-          println(converter.to_graphviz())
-        }
+  if (!solver.solution_set.wts_list.isEmpty) {
+    for (wts <- solver.solution_set.full_wts) {
+      println(wts.to_graphviz(node => node.toString))
+      val converter = new WTS2Solution(wts, initial)
+      println(converter.to_graphviz())
     }
+    if (solver.solution_set.full_wts.isEmpty)
+      for (wts <- solver.solution_set.wts_list) {
+        println(wts.wts_labelling.goal_sat_list)
+        println(wts.to_decorated_graphviz(node => node.toString))
+        //val converter = new WTS2Solution(wts, initial)
+        //println(converter.to_graphviz())
+      }
   }
 }
 

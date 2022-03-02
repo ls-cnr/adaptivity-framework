@@ -1,7 +1,7 @@
 package org.icar.pmr_solver.best_first_planner
 
 import org.icar.sublevel.RawState
-import org.icar.symbolic.{CapabilityGrounding, EndEvent, HL_PredicateFormula, JoinGateway, SequenceFlow, SolutionTask, SplitGateway, StartEvent, StateOfWorld, True, WorkflowItem}
+import org.icar.symbolic.{CapabilityGrounding, EndEvent, HL_PredicateFormula, JoinGateway, SequenceFlow, Solution, SolutionTask, SplitGateway, StartEvent, StateOfWorld, True, WorkflowItem}
 
 class WTS2Solution(wts:WTSGraph, I : StateOfWorld) {
   var wfitems: Set[WorkflowItem] = Set(StartEvent(),EndEvent())
@@ -12,9 +12,19 @@ class WTS2Solution(wts:WTSGraph, I : StateOfWorld) {
 
   visit_node(wts.start, StartEvent())
 
+  def toSolution : Solution = {
+    Solution(
+      I,
+      wfitems.toArray,
+      wfflow.toArray,
+      true//wts.isFullSolution
+    )
+
+  }
+
   def visit_node(wts_node: RawState, connect_from : WorkflowItem, scenario:String="") : Unit = {
     if (!map.contains(wts_node)) {
-      val outgoing = wts.transitions.filter(_.origin == wts_node) ++ wts.perturbations.filter(_.origin == wts_node)
+      val outgoing = wts.transitions.filter(_.origin == wts_node)
       if (outgoing.size == 0) {
         // first element
         addSequenceFlow(connect_from,EndEvent(),scenario)
