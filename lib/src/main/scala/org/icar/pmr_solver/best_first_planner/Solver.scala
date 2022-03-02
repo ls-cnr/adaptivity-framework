@@ -109,10 +109,11 @@ class Solver(rete:RETE, specifications:Array[RawGoal], val available_actions:Arr
 		/* check if the expansion is appliable to all the WTS that are not complete */
 		var new_wts_list : List[WTSGraph] = List.empty
 		for (wts <- solution_set.wts_list) {
-			if (wts.isFullSolution(specifications) || !wts.nodes.contains(focus))
+			if (!wts.nodes.contains(focus))
 				new_wts_list = wts :: new_wts_list
-
-			else //if (wts.nodes.contains(focus))
+			else if (wts.isFullSolution(specifications))
+				new_wts_list = wts :: new_wts_list
+			else
 				new_wts_list = update_wts(wts,focus, exp_list) ::: new_wts_list
 		}
 

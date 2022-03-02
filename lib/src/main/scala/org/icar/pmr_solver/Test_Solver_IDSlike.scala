@@ -187,9 +187,20 @@ object Test_Solver_IDSlike extends App {
 	println()
 	//println( solver.opt_solution_set.get.all_solutions_to_graphviz(node => node.toString) )
 
-	val wts: WTSGraph = solver.solution_set.wts_list.head
-	val converter = new WTS2Solution(wts,initial)
-	println( converter.to_graphviz() )
+	if (!solver.solution_set.wts_list.isEmpty) {
+		for (wts <- solver.solution_set.full_wts) {
+			println(wts.to_decorated_graphviz(node => node.toString))
+			val converter = new WTS2Solution(wts, initial)
+			println(converter.to_graphviz())
+		}
+		if (solver.solution_set.full_wts.isEmpty)
+			for (wts <- solver.solution_set.wts_list) {
+				println(wts.wts_labelling.goal_sat_list)
+				println(wts.to_decorated_graphviz(node => node.toString))
+				val converter = new WTS2Solution(wts, initial)
+				println(converter.to_graphviz())
+			}
+	}
 
 
 }

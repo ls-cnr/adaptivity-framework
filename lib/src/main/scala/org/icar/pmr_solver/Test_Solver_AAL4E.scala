@@ -309,8 +309,8 @@ object Test_Solver_AAL4E extends App {
       for (wts <- solver.solution_set.wts_list) {
         println(wts.wts_labelling.goal_sat_list)
         println(wts.to_decorated_graphviz(node => node.toString))
-        //val converter = new WTS2Solution(wts, initial)
-        //println(converter.to_graphviz())
+        val converter = new WTS2Solution(wts, initial)
+        println(converter.to_graphviz())
       }
   }
 }

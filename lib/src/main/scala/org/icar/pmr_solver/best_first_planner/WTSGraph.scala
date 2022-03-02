@@ -67,7 +67,7 @@ case class WTSGraph(
 		var all_terminal_are_exit = true
 		var no_terminal_has_trigger = true
 		for (node <- nodes) {
-			if (wts_labelling.nodes_labelling(node).is_terminal) {
+			if (wts_labelling.nodes_labelling(node).is_frontier) {
 				if (!wts_labelling.nodes_labelling(node).isExit())
 					all_terminal_are_exit = false
 
