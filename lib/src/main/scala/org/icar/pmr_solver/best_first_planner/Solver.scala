@@ -111,7 +111,7 @@ class Solver(rete:RETE, specifications:Array[RawGoal], val available_actions:Arr
 		for (wts <- solution_set.wts_list) {
 			if (!wts.nodes.contains(focus))
 				new_wts_list = wts :: new_wts_list
-			else if (wts.isFullSolution(specifications))
+			else if ( wts.isFullSolution )
 				new_wts_list = wts :: new_wts_list
 			else
 				new_wts_list = update_wts(wts,focus, exp_list) ::: new_wts_list
@@ -148,12 +148,15 @@ class Solver(rete:RETE, specifications:Array[RawGoal], val available_actions:Arr
 					if (post_test) {
 						val updated_labelling = update_wts_labelling(wts,focus,exp_nodes,new_transitions,exp.invariants)
 
+						val is_full_solution = check_full_solution(wts.nodes++new_frontier, updated_labelling.nodes_labelling, updated_labelling.goal_sat_list)
+
 						/* FINALLY, the new list of WTS will contain the cloned updated WTS */
 						val new_wts = WTSGraph(
 							wts.start,                          	//initial node
 							wts.nodes++new_frontier,               	//nodes
 							wts.transitions++new_transitions,   	//transitions
-							updated_labelling                   	//labelling
+							updated_labelling,                   	//labelling
+							is_full_solution
 						)
 
 						updated_list = new_wts :: updated_list
@@ -224,7 +227,7 @@ class Solver(rete:RETE, specifications:Array[RawGoal], val available_actions:Arr
 
 				// goal violation
 				} else if (!update_sup.success) {
-					// TODO it should discard the whole expansion (how?)
+					// TODO this condition should discard the whole expansion (how? returning a negative quality of solution?)
 
 				// otherwise
 				} else {
@@ -316,6 +319,29 @@ class Solver(rete:RETE, specifications:Array[RawGoal], val available_actions:Arr
 
 		self_loop_test && loop_test
 	}
+
+	// check when a wts is complete (no need of further expansions)
+	private def check_full_solution(nodes : Set[RawState], nodes_labelling : Map[RawState, StateLabel], goal_sat_list : Set[String]) : Boolean = {
+		//check all the goals are fully addressed
+		val all_goals_are_sat = goal_sat_list.size == specifications.size
+
+		//check all terminal node are exit nodes without trigger
+		var all_terminal_are_exit = true
+		var no_terminal_has_trigger = true
+		for (node <- nodes) {
+			if (nodes_labelling(node).is_frontier) {
+				if (!nodes_labelling(node).isExit())
+					all_terminal_are_exit = false
+
+				if (nodes_labelling(node).isTrigger())
+					no_terminal_has_trigger = false
+			}
+		}
+
+		all_goals_are_sat && all_terminal_are_exit && no_terminal_has_trigger
+	}
+
+
 
 }
 

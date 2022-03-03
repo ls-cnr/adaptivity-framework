@@ -37,15 +37,21 @@ class SolutionSet(val rete_memory : RETEMemory, qos : RawState => Float, specifi
 			Set.empty
 		)
 
-		List(WTSGraph(initial_state,Set(initial_state),Set.empty,labelling))
+		List(WTSGraph(
+			initial_state,
+			Set(initial_state),
+			Set.empty,
+			labelling,
+			is_full_solution = false
+		))
 	}
 
 	def full_wts : Array[WTSGraph] = {
-		wts_list.filter( _.isFullSolution(specifications) ).toArray
+		wts_list.filter( _.isFullSolution ).toArray
 	}
 
 	def partial_wts : Array[WTSGraph] = {
-		wts_list.filter( _.isPartialSolution(specifications) ).toArray
+		wts_list.filter( _.isPartialSolution ).toArray
 	}
 
 	/*
