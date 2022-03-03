@@ -7,9 +7,9 @@ import org.icar.symbolic.{AvailableActions, Domain, GoalModel, GoalState, Proble
 
 /******* NOTES AND COMMENTS ********/
 // Luca: to implement:
-// 2. violation of temporal properties
-// 3. improving EVOLUTION CONSTRAINTS: invariants associated to the evolution scenario, and therefore each frontier node has a different set of invariants
-
+// 1. TODO persistent temporal properties: a goal like Globally(...)... it will be never be satisfied!!! this is a problem for the wts completeness
+// 2. TODO invariants associated to the evolution scenario haven't been tested until now
+// 3. TODO violation of goals (Globally, Until...) can produce violations that will discard the solution
 
 /******* SYMBOLIC SOLVER ********/
 class Solver(rete:RETE, specifications:Array[RawGoal], val available_actions:Array[RawAction], val available_perturb:Array[RawAction], qos : RawState => Float, conf : SolverConfiguration) {

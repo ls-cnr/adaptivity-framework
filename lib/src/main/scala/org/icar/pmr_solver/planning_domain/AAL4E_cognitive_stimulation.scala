@@ -1,10 +1,9 @@
-package org.icar.pmr_solver
+package org.icar.pmr_solver.planning_domain
 
-import org.icar.pmr_solver.best_first_planner._
 import org.icar.sublevel.{HL2Raw_Map, RawState}
-import org.icar.symbolic._
+import org.icar.symbolic.{AbstractCapability, AddOperator, AtomTerm, AvailableActions, Conjunction, Disjunction, Domain, DomainConstant, DomainPredicate, DomainType, DomainVariable, EvoOperator, EvolutionGrounding, ExistQuantifier, Finally, GoalModel, GoalSPEC, GroundPredicate, Predicate, Problem, StateOfWorld, StringEnum_DomainType, True, VariableTerm}
 
-object Test_Solver_AAL4E extends App {
+object AAL4E_cognitive_stimulation {
   def qos(n: RawState): Float = 0
 
   val dom_types: Array[DomainType] = Array(
@@ -12,7 +11,6 @@ object Test_Solver_AAL4E extends App {
     StringEnum_DomainType("ENGAGEMENT", Array("social", "open_mind", "passive", "not_interested")),
     StringEnum_DomainType("ACTIVITY_TYPE", Array("social_activity", "cognitive_exercise", "entertainment", "nothing")),
     StringEnum_DomainType("ENT_CONTENT", Array("selected", "positive_reaction", "neutral_reaction", "negative_reaction")),
-    //StringEnum_DomainType("FOUND_OUTCOME", Array("found_in_room", "not_found", "found_otherwise")),
   )
 
   val preds: Array[DomainPredicate] = Array(
@@ -34,13 +32,10 @@ object Test_Solver_AAL4E extends App {
     DomainPredicate("activity_registered", List(
       DomainConstant("done"),
     )),
-
-
   )
 
   val my_domain = Domain("AAL4E", preds, dom_types, Array.empty)
   val map = new HL2Raw_Map(my_domain)
-
 
   /* capability */
   val find_user = AbstractCapability(
@@ -211,7 +206,7 @@ object Test_Solver_AAL4E extends App {
   /* the problem */
   val initial = StateOfWorld(List())
 
-  val goalset = GoalModel(Array(
+  val goalset1 = GoalModel(Array(
     GoalSPEC("1",
       pre = Disjunction(List(
         GroundPredicate("user_localization", List(AtomTerm("otherwise"))),
@@ -221,16 +216,16 @@ object Test_Solver_AAL4E extends App {
         GroundPredicate("performed", List(AtomTerm("entertainment"))),
       )),
       post=Finally(GroundPredicate("activity_registered", List(AtomTerm("done")))
-   ))
+      ))
   ))
 
   val goalset2 = GoalModel(Array(
     GoalSPEC("1",True(),Finally(Disjunction(List(
-        GroundPredicate("user_engagement", List(AtomTerm("not_interested"))),
-        GroundPredicate("user_engagement", List(AtomTerm("social"))),
-        GroundPredicate("user_engagement", List(AtomTerm("open_mind"))),
-        GroundPredicate("user_engagement", List(AtomTerm("passive"))),
-      )))),
+      GroundPredicate("user_engagement", List(AtomTerm("not_interested"))),
+      GroundPredicate("user_engagement", List(AtomTerm("social"))),
+      GroundPredicate("user_engagement", List(AtomTerm("open_mind"))),
+      GroundPredicate("user_engagement", List(AtomTerm("passive"))),
+    )))),
 
     GoalSPEC("2.1",
       pre=GroundPredicate("user_engagement", List(AtomTerm("social"))),
@@ -266,53 +261,9 @@ object Test_Solver_AAL4E extends App {
       post=Finally(GroundPredicate("activity_registered", List(AtomTerm("done"))))
     ),
 
-   ))
+  ))
 
   val available = AvailableActions(sys_action, env_action)
   val my_problem = Problem(initial, goalset2, available)
 
-  /* the solver */
-  val solver = Solver(my_problem, my_domain, qos,SolverConfiguration(
-    IterationTermination(50),
-    SolutionConfiguration(
-      allow_self_loop = false,
-      allow_cap_multiple_instance = true,
-      allow_loop = true,
-      allow_parallel_action = true)))
-
-  println("**Domain**")
-  println("Number of predicates: " + map.inverse.size)
-  println("Number of goals: " + goalset.goals.length)
-  println("Number of actions: " + solver.available_actions.length)
-  println("Number of perturbations: " + solver.available_perturb.length)
-
-  val its = solver.iterate_until_termination()
-
-    println("**Planning**")
-    println("Number of iterations: " + its)
-    println()
-
-    println("**Solutions**")
-    println("Number of generated WTS: " + solver.solution_set.wts_list.size)
-    println("Number of full WTS: " + solver.solution_set.full_wts.size)
-    println("Number of partial WTS: " + solver.solution_set.partial_wts.size)
-    println()
-    //println( solver.opt_solution_set.get.all_solutions_to_graphviz(node => node.toString) )
-
-  if (!solver.solution_set.wts_list.isEmpty) {
-    for (wts <- solver.solution_set.full_wts) {
-      println(wts.to_graphviz(node => node.toString))
-      val converter = new WTS2Solution(wts, initial)
-      println(converter.to_graphviz())
-    }
-    if (solver.solution_set.full_wts.isEmpty)
-      for (wts <- solver.solution_set.wts_list) {
-        println(wts.wts_labelling.goal_sat_list)
-        println(wts.to_decorated_graphviz(node => node.toString))
-        val converter = new WTS2Solution(wts, initial)
-        println(converter.to_graphviz())
-      }
-  }
 }
-
-
