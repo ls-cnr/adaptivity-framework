@@ -65,7 +65,7 @@ class WorkflowCase(val domain: Domain, workflow:Solution, val execute:SolutionTa
 	private def successors_reference(item: WorkflowItem, scenario:Option[String]=None): WorkflowReference = {
 		item match {
 			case StartEvent() => SimpleItem(item)
-			case EndEvent() => SimpleItem(item)
+			case EndEvent(_) => SimpleItem(item)
 			case JoinGateway(_) => SimpleItem(item)
 			case t@SolutionTask(_, grounding) =>
 				val real_pre = grounding.capability.pre

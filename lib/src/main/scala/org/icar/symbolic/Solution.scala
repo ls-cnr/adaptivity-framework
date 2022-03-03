@@ -4,7 +4,7 @@ import java.io.{File, PrintWriter}
 
 abstract class WorkflowItem
 case class StartEvent() extends WorkflowItem
-case class EndEvent() extends WorkflowItem
+case class EndEvent(id:Int) extends WorkflowItem
 case class SolutionTask(id:Int, grounding : CapabilityGrounding) extends WorkflowItem
 case class SplitGateway(id:Int,outport:List[String]) extends WorkflowItem
 case class JoinGateway(id:Int) extends WorkflowItem
@@ -53,7 +53,7 @@ case class Solution(
 	private def print_item(n: WorkflowItem): String = {
 		n match {
 			case StartEvent() => "start"
-			case EndEvent() => "end"
+			case EndEvent(_) => "end"
 			case SolutionTask(_, grounding) => grounding.unique_id
 			case JoinGateway(id) => "J"+id
 			case SplitGateway(id, outport) => "S"+id
@@ -62,7 +62,7 @@ case class Solution(
 	private def print_item_decoration(n: WorkflowItem): String = {
 		n match {
 			case StartEvent() => "[shape=doublecircle,color=black];\n"
-			case EndEvent() => "[shape=doublecircle,color=green];\n"
+			case EndEvent(_) => "[shape=doublecircle,color=green];\n"
 			case SolutionTask(_, _) => "[shape=box,color=black];\n"
 			case JoinGateway(_) => "[shape=diamond,color=black];\n"
 			case SplitGateway(_, _) => "[shape=diamond,color=black];\n"

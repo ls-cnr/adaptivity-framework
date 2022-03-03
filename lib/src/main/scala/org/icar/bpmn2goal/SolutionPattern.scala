@@ -157,7 +157,7 @@ class SolutionPattern(sol:Solution) {
 			val result = decompose(i,new_visited,"choice")
 			if (result._1.isDefined) {
 				branches = result._1.get :: branches
-				if (result._2 != EndEvent()) ending_points += result._2
+				if (result._2.isInstanceOf[EndEvent]) ending_points += result._2
 				new_visited = result._3
 			} else {
 				error=true
@@ -168,7 +168,7 @@ class SolutionPattern(sol:Solution) {
 			error = true
 
 		if (!error) {
-			val last = if (ending_points.size==1) sol.successors(ending_points.head).head  else EndEvent()
+			val last = if (ending_points.size==1) sol.successors(ending_points.head).head  else EndEvent(0)
 			(Some(ChoicePattern( branches) ), last, new_visited)
 		} else {
 			(None,pivot_node,visited)
