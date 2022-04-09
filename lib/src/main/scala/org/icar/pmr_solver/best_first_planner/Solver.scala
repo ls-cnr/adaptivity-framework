@@ -33,13 +33,14 @@ class Solver(rete:RETE, specifications:Array[RawGoal], val available_actions:Arr
 		var n_iteration = 0
 
 		while (!TerminationDescription.check_termination(conf.termination,start_timestamp,n_iteration,solution_set.full_wts.length)) {
-			iteration()
 
 //			println("iteration"+n_iteration)
 //			for (wts <- opt_solution_set.get.wts_list)
 //				println( wts.to_graphviz(node => node.toString) )
 //			println("end of iteration"+n_iteration)
 //			println()
+
+			iteration()
 
 			n_iteration += 1
 		}
@@ -58,10 +59,15 @@ class Solver(rete:RETE, specifications:Array[RawGoal], val available_actions:Arr
 
 	/* Main algorithm of the Solver class */
 	private def iteration() : Unit = {
+		//print("visited"); for (x<-solution_set.visited) print(x); println()
+		//print("frontier"); for (x<-solution_set.global_frontier) print(x.rete_memory.current); println()
+
 		val frontier_node: Option[RawFrontierItem] = solution_set.get_next_node
 		if (frontier_node.isDefined) {
 			val focus_node_rete_memory: RETEMemory = frontier_node.get.rete_memory
 			val focus_node = focus_node_rete_memory.current
+
+			//println("focus on"+focus_node.toString)
 			//val focus_node_supervisor: RawGoalSetSupervisor = frontier_node.get.sup
 
 			val actions : Array[RawAction] = applicable_capabilities(focus_node)
@@ -99,7 +105,11 @@ class Solver(rete:RETE, specifications:Array[RawGoal], val available_actions:Arr
 		rete.extend(evo_description)
 		val new_state = rete.state
 //		val next = supervisor.getNext(new_state)
-		val score =qos(new_state)
+		var score = qos(new_state)
+
+		for (s <- specifications)
+			if (new_state.satisfies(s.pre)) score +=1
+
 		val dest = RawFrontierItem(score,rete.memory)
 		RawEvoScenario(evo_description.name,evo_description.probability,dest)
 	}
@@ -123,9 +133,11 @@ class Solver(rete:RETE, specifications:Array[RawGoal], val available_actions:Arr
 	private def update_global_frontier(exp_list: List[RawExpansion]) : Unit = {
 		/* update the frontier */
 		for (e<-exp_list)
-			for (t<-e.probtrajectory)
+			for (t<-e.probtrajectory) {
 				//if (!t.dest.sup.check_exit_node)
-				solution_set.global_frontier = t.dest :: solution_set.global_frontier
+				if (!solution_set.visited.contains(t.dest.rete_memory.current))
+					solution_set.global_frontier = t.dest :: solution_set.global_frontier
+			}
 	}
 
 	private def update_wts(wts:WTSGraph, focus : RawState, exp_list: List[RawExpansion]) : List[WTSGraph] = {

@@ -11,6 +11,7 @@ import org.icar.symbolic.GoalState
 class SolutionSet(val rete_memory : RETEMemory, qos : RawState => Float, specifications:Array[RawGoal]) {
 	val initial_state = rete_memory.current
 	val initial_score = qos(initial_state)
+	var visited : List[RawState] = List( )
 	var global_frontier : List[RawFrontierItem] = List( RawFrontierItem(initial_score,rete_memory) )
 	var wts_list : List[WTSGraph] = init()
 
@@ -68,6 +69,7 @@ class SolutionSet(val rete_memory : RETEMemory, qos : RawState => Float, specifi
 			global_frontier = global_frontier.sorted
 
 			somenode = Some(global_frontier.head)
+			visited = somenode.get.rete_memory.current :: visited
 
 			global_frontier = global_frontier.tail
 		}
