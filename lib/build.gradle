@@ -187,7 +187,7 @@ task runAAL4E (type: JavaExec, dependsOn: 'classes') {
 task runPerfTest (type: JavaExec, dependsOn: 'classes') {
     description 'benchmark of WTS2Sol'
     group 'execution'
-    mainClass = 'org.icar.pmr_solver.Convert__Benchmark'
+    mainClass = 'org.icar.pmr_solver.WTS2Solution__Benchmark'
     classpath sourceSets.main.runtimeClasspath
 }
 
