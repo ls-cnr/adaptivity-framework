@@ -20,13 +20,23 @@ class RandomlyGeneratedDomain(SIZE_ARGS:Int, SIZE_PREDS:Int) {
   val my_domain = Domain("RandomSpace", preds, types, Array.empty)
   val map = new HL2Raw_Map(my_domain)
 
+  val main_rand = scala.util.Random
   var list_of_caps : List[AbstractCapability] = List.empty
   for (p_index <- range_preds)
     for (a_index <- range_args)
-      for (ind <- 1 to 2) {
-        list_of_caps = forward_random_capability(p_index,a_index,ind) :: list_of_caps
-        //list_of_caps = backward_random_capability(p_index,a_index,ind) :: list_of_caps
+      if (main_rand.nextInt(100) > 20) {
+        for (ind <- 1 to 2) {
+          list_of_caps = forward_random_capability(p_index, a_index, ind) :: list_of_caps
+          //list_of_caps = backward_random_capability(p_index,a_index,ind) :: list_of_caps
+        }
+      } else {
+        list_of_caps = forward_nondet_capability(p_index, a_index) :: list_of_caps
       }
+
+
+
+  //for (index <- 1 to 5) list_of_caps = nondet_random_capability() :: list_of_caps
+
 
   val sys_action = list_of_caps.reverse.toArray
   val env_action: Array[AbstractCapability] = Array.empty
@@ -34,14 +44,14 @@ class RandomlyGeneratedDomain(SIZE_ARGS:Int, SIZE_PREDS:Int) {
   val initial = StateOfWorld(List(GroundPredicate(preds(0).functor,List(AtomTerm(args(0))))))
 
   var list_of_goals : List[GoalSPEC] = List.empty
-  for (index <- 1 to 1) list_of_goals = generate_random_goal() :: list_of_goals
+  for (index <- 1 to 2) list_of_goals = generate_random_goal() :: list_of_goals
   val goalset = GoalModel(list_of_goals.toArray)
 
   val available = AvailableActions(sys_action, env_action)
   val my_problem = Problem(initial, goalset, available)
 
   val domaingraph = domain_to_graphviz(map, my_problem.goal_model,my_problem.actions.sys_action)
-  println(domaingraph)
+  //println(domaingraph)
 
 
   def generate_random_goal() : GoalSPEC = {
@@ -63,6 +73,80 @@ class RandomlyGeneratedDomain(SIZE_ARGS:Int, SIZE_PREDS:Int) {
     )
 
   }
+
+  def nondet_random_capability(): AbstractCapability = {
+    cap_id += 1
+
+    val rand = scala.util.Random
+
+    val half_args = (SIZE_ARGS/2).intValue()+1
+    val half_preds = (SIZE_PREDS/2).intValue()+1
+
+    val p_index_pre = rand.nextInt(half_preds)
+    val a_index_pre = rand.nextInt(half_args)
+    val p_index_post1 = Math.min(rand.nextInt(half_preds)+half_preds, SIZE_PREDS)
+    val a_index_post1 = Math.min(rand.nextInt(half_args)+half_args, SIZE_ARGS)
+    val p_index_post2 = rand.nextInt(SIZE_PREDS)
+    val a_index_post2 = rand.nextInt(SIZE_ARGS)
+    // NON DETERMINISTIC
+    AbstractCapability(
+      id = "NON"+cap_id,
+      params = List(),
+      pre = GroundPredicate(preds(p_index_pre).functor,List(AtomTerm(args(a_index_pre)))),
+      post = Disjunction(List(
+        GroundPredicate(preds(p_index_post1).functor,List(AtomTerm(args(a_index_post1)))),
+        GroundPredicate(preds(p_index_post2).functor,List(AtomTerm(args(a_index_post2)))),
+      )),
+      effects = Array(
+        EvolutionGrounding("uno", Array[EvoOperator](
+          RmvOperator(Predicate(preds(p_index_pre).functor, List(AtomTerm(args(a_index_pre))))),
+          AddOperator(Predicate(preds(p_index_post1).functor, List(AtomTerm(args(a_index_post1)))))
+        )),
+        EvolutionGrounding("due", Array[EvoOperator](
+          RmvOperator(Predicate(preds(p_index_pre).functor, List(AtomTerm(args(a_index_pre))))),
+          AddOperator(Predicate(preds(p_index_post2).functor, List(AtomTerm(args(a_index_post2)))))
+        )),
+      ),
+      future = List.empty
+    )
+  }
+
+
+  def forward_nondet_capability(p_index_pre:Int, a_index_pre: Int): AbstractCapability = {
+    cap_id += 1
+
+    val rand = scala.util.Random
+
+    val half_args = (SIZE_ARGS/2).intValue()+1
+    val half_preds = (SIZE_PREDS/2).intValue()+1
+
+    val p_index_post1 = Math.min(rand.nextInt(half_preds)+half_preds, SIZE_PREDS)
+    val a_index_post1 = Math.min(rand.nextInt(half_args)+half_args, SIZE_ARGS)
+    val p_index_post2 = rand.nextInt(SIZE_PREDS)
+    val a_index_post2 = rand.nextInt(SIZE_ARGS)
+    // NON DETERMINISTIC
+    AbstractCapability(
+      id = "NON"+cap_id,
+      params = List(),
+      pre = GroundPredicate(preds(p_index_pre).functor,List(AtomTerm(args(a_index_pre)))),
+      post = Disjunction(List(
+        GroundPredicate(preds(p_index_post1).functor,List(AtomTerm(args(a_index_post1)))),
+        GroundPredicate(preds(p_index_post2).functor,List(AtomTerm(args(a_index_post2)))),
+      )),
+      effects = Array(
+        EvolutionGrounding("uno", Array[EvoOperator](
+          RmvOperator(Predicate(preds(p_index_pre).functor, List(AtomTerm(args(a_index_pre))))),
+          AddOperator(Predicate(preds(p_index_post1).functor, List(AtomTerm(args(a_index_post1)))))
+        )),
+        EvolutionGrounding("due", Array[EvoOperator](
+          RmvOperator(Predicate(preds(p_index_pre).functor, List(AtomTerm(args(a_index_pre))))),
+          AddOperator(Predicate(preds(p_index_post2).functor, List(AtomTerm(args(a_index_post2)))))
+        )),
+      ),
+      future = List.empty
+    )
+  }
+
   def forward_random_capability(p_index_pre:Int, a_index_pre: Int, index:Int) : AbstractCapability =  {
     cap_id += 1
 
@@ -72,13 +156,14 @@ class RandomlyGeneratedDomain(SIZE_ARGS:Int, SIZE_PREDS:Int) {
     if (index==1) {
       p_index_post += 1
       if (p_index_post > SIZE_PREDS) p_index_post = 0
-    } else {
+    } else if (index==2) {
       a_index_post += 1
       if (a_index_post > SIZE_ARGS) a_index_post = 0
     }
 
+    // DETERMINISTIC
     AbstractCapability(
-      id = "CAP"+(cap_id).toString,
+      id = "CAP"+cap_id,
       params = List(),
       pre = GroundPredicate(preds(p_index_pre).functor,List(AtomTerm(args(a_index_pre)))),
       post = GroundPredicate(preds(p_index_post).functor,List(AtomTerm(args(a_index_post)))),

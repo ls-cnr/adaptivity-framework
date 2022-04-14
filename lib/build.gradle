@@ -67,6 +67,9 @@ dependencies {
     implementation 'javax.servlet:javax.servlet-api:3.0.1'
     implementation group: 'org.json', name: 'json', version: '20211205'
 
+    implementation group: 'io.github.hughsimpson',   name: 'scalameter_2.13',           version: '0.22'
+    implementation group: 'org.mongodb',   name: 'casbah_2.11',           version: '3.1.1'
+
 }
 
 configurations {
@@ -180,6 +183,14 @@ task runAAL4E (type: JavaExec, dependsOn: 'classes') {
     mainClass = 'org.icar.pmr_solver.Test_Solver_AAL4E'
     classpath sourceSets.main.runtimeClasspath
 }
+
+task runPerfTest (type: JavaExec, dependsOn: 'classes') {
+    description 'benchmark of WTS2Sol'
+    group 'execution'
+    mainClass = 'org.icar.pmr_solver.Convert__Benchmark'
+    classpath sourceSets.main.runtimeClasspath
+}
+
 
 task testSup (type: JavaExec, dependsOn: 'classes') {
     description 'test_supervisor'
