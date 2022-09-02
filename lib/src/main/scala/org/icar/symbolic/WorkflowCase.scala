@@ -15,7 +15,7 @@ case class ExecutionLog(time_stamp:Long,task:SolutionTask)
 
 class WorkflowCase(val domain: Domain, workflow:Solution, val execute:SolutionTask=>Unit ) {
 	val raw_map = new HL2Raw_Map(domain)
-	var case_pool : Set[WorkflowReference] = Set(SimpleItem(StartEvent()))
+	var case_pool : Set[WorkflowReference] = Set(SimpleItem(StartEvent(0,s"startEvent_${0}")))
 	var process_log_list : List[ExecutionLog] = List.empty
 
 	def progress(state:RawState) : Unit = {
@@ -64,8 +64,8 @@ class WorkflowCase(val domain: Domain, workflow:Solution, val execute:SolutionTa
 
 	private def successors_reference(item: WorkflowItem, scenario:Option[String]=None): WorkflowReference = {
 		item match {
-			case StartEvent() => SimpleItem(item)
-			case EndEvent(_) => SimpleItem(item)
+			case StartEvent(_,_) => SimpleItem(item)
+			case EndEvent(_,_) => SimpleItem(item)
 			case JoinGateway(_) => SimpleItem(item)
 			case t@SolutionTask(_, grounding) =>
 				val real_pre = grounding.capability.pre

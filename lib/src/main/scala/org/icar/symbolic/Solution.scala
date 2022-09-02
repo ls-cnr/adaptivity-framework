@@ -1,15 +1,25 @@
 package org.icar.symbolic
 
+import org.icar.bpmn2goal.EventDefinition
+
 import java.io.{File, PrintWriter}
 
 abstract class WorkflowItem
-case class StartEvent() extends WorkflowItem
-case class EndEvent(id:Int) extends WorkflowItem
+case class StartEvent(id:Int, name:String) extends WorkflowItem
+case class EndEvent(id:Int, name:String) extends WorkflowItem
 case class SolutionTask(id:Int, grounding : CapabilityGrounding) extends WorkflowItem
-case class SplitGateway(id:Int,outport:List[String]) extends WorkflowItem
+case class SplitGateway(id:Int, outport:List[String]) extends WorkflowItem
 case class JoinGateway(id:Int) extends WorkflowItem
 
+//TODO why ID is an integer?
+case class ExclusiveGateway(id: Int) extends WorkflowItem
+
+//davide
+case class BoundaryEvent(id: String, name: String, attachedToRef:String, cancelActivity: Option[Boolean], evtDef: Option[EventDefinition])
+
 case class SequenceFlow(from:WorkflowItem,to:WorkflowItem,scenario:String="",condition:HL_PredicateFormula=True())
+
+/**/
 
 
 case class Solution(
@@ -52,8 +62,8 @@ case class Solution(
 
 	private def print_item(n: WorkflowItem): String = {
 		n match {
-			case StartEvent() => "start"
-			case EndEvent(_) => "end"
+			case StartEvent(_,_) => "start"
+			case EndEvent(_,_) => "end"
 			case SolutionTask(_, grounding) => grounding.unique_id
 			case JoinGateway(id) => "J"+id
 			case SplitGateway(id, outport) => "S"+id
@@ -61,8 +71,8 @@ case class Solution(
 	}
 	private def print_item_decoration(n: WorkflowItem): String = {
 		n match {
-			case StartEvent() => "[shape=doublecircle,color=black];\n"
-			case EndEvent(_) => "[shape=doublecircle,color=green];\n"
+			case StartEvent(_,_) => "[shape=doublecircle,color=black];\n"
+			case EndEvent(_,_) => "[shape=doublecircle,color=green];\n"
 			case SolutionTask(_, _) => "[shape=box,color=black];\n"
 			case JoinGateway(_) => "[shape=diamond,color=black];\n"
 			case SplitGateway(_, _) => "[shape=diamond,color=black];\n"
