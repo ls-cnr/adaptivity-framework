@@ -8,13 +8,16 @@ case class StructuredLoop(goal_id:String, condition : String) extends GoalPatter
 
 
 class WTS2Solution(wts:WTSGraph, I : StateOfWorld, patterns:List[GoalPattern]=List.empty) {
-  var wfitems: Set[WorkflowItem] = Set(StartEvent())
+
+  val startEventID = 0
+
+  var wfitems: Set[WorkflowItem] = Set(StartEvent(startEventID, s"start_${startEventID}"))
   var wfflow: List[SequenceFlow] = List.empty
   var map:Map[RawState,WorkflowItem] = Map.empty
 
   var task_id=1; var split_id=1; var join_id=1; var end_id = 1
 
-  visit_node(wts.start, StartEvent())
+  visit_node(wts.start, StartEvent(startEventID, s"start_${startEventID}"))
 
   for (pattern <- patterns)
     apply_pattern(pattern)
@@ -88,7 +91,7 @@ class WTS2Solution(wts:WTSGraph, I : StateOfWorld, patterns:List[GoalPattern]=Li
   }
 
   def addEnd() : EndEvent = {
-    val end = EndEvent(end_id)
+    val end = EndEvent(end_id, s"endEvent_${end_id}")
     end_id += 1
     wfitems = wfitems+end
     end
@@ -271,8 +274,8 @@ class WTS2Solution(wts:WTSGraph, I : StateOfWorld, patterns:List[GoalPattern]=Li
 
   private def print_item(n: WorkflowItem): String = {
     n match {
-      case StartEvent() => "start"
-      case EndEvent(_) => "end"
+      case StartEvent(_,_) => "start"
+      case EndEvent(_,_) => "end"
       case SolutionTask(id, grounding) => s"${id}_${grounding.unique_id}"
       case JoinGateway(id) => "J"+id
       case SplitGateway(id, outport) => s"S${id}"
@@ -280,8 +283,8 @@ class WTS2Solution(wts:WTSGraph, I : StateOfWorld, patterns:List[GoalPattern]=Li
   }
   private def print_item_decoration(n: WorkflowItem): String = {
     n match {
-      case StartEvent() => "[shape=doublecircle,color=black];\n"
-      case EndEvent(_) => "[shape=doublecircle,color=green];\n"
+      case StartEvent(_,_) => "[shape=doublecircle,color=black];\n"
+      case EndEvent(_,_) => "[shape=doublecircle,color=green];\n"
       case SolutionTask(_, _) => "[shape=box,color=black];\n"
       case JoinGateway(_) => "[shape=diamond,color=black];\n"
       case SplitGateway(_, _) => "[shape=diamond,color=black];\n"

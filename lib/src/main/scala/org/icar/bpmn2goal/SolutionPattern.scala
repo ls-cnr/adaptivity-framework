@@ -11,8 +11,8 @@ case class ParallelPattern(children:List[WorkflowPattern]) extends WorkflowPatte
 
 class SolutionPattern(sol:Solution) {
 
-	val start_event = sol.wfitems.filter(i => i == StartEvent()).head
-	var visited: List[WorkflowItem] = List(StartEvent())
+	val start_event = sol.wfitems.filter(i => i == StartEvent(0,s"startEvent_${0}")).head
+	var visited: List[WorkflowItem] = List(StartEvent(0,s"startEvent_${0}"))
 
 	var first_node: WorkflowItem = sol.successors(start_event).head
 	var root_pattern = decompose(first_node,visited, "main")
@@ -168,7 +168,7 @@ class SolutionPattern(sol:Solution) {
 			error = true
 
 		if (!error) {
-			val last = if (ending_points.size==1) sol.successors(ending_points.head).head  else EndEvent(0)
+			val last = if (ending_points.size==1) sol.successors(ending_points.head).head  else EndEvent(0,s"endEvent_${0}")
 			(Some(ChoicePattern( branches) ), last, new_visited)
 		} else {
 			(None,pivot_node,visited)

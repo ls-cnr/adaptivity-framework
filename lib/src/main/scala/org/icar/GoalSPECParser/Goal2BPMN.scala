@@ -1,7 +1,7 @@
 package org.icar.GoalSPECParser
 
-import org.icar.bpmn2goal.Task
-import org.icar.symbolic.{EndEvent, SequenceFlow}
+import org.icar.bpmn2goal._
+import org.icar.symbolic.{SequenceFlow, _}
 
 import scala.xml.Elem
 
@@ -19,38 +19,38 @@ object Goal2BPMN {
   def BPMNProcess(): Elem = {
     val processID = ""
     val processName = ""
-    <process id={processID} name={processName} isExecutable="true"></process>
+    <process id={processID} name={processName} isExecutable="true">
+      {/*?*/}
+    </process>
   }
 
-  def extentionElements(): Elem = {
+  /*Service task------------------------------------------*/
+  def serviceTask(name: String, taskID: String, className: String, extElems: Option[FlowableExtentionElements]): Elem = {
+    <serviceTask id={taskID} name={name} flowable:class={className}>
+      {if (extElems.isDefined) {
+      extentionElements(extElems.get)
+    }}
+    </serviceTask>
+  }
+
+  def extentionElements(elems: FlowableExtentionElements): Elem = {
     <extensionElements>
-      {executionListener()}
+      {elems.listeners.foreach(executionListener)}
     </extensionElements>
   }
 
-  def executionListener(): Elem = {
-    val event = ""
-    val className = ""
-    <flowable:executionListener event={event} class={className}></flowable:executionListener>
+  def executionListener(listener: FlowableExecutionListener): Elem = {
+    <flowable:executionListener event={listener.event} class={listener.className}></flowable:executionListener>
   }
-
-  def serviceTask(): Elem = {
-    val name = "yeye"
-    val taskID = ""
-    val className = ""
-
-    <serviceTask id={taskID} name={name} flowable:class={className}>
-      {extentionElements}
-    </serviceTask>
-  }
+  /*------------------------------------------*/
 
   def userTask(name: String, taskID: String, candidateGroup: Option[String] = None): Elem = {
     <userTask id={name} name={taskID} flowable:candidateGroups={candidateGroup.getOrElse("")}></userTask>
   }
 
-  def writeTask(t: Task): Elem = t.tasktype match {
-    case "userTask" => userTask(t.label, t.id)
-    case "serviceTask" => serviceTask()
+  def writeTask(item: Item): Elem = item match {
+    case t: Task => userTask(t.label, t.id)
+    case t: ServiceTask => serviceTask(t.label, t.id, t.className, t.extElems)
   }
 
   //l = SequenceFlow(id.text, start, end, optional_condition)
@@ -58,7 +58,7 @@ object Goal2BPMN {
     val flowID = java.util.UUID.randomUUID.toString
     val from = s.from
     val to = s.to
-    <sequenceFlow id={flowID} sourceRef={from} targetRef={to}>
+    <sequenceFlow id={flowID} sourceRef={from.toString} targetRef={to.toString}>
       {conditionalExpr(s.condition.toString)}
     </sequenceFlow>
   }
@@ -66,48 +66,42 @@ object Goal2BPMN {
   def conditionalExpr(expression: String): Elem =
     scala.xml.XML.loadString(s"<conditionExpression xsi:type=\"tFormalExpression\">\n<![CDATA[\n{${expression}}\n]]>\n</conditionExpression>")
 
-
-  def boundaryEvent(): Elem = {
-    <boundaryEvent id="boundaryerror2" name="Error" attachedToRef="gestionnaire_inform_orgs">
-      {errorEventDefinition()}
+  def boundaryEvent(evt: BoundaryEvent): Elem = {
+    <boundaryEvent id={evt.id} name={evt.name} attachedToRef={evt.attachedToRef}>
+      {if (evt.evtDef.isDefined) {
+      evt.evtDef.get match {
+        case evtDef: TimerEventDefinition => timerEventDefinition(evtDef)
+        case evtDef: ErrorEventDefinition => errorEventDefinition(evtDef)
+      }
+    }}
     </boundaryEvent>
   }
 
-  def errorEventDefinition(): Elem = {
-    <errorEventDefinition errorRef="REQUIRE_ORCHESTRATION"></errorEventDefinition>
-  }
-
-  def timerEventDefinition(): Elem = {
-    val timeDuration = ""
+  def timerEventDefinition(evtDef: TimerEventDefinition): Elem = {
     <timerEventDefinition>
       <timeDuration>
-        {timeDuration}
+        {evtDef.timecondition}
       </timeDuration>
     </timerEventDefinition>
   }
 
+  def errorEventDefinition(evtDef: ErrorEventDefinition): Elem = <errorEventDefinition errorRef={evtDef.errType}></errorEventDefinition>
 
-  def startEvent(): Elem = {
-    val eventName = ""
-    val eventID = ""
+  def startEvent(ev: StartEvent): Elem = <startEvent id={ev.id.toString} name={ev.name}></startEvent>
 
+  def endEvent(ev: EndEvent): Elem = <endEvent id={ev.id.toString} name={ev.name}></endEvent>
 
-    <startEvent id={eventID} name={eventName}></startEvent>
-  }
+  def parallelGateway(gg: SplitGateway): Elem = <parallelGateway id={gg.id.toString} name={gg.id.toString}></parallelGateway>
 
-  def endEvent(ev : EndEvent): Elem = <endEvent id={ev.id} name={ev.id}></endEvent>
+  def exclusiveGateway(gg: ExclusiveGateway): Elem = <exclusiveGateway id={gg.id.toString} name={gg.id.toString}></exclusiveGateway>
 
-  def parallelGateway(): Elem = {
-    <parallelGateway id="parallelgateway1" name="Parallel Gateway"></parallelGateway>
-  }
-
-  def exclusiveGateway(): Elem = {
-    <exclusiveGateway id="incident_solved_gateway" name="Incident solved"></exclusiveGateway>
-  }
-
-
+  /**
+   * TEST
+   *
+   * @param args
+   */
   def main(args: Array[String]): Unit = {
-    val ll = conditionalExpr().toString()
+    val ll = conditionalExpr("").toString()
 
     print(ll)
   }

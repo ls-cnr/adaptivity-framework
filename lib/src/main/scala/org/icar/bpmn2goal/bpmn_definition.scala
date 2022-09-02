@@ -10,6 +10,8 @@ case class UnspecifiedDirection() extends GatewayDirection
 case class DataType(id: String, name : String)
 
 abstract class EventDefinition
+//davide
+case class ErrorEventDefinition(errType: String) extends EventDefinition
 case class MessageEventDefinition(mess: Message) extends EventDefinition
 case class SignalEventDefinition(signal: Signal) extends EventDefinition
 case class TimerEventDefinition(timertype:String, timecondition : String) extends EventDefinition
@@ -19,6 +21,14 @@ abstract class Item(val id: String)
 case class Task(override val id: String, label: String, tasktype : String, message_opt : Option[Message] = None) extends Item(id)
 case class Event(override val id: String, label : String, eventtype : String, definition : EventDefinition) extends Item(id)
 case class Gateway(override val id: String, label : String, gwtype : String, direction : GatewayDirection) extends Item(id)
+
+
+case class ServiceTask(override val id: String, label: String, className: String, extElems : Option[FlowableExtentionElements]) extends Item(id)
+//davide
+case class FlowableExtentionElements(listeners: List[FlowableExecutionListener])
+//davide
+case class FlowableExecutionListener(event: String, className: String)
+
 
 abstract class Flow(id: String)
 abstract class MessageFlow(id : String) extends Flow(id)

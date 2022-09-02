@@ -18,11 +18,11 @@ case class False() extends HL_PredicateFormula with HL_LTLFormula {
 	override def toString: String = "\u22A5"
 }
 
-case class ExistQuantifier(vars: List[VariableTerm], formula : HL_PredicateFormula) extends HL_PredicateFormula {
+case class ExistQuantifier(vars: List[VariableTerm], formula : HL_PredicateFormula) extends HL_PredicateFormula with HL_LTLFormula {
 	override def toString: String = "\u2203 "+vars.mkString(",")+":"+formula
 }
 
-case class UnivQuantifier(vars : List[VariableTerm], formula : HL_PredicateFormula) extends HL_PredicateFormula {
+case class UnivQuantifier(vars : List[VariableTerm], formula : HL_PredicateFormula) extends HL_PredicateFormula with HL_LTLFormula {
 	override def toString: String = "\u2200 "+vars.mkString(",")+":"+formula
 }
 

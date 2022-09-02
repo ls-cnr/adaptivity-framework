@@ -1,19 +1,48 @@
 package org.icar.GoalSPECParser
 
-import org.apache.commons.lang3.StringUtils
-import org.icar.symbolic.{BiImplication, Conjunction, ConstantTerm, Disjunction, ExistQuantifier, False, FalsityTerm, Finally, Globally, GoalSPEC, HL_LTLFormula, HL_PredicateFormula, Implication, Negation, Next, NumeralTerm, Predicate, Release, StringTerm, Term, True, TruthTerm, UnivQuantifier, Until, VariableTerm}
+import org.icar.symbolic._
 
+import java.time.{Duration, Period, ZonedDateTime}
 import scala.util.parsing.combinator.JavaTokenParsers
 
 class GoalParserImpl extends JavaTokenParsers {
+
+  def tc: Parser[Any] = "DURATION" ~ ',' ~ duration | "StartTC" ~ ',' ~ time | "EndTC" ~ ',' ~ time
+
+  def inter_goal_TDependency: Parser[Any] = "TDEPENDENCY" ~ ident ~ "FROM GOAL" ~ ident ~ "TO GOAL" ~ ident ~ "IMPLIES" ~ td
+
+  def td: Parser[Any] = tdType ~ '[' ~ startTime ~ ',' ~ endTime ~ ']'
+
+  def tdType: Parser[String] = "SF" | "FS" | "SS" | "FF"
+
+  //NOTE: duration is in ISO8601 format. Ex.
+  // - P1Y - 1 year
+  // - P2M4D - 2 months and 4 days
+  // - P3Y6M4DT12H30M5S - 3 years, 7 months, 4 days, 12 hours, 30 minutes, and 5 seconds
+  def duration: Parser[Duration] = stringLiteral ^^ { x => Duration.parse(x) }
+
+  def startTime: Parser[Period] = time
+
+  def endTime: Parser[Period] = time
+
+  def time: Parser[Period] = stringLiteral ^^ { x => Period.parse(x) }
+
+  def dateTime: Parser[ZonedDateTime] = stringLiteral ^^ { x => ZonedDateTime.parse(x) }
+
   /*---------------------------------------------GOALS---------------------------------------------*/
+
   def goal: Parser[List[GoalSPEC]] = alt_decomposition | and_decomposition | leaf_goal ^^ { x => List(x) }
 
-  def alt_decomposition: Parser[List[GoalSPEC]] = "GOAL" ~> ident ~> "IS" ~> "OR" ~> "OF" ~> "{" ~> goal_list <~ "}"
+  def alt_decomposition: Parser[List[GoalSPEC]] = "GOAL" ~> ident ~> "IS" ~> "OR" ~> "OF" ~> "{" ~> spec_list <~ "}"
 
-  def and_decomposition: Parser[List[GoalSPEC]] = "GOAL" ~> ident ~> "IS" ~> "AND" ~> "OF" ~> "{" ~> goal_list <~ "}"
+  def and_decomposition: Parser[List[GoalSPEC]] = "GOAL" ~> ident ~> "IS" ~> "AND" ~> "OF" ~> "{" ~> spec_list <~ "}"
 
-  def goal_list: Parser[List[GoalSPEC]] = goal ~ goal_list ^^ { case g ~ gl => g.concat(gl) } | goal
+  def spec_list: Parser[List[GoalSPEC]] = goal ~ spec_list ^^ { case g ~ gl => g.concat(gl) } |
+    tc ~ spec_list ^^ { case _ ~ gl => gl } |
+    inter_goal_TDependency ~ spec_list ^^ { case _ ~ gl => gl } |
+    goal |
+    tc ^^ { _ => List() } |
+    inter_goal_TDependency ^^ { _ => List() }
 
   def leaf_goal: Parser[GoalSPEC] = social_goal | system_goal
 
@@ -33,44 +62,22 @@ class GoalParserImpl extends JavaTokenParsers {
   //label, è una stringa.
   def actor: Parser[Any] = individual_actor | collective_actor
 
-  def individual_actor: Parser[Any] = "THE_SYSTEM" | "THE" ~> ident ~ "ROLE";
+  def individual_actor: Parser[Any] = "THE_SYSTEM" | "THE" ~> ident ~ "ROLE"
 
-  def collective_actor: Parser[Any] = "THE" ~> ident ~ "GROUP";
+  def collective_actor: Parser[Any] = "THE" ~> ident ~ "GROUP"
 
   /*---------------------------------------------TRIGGER CONDITION---------------------------------------------*/
 
   def trigger_condition: Parser[HL_LTLFormula] = observed_event //| message_received_event; ??????
 
-  def observed_event: Parser[HL_LTLFormula] = "WHEN" ~> state;
+  def observed_event: Parser[HL_LTLFormula] = "WHEN" ~> state
 
   def message_received_event: Parser[Any] = "RECEIVED MESSAGE" ~> operand <~ "FROM" ~> actor
 
-  //Any?
-
-  def final_condition: Parser[Any] = quantification |
+  def final_condition: Parser[HL_LTLFormula] = quantification |
     '(' ~> quantification <~ ')' |
     LTL_statement |
     '(' ~> LTL_statement <~ ')'
-
-  /*---------------------------------------------STATE---------------------------------------------*/
-
-  def state: Parser[HL_LTLFormula] =
-    atom ~ bin_op ~ state ^^ { case head ~ op ~ (tail: HL_LTLFormula) =>
-      op match {
-        case "AND" => Conjunction(List(head, tail))
-        case "OR" => Disjunction(List(head, tail))
-        case "->" => Implication(head, tail)
-        case "<->" => BiImplication(head, tail)
-      }
-    } |
-      "NOT" ~> atom ^^ { case x => Negation(x) } |
-      "(" ~> atom <~ ")" |
-      atom
-
-  def atom: Parser[HL_LTLFormula] =
-    "true" ^^ { _ => True() } |
-      "false" ^^ { _ => False() } |
-      predicate
 
   /*---------------------------------------------STATEMENT---------------------------------------------*/
   def LTL_statement: Parser[HL_LTLFormula] =
@@ -83,19 +90,35 @@ class GoalParserImpl extends JavaTokenParsers {
           case "NOT" => Negation(s)
         }
       } |
-      state ~ "UNTIL" ~ LTL_statement ^^ { case l ~ _ ~ r => Until(l, r) } | //VERIFICARE
-      state ~ "RELEASE" ~ LTL_statement ^^ { case l ~ _ ~ r => Release(l, r) } | //VERIFICARE
+      state ~ "UNTIL" ~ LTL_statement ^^ { case l ~ _ ~ r => Until(l, r) } | //TODO VERIFICARE
+      state ~ "RELEASE" ~ LTL_statement ^^ { case l ~ _ ~ r => Release(l, r) } | //TODO VERIFICARE
       state
 
   def ltl_op: Parser[Any] = "FINALLY" | "GLOBALLY" | "NEXT" | "UNTIL" | "RELEASE"
+
+  def state: Parser[HL_LTLFormula] =
+    atom ~ bin_op ~ state ^^ { case head ~ op ~ (tail: HL_LTLFormula) =>
+      op match {
+        case "AND" => Conjunction(List(head, tail))
+        case "OR" => Disjunction(List(head, tail))
+        case "->" => Implication(head, tail)
+        case "<->" => BiImplication(head, tail)
+      }
+    } |
+      "NOT" ~> atom ^^ (x => Negation(x)) |
+      "(" ~> atom <~ ")" |
+      atom
+
+  def atom: Parser[HL_LTLFormula] =
+    "true" ^^ { _ => True() } |
+      "false" ^^ { _ => False() } |
+      predicate
 
   /*---------------------------------------------OPs---------------------------------------------*/
 
   def expr_op: Parser[Any] = "==" | "<" | "<=" | ">" | ">="
 
   def expression: Parser[Any] = operand ~ expr_op ~ operand | operand
-
-  def variable_list: Parser[List[VariableTerm]] = repsep(variable, ",")
 
   def variable: Parser[VariableTerm] = "?" ~> ident ^^ { v => VariableTerm(v) }
 
@@ -105,26 +128,22 @@ class GoalParserImpl extends JavaTokenParsers {
 
   def argument_list: Parser[List[Term]] = repsep(argument, ",")
 
+  def variable_list: Parser[List[VariableTerm]] = repsep(variable, ",")
+
   /*---------------------------------------------FOL QUANTIFIER---------------------------------------------*/
 
-  def quantification: Parser[HL_PredicateFormula] = universal_quantification | existential_quantification
+  def quantification: Parser[HL_LTLFormula] = universal_quantification | existential_quantification
 
-  /*
-  * Il problema qui è che la argument_list è una lista di argument, che possono essere sia variabili che costanti
-  *
-  * per risolvere faccio un mapping Term=>VariableTem
-  */
-  def universal_quantification: Parser[UnivQuantifier] = "FOREACH" ~> argument_list ~ LTL_statement ^^ {
-    case (terms: List[Term]) ~ (formula: HL_PredicateFormula) => UnivQuantifier(terms.map(x => VariableTerm(x.toString)), formula)
+  def universal_quantification: Parser[UnivQuantifier] = "FOREACH" ~> variable_list ~ LTL_statement ^^ {
+    case (terms: List[Term]) ~ (formula: HL_PredicateFormula) => UnivQuantifier(terms, formula)
   }
 
-  def existential_quantification: Parser[ExistQuantifier] = "FORALL" ~> argument_list ~ LTL_statement ^^ {
-    case (terms: List[Term]) ~ (formula: HL_PredicateFormula) => ExistQuantifier(terms.map(x => VariableTerm(x.toString)), formula)
+  def existential_quantification: Parser[ExistQuantifier] = "FORALL" ~> variable_list ~ LTL_statement ^^ {
+    case (terms: List[Term]) ~ (formula: HL_PredicateFormula) => ExistQuantifier(terms, formula)
   }
 
   def predicate: Parser[Predicate] = ident ~ "(" ~ argument_list <~ ")" ^^ { case f ~ _ ~ t => Predicate(f, t) } |
     ident ^^ { x => Predicate(x, List()) }
-
 
   def constant: Parser[ConstantTerm] =
     floatingPointNumber ^^ (x => NumeralTerm(x.toDouble)) |
@@ -146,7 +165,6 @@ object testParserImpl extends GoalParserImpl {
 
     val Evaluate_incident_scenario = s"GOAL Evaluate_incident_scenario IS AND OF {\n${Evaluate_event_severity}\n${Decide_response_type}}"
     val Support_stragic_decisions = s"GOAL Support_stragic_decisions IS AND OF {\n${declare_alarm_state}\n${Evaluate_incident_scenario}\n}"
-
 
     val composite_goal = "GOAL Support_stragic_decisions IS AND OF { GOAL Declare_alarm_state : WHEN potential_incident THEN THE prefect ROLE SHALL ADDRESS FINALLY (alarm_state(attention)) }"
     val inner = "GOAL Declare_alarm_state : WHEN potential_incident THEN THE prefect ROLE SHALL ADDRESS FINALLY (alarm_state(attention))"
