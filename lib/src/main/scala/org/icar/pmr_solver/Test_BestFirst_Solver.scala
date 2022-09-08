@@ -1,11 +1,14 @@
 package org.icar.pmr_solver
 
-import org.icar.pmr_solver.best_first_planner.{Solver, WTS2Solution, WTSGraph}
+import org.icar.GoalSPECParser.Goal2BPMN
+import org.icar.grounding.NETTUNIT.Test_BestFirstSolver_Repository
+import org.icar.grounding.SolutionGrounder
+import org.icar.pmr_solver.best_first_planner.{Solver, WTS2Solution}
 import org.icar.pmr_solver.planning_domain.{AAL4E_cognitive_stimulation, GenericPlannerExecutor, IDS_like_domain, RandomlyGeneratedDomain}
 import org.icar.sublevel.{HL2Raw_Map, RawState}
 import org.icar.symbolic.{Domain, Problem}
-import org.scalameter.api.Gen
-import org.scalameter.api._
+
+import scala.Console.{BLACK_B, BOLD, RESET, YELLOW}
 
 object Test_Solver_AAL4E extends App {
   val my_domain = AAL4E_cognitive_stimulation.my_domain
@@ -71,9 +74,20 @@ object Test_Solver_Random extends App {
         val start_time: Long = System.currentTimeMillis()
         val converter = new WTS2Solution(wts, my_problem.I)
         val end_time: Long = System.currentTimeMillis()
-        val total_time: Long = end_time-start_time
-        print("wts size= "+wts.nodes.size)
-        println("=> time = "+total_time)
+        val total_time: Long = end_time - start_time
+        print("wts size= " + wts.nodes.size)
+        println("=> time = " + total_time)
+
+        val grounder = new SolutionGrounder(Test_BestFirstSolver_Repository)
+        val solution = grounder.groundSolution(converter)
+        val theBPMN = Goal2BPMN.getBPMN(solution)
+
+        Console.out.println(s"${RESET}${BLACK_B}${YELLOW}${BOLD}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${RESET}")
+        Console.out.println(s"${RESET}${BLACK_B}${YELLOW}${BOLD}BPMN PROCESS!${RESET}")
+        Console.out.println(s"${RESET}${BLACK_B}${YELLOW}${BOLD}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${RESET}")
+        Console.out.println(theBPMN.toString())
+        Console.out.println(s"${RESET}${BLACK_B}${YELLOW}${BOLD}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${RESET}")
+
       }
     }
   }
