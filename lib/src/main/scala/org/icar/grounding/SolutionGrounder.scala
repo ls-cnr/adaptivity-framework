@@ -1,17 +1,28 @@
 package org.icar.grounding
 
-import org.icar.bpmn2goal.{Converging, Data, DataType, Diverging, Event, EventType, Gateway, GatewayType, Item, Task, UnspecifiedDirection, Workflow}
+import org.icar.bpmn2goal._
 import org.icar.grounding.constraints.GroundingConstraint
+import org.icar.grounding.groundingStrategy.GroundingStrategy
+import org.icar.grounding.processDecorator.ProcessDecoratorStrategy
 import org.icar.pmr_solver.best_first_planner.WTS2Solution
-import org.icar.symbolic.{EndEvent, ExclusiveGateway, JoinGateway, SequenceFlow, SolutionTask, SplitGateway, StartEvent, WorkflowItem}
+import org.icar.symbolic.{SequenceFlow, _}
 
 import scala.collection.mutable.ListBuffer
 
 /**
+ * This class "ground" an abstract workflow to a concrete one. The grounding operation maps every item within the
+ * workflow to entities that can be later converted to BPMN.
  *
- * @param repository
+ * @author Davide Guastella
+ * @param repository a repository of [[ConcreteCapability]] that are used to ground abstract capabilities
+ * @param groundingStrategy
  */
-class SolutionGrounder(repository: CapabilityRepository) {
+class SolutionGrounder(repository: CapabilityRepository, groundingStrategy: GroundingStrategy) {
+  /**
+   *
+   */
+  var processDecorator: Option[ProcessDecoratorStrategy] = None
+
   /**
    * List of constraints that can be applied when grounding tasks. These are used to avoid that certain concrete
    * capability is grounded because, for example, it doesn't satisfy a temporal constraint, or simply because the
@@ -27,28 +38,42 @@ class SolutionGrounder(repository: CapabilityRepository) {
   def addConstraint(groundingConstraint: GroundingConstraint): Unit = groundingConstraints.addOne(groundingConstraint)
 
   /**
+   * Set the decoration strategy to be applied '''*AFTER*''' grounding an abstract workflow
+   *
+   * @param decorator
+   */
+  def setProcessDecorator(decorator: ProcessDecoratorStrategy): Unit = processDecorator = Some(decorator)
+
+  /**
    * Ground the input solution to a concrete solution that can be later converted into a BPMN notation and injected
-   * into the workflow engine for its execution
+   * into the workflow engine for its execution. The steps performed are the following:
+   *
+   *  1. Ground each item of the abstract workflow
+   *  1. Assemble a new [[Workflow]] using the grounded items
+   *  1. apply the [[ProcessDecoratorStrategy]], if any
    *
    * @param abstractWF
    * @param applyConstraints if true, the grounding constraints will be applied
    * @return
    */
   def groundSolution(abstractWF: WTS2Solution, applyConstraints: Boolean = false): Workflow = {
-    //Ground all workflow items...
+    //STEP 1 -> Ground items
     val groundedTasks = groundSolutionTasks(getSolutionTasks(abstractWF), applyConstraints)
     val gateways = groundGateways(abstractWF)
     val events = groundEvents(getStartEvents(abstractWF) ++ getEndEvents(abstractWF))
     val flows = groundSequenceFlows(abstractWF.wfflow, groundedTasks ++ gateways ++ events)
 
-    //Assemble a new "concrete" workflow
+    //STEP 2 -> Assemble a new "concrete" workflow
     val destWF = Workflow(Array[DataType](),
       (groundedTasks ++ gateways ++ events).toArray,
       flows.toArray,
       Array[Data]())
 
-    //return the new workflow
-    destWF
+    //STEP 3 -> Apply process decorator (if any)
+    processDecorator.map(pd => pd.apply(destWF)) match {
+      case Some(wf) => wf
+      case _ => destWF
+    }
   }
 
   /**
@@ -77,13 +102,23 @@ class SolutionGrounder(repository: CapabilityRepository) {
     def aux(flows: List[SequenceFlow], allItems: List[Item], itemID: Int): List[org.icar.bpmn2goal.SequenceFlow] = flows match {
       case Nil => List()
       case (head: SequenceFlow) :: tail =>
+        val fromID = head.from match {
+          case hs: SolutionTask => hs.grounding.unique_id
+          case hi => hi.getStringID()
+          case _ => ""
+        }
+
+        val toID = head.to match {
+          case hs: SolutionTask => hs.grounding.unique_id
+          case hi => hi.getStringID()
+          case _ => ""
+        }
+
         aux(tail, allItems, itemID + 1) ++ List(org.icar.bpmn2goal.SequenceFlow(s"SequenceFlow_${itemID}",
-          // find the "from" Item matching the head ID
-          allItems.find(p => p.id == head.from.getStringID()).orNull,
-          // find the "to" Item matching the head ID
-          allItems.find(p => p.id == head.to.getStringID()).orNull,
-          // copy the condition
-          Some(head.condition)))
+          allItems.find(p => p.id == fromID).orNull,
+          allItems.find(p => p.id == toID).orNull,
+          Some(head.condition))) // copy the condition
+
     }
 
     aux(flows, allItems, 0)
@@ -116,10 +151,10 @@ class SolutionGrounder(repository: CapabilityRepository) {
   def groundSolutionTasks(solutionTasks: List[SolutionTask], applyConstraints: Boolean): List[Item] = {
     val outputTasks = new ListBuffer[Item]()
     for (task <- solutionTasks) {
-      val taskID = task.grounding.capability.id
+      val serviceName = task.grounding.capability.id
 
       // find the matching services
-      var concreteCapabilities = findMatchingServices(taskID)
+      var concreteCapabilities = findMatchingServices(serviceName)
 
       // apply the grounding constraints, if any/specified
       if (applyConstraints) {
@@ -127,17 +162,16 @@ class SolutionGrounder(repository: CapabilityRepository) {
       }
 
       if (concreteCapabilities.length > 0) {
-        //Get the first available capability
-        //TODO a better strategy?
-        outputTasks.addOne(concreteCapabilities.head.toServiceTask())
+        //Get the first available capability according to the chosen grounding strategy
+        outputTasks.addOne(groundingStrategy.apply(concreteCapabilities).toServiceTask())
       }
-
     }
+
     outputTasks.toList
   }
 
   /**
-   * Check if the input capability satisfied the grounding constraints
+   * Check if the input capability satisfies the grounding constraints
    *
    * @param capability
    * @return

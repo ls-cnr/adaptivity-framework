@@ -14,8 +14,14 @@ case class DataType(id: String, name: String)
 
 abstract class EventDefinition
 
-//davide
-case class ErrorEventDefinition(errType: String) extends EventDefinition
+/**
+ * This definition specify, for a unique boundary event, the type of error and the task to which the event is attached
+ *
+ * @param attachedToRef the ID of the task to which the boundary error event is attached
+ * @param errType       the type of error. When a class handling a service task throw a BPMNError with the code
+ *                      [[errType]], the boundary error event is triggered
+ */
+case class ErrorEventDefinition(attachedToRef: String, errType: String) extends EventDefinition
 
 case class MessageEventDefinition(mess: Message) extends EventDefinition
 
@@ -32,20 +38,19 @@ case class Task(override val id: String, label: String, tasktype: String, messag
 case class Event(override val id: String, label: String, eventtype: String, definition: EventDefinition) extends Item(id)
 
 object EventType extends Enumeration {
-  type eventType = Value
-  val Start, End = Value
+  val Start, End, Boundary = Value
+
   override def toString() =
     this match {
       case Start => "start"
       case End => "end"
+      case Boundary => "boundary"
     }
 }
 
 case class Gateway(override val id: String, label: String, gwtype: String, direction: GatewayDirection) extends Item(id)
 
 object GatewayType extends Enumeration {
-  type gatewayType = Value
-
   val Join, Split, Exclusive = Value
 
   override def toString() =
@@ -58,10 +63,18 @@ object GatewayType extends Enumeration {
 
 case class ServiceTask(override val id: String, label: String, className: String, extElems: Option[FlowableExtentionElements]) extends Item(id)
 
-//davide, todo rimuovi
 case class FlowableExtentionElements(listeners: List[FlowableExecutionListener])
 
-//davide
+/**
+ * An execution listener attached to ServiceTask. This is used by Flowable to execute some code before and/or after the
+ * execution of a service task.
+ *
+ * @param event     "end" or "start" (lowercase). In the former case the code from [[className]] is executed after the
+ *                  execution of the service task to which this listener is attached. In the latter case, the listener is
+ *                  executed before.
+ * @param className the complete path of the class containing the code to execute before or after the execution of the
+ *                  service task to which this listener is attached
+ */
 case class FlowableExecutionListener(event: String, className: String)
 
 abstract class Flow(id: String)

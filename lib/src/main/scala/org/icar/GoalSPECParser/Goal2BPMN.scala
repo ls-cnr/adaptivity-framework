@@ -1,7 +1,6 @@
 package org.icar.GoalSPECParser
 
 import org.icar.bpmn2goal._
-import org.icar.symbolic.{SequenceFlow, _}
 
 import scala.xml.Elem
 
@@ -10,9 +9,7 @@ import scala.xml.Elem
  */
 object Goal2BPMN {
 
-  def getBPMN(process: Workflow): Elem = {
-    val processID = ""
-    val processName = ""
+  def getBPMN(process: Workflow, processName: String, processID: String): Elem = {
     <definitions xmlns:flowable="http://flowable.org/bpmn" xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
                  xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
@@ -20,18 +17,27 @@ object Goal2BPMN {
                  typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
                  targetNamespace="http://www.activiti.org/test">
       <process id={processID} name={processName} isExecutable="true">
-        {process.items.map(writeItems)}{process.flows.map(writeFlows)}
+        {process.items.map(writeItem)}{process.flows.map(writeFlow)}
       </process>
     </definitions>
   }
 
   /*Service task------------------------------------------*/
   def serviceTask(task: ServiceTask): Elem = {
-    <serviceTask id={task.id} flowable:class={task.className}>
-      {if (task.extElems.isDefined) {
-      extentionElements(task.extElems.get)
-    }}
+    <serviceTask id={task.id} name={task.label} flowable:class={scala.xml.Unparsed(task.className)}>
+      <extensionElements>
+        {if (task.extElems.isDefined) {
+        task.extElems.get.listeners.map(executionListener)
+        //        extensionElements(task.extElems.get)
+      }}
+      </extensionElements>
     </serviceTask>
+  }
+
+  def extensionElements(elems: FlowableExtentionElements): Elem = {
+    <extensionElements>
+      {elems.listeners.foreach(executionListener)}
+    </extensionElements>
   }
 
   def gateway(gt: Gateway): Elem = gt match {
@@ -49,18 +55,12 @@ object Goal2BPMN {
 
   }
 
-  def extentionElements(elems: FlowableExtentionElements): Elem = {
-    <extensionElements>
-      {elems.listeners.foreach(executionListener)}
-    </extensionElements>
-  }
-
   def executionListener(listener: FlowableExecutionListener): Elem =
-    <flowable:executionListener event={listener.event} class={listener.className}></flowable:executionListener>
+    <flowable:executionListener event={listener.event} class={scala.xml.Unparsed(listener.className)}></flowable:executionListener>
 
   def userTask(task: Task): Elem = <userTask id={task.id} name={task.label} flowable:candidateGroups=""></userTask>
 
-  def writeItems(item: Item): Elem = item match {
+  def writeItem(item: Item): Elem = item match {
     case t: Task => userTask(t)
     case st: ServiceTask => serviceTask(st)
     case gt: Gateway => gateway(gt)
@@ -68,15 +68,37 @@ object Goal2BPMN {
   }
 
   def event(ev: Event): Elem = ev match {
+    // ~~~~~ START EVENT ~~~~~
     case ev if EventType.withName(ev.eventtype) == EventType.Start =>
-      <startEvent id={ev.id}></startEvent>
-
+      <startEvent id={ev.id} name={ev.label}></startEvent>
+    // ~~~~~ END EVENT ~~~~~
     case ev if EventType.withName(ev.eventtype) == EventType.End =>
-      <endEvent id={ev.id}></endEvent>
-
+      <endEvent id={ev.id} name={ev.label}></endEvent>
+    // ~~~~~ BOUNDARY EVENT ~~~~~
+    case ev if EventType.withName(ev.eventtype) == EventType.Boundary =>
+      <boundaryEvent id={ev.id} name={ev.label} attachedToRef={getBoundaryEventAttachedRef(ev.definition)}>
+        {if (ev.definition != null) {
+        boundaryEventDefinition(ev.definition)
+      }}
+      </boundaryEvent>
   }
 
-  def writeFlows(s: Flow): Elem = s match {
+  def getBoundaryEventAttachedRef(evDef: EventDefinition): String = evDef match {
+    case theDef: ErrorEventDefinition => theDef.attachedToRef
+    case _ => ""
+  }
+
+  def boundaryEventDefinition(evtDef: EventDefinition): Elem = evtDef match {
+    case t: ErrorEventDefinition => <errorEventDefinition errorRef={t.errType}></errorEventDefinition>
+    case t: TimerEventDefinition =>
+      <timerEventDefinition>
+        <timeDuration>
+          {scala.xml.Unparsed(t.timecondition)}
+        </timeDuration>
+      </timerEventDefinition>
+  }
+
+  def writeFlow(s: Flow): Elem = s match {
     case sf: org.icar.bpmn2goal.SequenceFlow => writeSequenceFlows(sf)
     //TODO other flow types here
   }
@@ -101,26 +123,5 @@ object Goal2BPMN {
     <conditionExpression xsi:type="tFormalExpression">
       {scala.xml.Unparsed("<![CDATA[%s]]>".format(expression))}
     </conditionExpression>
-
-  def boundaryEvent(evt: BoundaryEvent): Elem = {
-    <boundaryEvent id={evt.id} name={evt.name} attachedToRef={evt.attachedToRef}>
-      {if (evt.evtDef.isDefined) {
-      evt.evtDef.get match {
-        case evtDef: TimerEventDefinition => timerEventDefinition(evtDef)
-        case evtDef: ErrorEventDefinition => errorEventDefinition(evtDef)
-      }
-    }}
-    </boundaryEvent>
-  }
-
-  def timerEventDefinition(evtDef: TimerEventDefinition): Elem = {
-    <timerEventDefinition>
-      <timeDuration>
-        {evtDef.timecondition}
-      </timeDuration>
-    </timerEventDefinition>
-  }
-
-  def errorEventDefinition(evtDef: ErrorEventDefinition): Elem = <errorEventDefinition errorRef={evtDef.errType}></errorEventDefinition>
 
 }
