@@ -1,19 +1,26 @@
 package org.icar.grounding.NETTUNIT
 
 import org.icar.grounding.{CapabilityRepository, ConcreteCapability}
+import org.icar.symbolic.AbstractCapability
 
-object Test_BestFirstSolver_Repository extends CapabilityRepository {
+import scala.annotation.tailrec
 
-  def aux(current_idx: Int, limit: Int): Int = current_idx match {
-    case i if i < limit => {
-      add(s"CAP${i}", // -> the service name
-        ConcreteCapability(s"CAP${i}", // -> the service name (here we are in a concrete capability)
-          s"org.com.myclassCAP${i}", // -> the class that is used to realize the service
-          Some(s"com.cnr.startEventCAP${i}"))) // -> the listener executed when the BPMN task associated to this capability begins its execution
-      1 + aux(current_idx + 1, limit)
+case class Test_BestFirstSolver_Repository(capabilities: List[AbstractCapability]) extends CapabilityRepository {
+
+  @tailrec
+  final def aux(capabilities: List[AbstractCapability]): Unit = capabilities match {
+    case (cap: AbstractCapability) :: tail => {
+      for (typeID <- 1 to 10) {
+        add(cap.id, // -> the service name
+          ConcreteCapability(cap.id, // -> the service name (here we are in a concrete capability)
+            s"org.com.myclass_${cap.id}_type${typeID}", // -> the class that is used to realize the service
+            Some(s"com.cnr.startEvent_${cap.id}_type${typeID}"))) // -> the listener executed when the BPMN task associated to this capability begins its execution
+      }
+      aux(tail)
     }
-    case i => 0
+    case _ :: _ =>
+    case Nil =>
   }
 
-  aux(0, 50)
+  aux(capabilities)
 }

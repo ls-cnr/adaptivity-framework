@@ -1,17 +1,15 @@
 package org.icar.symbolic
 
-import org.icar.bpmn2goal.EventDefinition
-
 import java.io.{File, PrintWriter}
 
 abstract class WorkflowItem {
   def getStringID(): String = this match {
-    case x: StartEvent => s"StartEvent_${this.asInstanceOf[StartEvent].id}"
-    case x: EndEvent => s"EndEvent_${this.asInstanceOf[EndEvent].id}"
-    case x: SolutionTask => s"SolutionTask_${this.asInstanceOf[SolutionTask].id}"
-    case x: SplitGateway => s"SplitGateway_${this.asInstanceOf[SplitGateway].id}"
-    case x: JoinGateway => s"JoinGateway_${this.asInstanceOf[JoinGateway].id}"
-    case x: ExclusiveGateway => s"ExclusiveGateway_${this.asInstanceOf[ExclusiveGateway].id}"
+    case _: StartEvent => s"StartEvent_${this.asInstanceOf[StartEvent].id}"
+    case _: EndEvent => s"EndEvent_${this.asInstanceOf[EndEvent].id}"
+    case _: SolutionTask => s"SolutionTask_${this.asInstanceOf[SolutionTask].id}"
+    case _: SplitGateway => s"SplitGateway_${this.asInstanceOf[SplitGateway].id}"
+    case _: JoinGateway => s"JoinGateway_${this.asInstanceOf[JoinGateway].id}"
+    case _: ExclusiveGateway => s"ExclusiveGateway_${this.asInstanceOf[ExclusiveGateway].id}"
   }
 }
 
@@ -26,9 +24,6 @@ case class SplitGateway(id: Int, outport: List[String]) extends WorkflowItem
 case class JoinGateway(id: Int) extends WorkflowItem
 
 case class ExclusiveGateway(id: Int) extends WorkflowItem
-
-//davide
-case class BoundaryEvent(id: String, name: String, attachedToRef: String, cancelActivity: Option[Boolean], evtDef: Option[EventDefinition])
 
 case class SequenceFlow(from: WorkflowItem, to: WorkflowItem, scenario: String = "", condition: HL_PredicateFormula = True())
 
