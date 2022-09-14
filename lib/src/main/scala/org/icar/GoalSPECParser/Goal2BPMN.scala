@@ -6,6 +6,11 @@ import scala.xml.Elem
 
 /**
  * Use this class to transform a [[Workflow]] into a BPMN representation that can be injected into Flowable.
+ *
+ * '''NOTE''': the graphical information about items are not inserted. This causes software like Camunda modeler to show
+ * an error "No diagram to display". To address this issue, open the diagram with Eclipse (with Flowable plugin), modify
+ * the position of some elements in the graphical editor, the graphical information are added automatically. Now the
+ * diagram can be opened in Camunda.
  */
 object Goal2BPMN {
 
@@ -84,13 +89,14 @@ object Goal2BPMN {
   }
 
   def getBoundaryEventAttachedRef(evDef: EventDefinition): String = evDef match {
-    case theDef: ErrorEventDefinition => theDef.attachedToRef
+    case theDef: FlowableErrorEventDefinition => theDef.attachedToRef
+    case theDef: FlowableTimerEventDefinition => theDef.attachedToRef
     case _ => ""
   }
 
   def boundaryEventDefinition(evtDef: EventDefinition): Elem = evtDef match {
-    case t: ErrorEventDefinition => <errorEventDefinition errorRef={t.errType}></errorEventDefinition>
-    case t: TimerEventDefinition =>
+    case t: FlowableErrorEventDefinition => <errorEventDefinition errorRef={t.errType}></errorEventDefinition>
+    case t: FlowableTimerEventDefinition =>
       <timerEventDefinition>
         <timeDuration>
           {scala.xml.Unparsed(t.timecondition)}

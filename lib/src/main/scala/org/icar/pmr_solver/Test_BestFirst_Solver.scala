@@ -1,7 +1,7 @@
 package org.icar.pmr_solver
 
 import org.icar.GoalSPECParser.Goal2BPMN
-import org.icar.grounding.NETTUNIT.{NETTUNITProcessDecorator, Test_BestFirstSolver_Repository}
+import org.icar.grounding.NETTUNIT.{NETTUNITProcessDecoratorStrategy, Test_BestFirstSolver_Repository}
 import org.icar.grounding.SolutionGrounder
 import org.icar.grounding.groundingStrategy.TabuGroundingStrategy
 import org.icar.pmr_solver.best_first_planner.{Solver, WTS2Solution}
@@ -24,7 +24,33 @@ object Test_Solver_AAL4E extends App {
       allow_loop = true,
       allow_parallel_action = true))
 
-  GenericPlannerExecutor.run_solver(my_problem, my_domain, qos, map, conf)
+  //GenericPlannerExecutor.run_solver(my_problem, my_domain, qos, map, conf)
+
+  val solver = Solver(my_problem, my_domain, qos, conf)
+  val its = solver.iterate_until_termination()
+  if (!solver.solution_set.wts_list.isEmpty) {
+    for (wts <- solver.solution_set.full_wts) {
+      val start_time: Long = System.currentTimeMillis()
+      val converter = new WTS2Solution(wts, my_problem.I)
+      val end_time: Long = System.currentTimeMillis()
+      val total_time: Long = end_time - start_time
+      print("wts size= " + wts.nodes.size)
+      println("=> time = " + total_time)
+
+      val capabilityRepository = Test_BestFirstSolver_Repository(my_problem.actions.sys_action.toList)
+      val grounder = new SolutionGrounder(capabilityRepository, new TabuGroundingStrategy(2))
+      grounder.setProcessDecorator(NETTUNITProcessDecoratorStrategy)
+      val solution = grounder.groundSolution(converter)
+      val theBPMN = Goal2BPMN.getBPMN(solution, "myBPMNProcess", "process_0")
+
+      Console.out.println(s"${RESET}${BLACK_B}${YELLOW}${BOLD}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${RESET}")
+      Console.out.println(s"${RESET}${BLACK_B}${YELLOW}${BOLD}BPMN PROCESS!${RESET}")
+      Console.out.println(s"${RESET}${BLACK_B}${YELLOW}${BOLD}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${RESET}")
+      Console.out.println(theBPMN.toString())
+      Console.out.println(s"${RESET}${BLACK_B}${YELLOW}${BOLD}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${RESET}")
+
+    }
+  }
 
 }
 
@@ -82,7 +108,7 @@ object Test_Solver_Random extends App {
 
         val capabilityRepository = Test_BestFirstSolver_Repository(my_problem.actions.sys_action.toList)
         val grounder = new SolutionGrounder(capabilityRepository, new TabuGroundingStrategy(2))
-        grounder.setProcessDecorator(NETTUNITProcessDecorator)
+        grounder.setProcessDecorator(NETTUNITProcessDecoratorStrategy)
         val solution = grounder.groundSolution(converter)
         val theBPMN = Goal2BPMN.getBPMN(solution, "myBPMNProcess", "process_0")
 

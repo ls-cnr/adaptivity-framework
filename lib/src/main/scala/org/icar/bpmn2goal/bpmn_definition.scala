@@ -21,7 +21,9 @@ abstract class EventDefinition
  * @param errType       the type of error. When a class handling a service task throw a BPMNError with the code
  *                      [[errType]], the boundary error event is triggered
  */
-case class ErrorEventDefinition(attachedToRef: String, errType: String) extends EventDefinition
+case class FlowableErrorEventDefinition(attachedToRef: String, errType: String) extends EventDefinition
+
+case class FlowableTimerEventDefinition(attachedToRef: String, timecondition: String) extends EventDefinition
 
 case class MessageEventDefinition(mess: Message) extends EventDefinition
 

@@ -61,6 +61,7 @@ class SolutionGrounder(repository: CapabilityRepository, groundingStrategy: Grou
     val groundedTasks = groundSolutionTasks(getSolutionTasks(abstractWF), applyConstraints)
     val gateways = groundGateways(abstractWF)
     val events = groundEvents(getStartEvents(abstractWF) ++ getEndEvents(abstractWF))
+
     val flows = groundSequenceFlows(abstractWF.wfflow, groundedTasks ++ gateways ++ events)
 
     //STEP 2 -> Assemble a new "concrete" workflow
@@ -83,11 +84,23 @@ class SolutionGrounder(repository: CapabilityRepository, groundingStrategy: Grou
    * @param abstractWF
    * @return
    */
-  def groundGateways(abstractWF: WTS2Solution): List[Item] = {
+  def groundGateways(abstractWF: WTS2Solution): List[Item] =
     getJoinGateways(abstractWF).map(gt => Gateway(gt.getStringID(), gt.getStringID(), GatewayType.Join.toString, Converging())) ++
       getSplitGateways(abstractWF).map(gt => Gateway(gt.getStringID(), gt.getStringID(), GatewayType.Split.toString, Diverging())) ++
       getExclusiveGateways(abstractWF).map(gt => Gateway(gt.getStringID(), gt.getStringID(), GatewayType.Exclusive.toString, UnspecifiedDirection()))
-  }
+
+  /**
+   * maps an endpoint(start/end) of a sequence flow from an abstract item ([[WorkflowItem]]) to a concrete item
+   * ([[Item]] or [[Event]] or [[Gateway]]). All concrete items are assumed to be previously grounded and present
+   * in the [[allItems]] list.
+   *
+   * @param workflowItem the abstract workflow item to be mapped
+   * @param allItems     concrete workflow items ([[Item]] or [[Event]] or [[Gateway]])
+   * @return Given the input abstract item (workflowItem), this function returns the corresponding concrete item
+   *         (i.e., with the same ID), otherwise [[None]]
+   */
+  private def getSequenceFlowEndPoint(workflowItem: WorkflowItem, allItems: List[Item]): Option[Item] =
+    allItems.find(st => st.id == workflowItem.getStringID())
 
   /**
    * Do the grounding of sequence flow in an abstract workflow, and returns sequence flows that can be used in a
@@ -102,23 +115,15 @@ class SolutionGrounder(repository: CapabilityRepository, groundingStrategy: Grou
     def aux(flows: List[SequenceFlow], allItems: List[Item], itemID: Int): List[org.icar.bpmn2goal.SequenceFlow] = flows match {
       case Nil => List()
       case (head: SequenceFlow) :: tail =>
-        val fromID = head.from match {
-          case hs: SolutionTask => hs.grounding.unique_id
-          case hi => hi.getStringID()
-          case _ => ""
-        }
-
-        val toID = head.to match {
-          case hs: SolutionTask => hs.grounding.unique_id
-          case hi => hi.getStringID()
-          case _ => ""
-        }
+        /*map the endpoints (start/end) from abstract items ([[WorkflowItem]] ) to concrete items, that is, Item or
+        Event or Gateway. */
+        val fromItem = allItems.find(st => st.id == head.from.getStringID()).orNull
+        val toItem = allItems.find(st => st.id == head.to.getStringID()).orNull
 
         aux(tail, allItems, itemID + 1) ++ List(org.icar.bpmn2goal.SequenceFlow(s"SequenceFlow_${itemID}",
-          allItems.find(p => p.id == fromID).orNull,
-          allItems.find(p => p.id == toID).orNull,
+          fromItem,
+          toItem,
           Some(head.condition))) // copy the condition
-
     }
 
     aux(flows, allItems, 0)
@@ -150,8 +155,10 @@ class SolutionGrounder(repository: CapabilityRepository, groundingStrategy: Grou
    */
   def groundSolutionTasks(solutionTasks: List[SolutionTask], applyConstraints: Boolean): List[Item] = {
     val outputTasks = new ListBuffer[Item]()
+
     for (task <- solutionTasks) {
       val serviceName = task.grounding.capability.id
+      val solutionTaskID = task.id
 
       // find the matching services
       var concreteCapabilities = findMatchingServices(serviceName)
@@ -163,7 +170,8 @@ class SolutionGrounder(repository: CapabilityRepository, groundingStrategy: Grou
 
       if (concreteCapabilities.length > 0) {
         //Get the first available capability according to the chosen grounding strategy
-        outputTasks.addOne(groundingStrategy.apply(concreteCapabilities).toServiceTask())
+        val concreteCapability = groundingStrategy.apply(concreteCapabilities).withID(solutionTaskID).toServiceTask()
+        outputTasks.addOne(concreteCapability)
       }
     }
 
