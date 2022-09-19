@@ -48,6 +48,9 @@ repositories {
 }
 
 dependencies {
+    // https://mvnrepository.com/artifact/org.scalaj/scalaj-http
+    implementation 'org.scalaj:scalaj-http_2.13:2.4.2'
+
     // Use Scala 2.13 in our library project
     implementation 'org.scala-lang:scala-library:2.13.6'
     implementation 'org.scala-lang.modules:scala-parser-combinators_2.13:1.1.2'
