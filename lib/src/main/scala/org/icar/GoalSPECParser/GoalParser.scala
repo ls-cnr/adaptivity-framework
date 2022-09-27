@@ -1,8 +1,10 @@
 package org.icar.GoalSPECParser
 
+import org.icar.GoalSPECParser.testParserImpl.parseAll
 import org.icar.symbolic._
 
 import java.time.{Duration, Period, ZonedDateTime}
+import scala.io.Source
 import scala.util.parsing.combinator.JavaTokenParsers
 
 class GoalParserImpl extends JavaTokenParsers {
@@ -105,9 +107,12 @@ class GoalParserImpl extends JavaTokenParsers {
         case "<->" => BiImplication(head, tail)
       }
     } |
-      "NOT" ~> atom ^^ (x => Negation(x)) |
-      "(" ~> atom <~ ")" |
+      "NOT" ~> state ^^ (x => Negation(x)) |
+      "(" ~> state <~ ")" |
       atom
+  //"NOT" ~> atom ^^ (x => Negation(x)) |
+  //"(" ~> atom <~ ")" |
+  //atom
 
   def atom: Parser[HL_LTLFormula] =
     "true" ^^ { _ => True() } |
@@ -142,8 +147,9 @@ class GoalParserImpl extends JavaTokenParsers {
     case (terms: List[Term]) ~ (formula: HL_PredicateFormula) => ExistQuantifier(terms, formula)
   }
 
-  def predicate: Parser[Predicate] = ident ~ "(" ~ argument_list <~ ")" ^^ { case f ~ _ ~ t => Predicate(f, t) } |
-    ident ^^ { x => Predicate(x, List()) }
+  def predicate: Parser[Predicate] =
+    ident ~ "(" ~ argument_list <~ ")" ^^ { case f ~ _ ~ t => Predicate(f, t) } |
+      ident ^^ { x => Predicate(x, List()) }
 
   def constant: Parser[ConstantTerm] =
     floatingPointNumber ^^ (x => NumeralTerm(x.toDouble)) |
@@ -155,7 +161,15 @@ class GoalParserImpl extends JavaTokenParsers {
 }
 
 object testParserImpl extends GoalParserImpl {
+
   def main(args: Array[String]): Unit = {
+    val fname = "/Users/dguastel/Desktop/goaltreeNETTUNIT.txt"
+    val fileContent = Source.fromFile(fname).getLines().filterNot(x => x.isEmpty).mkString("\n")
+    val ll = parseAll(goal, fileContent)
+    println(ll)
+  }
+
+  def old_parser_tests(): Unit = {
 
     val goalExample_1 = "GOAL accept_new_issues_goal : WHEN MESSAGE issue_vote_list(?IssueList) RECEIVED FROM THE user ROLE THEN THE issue_manager ROLE SHALL ADDRESS FINALLY accepted(?IssueList)"
 
@@ -178,7 +192,6 @@ object testParserImpl extends GoalParserImpl {
 
     val finally_1 = "FINALLY (alarm_state(attention) OR alarm_state(pre_alert) OR alarm_state(alert) OR alarm_state(normality))"
     val ll_finally = parseAll(LTL_statement, finally_1)
-
 
     val ll = parseAll(goal, Support_stragic_decisions)
     println(parseAll(goal, Support_stragic_decisions))
