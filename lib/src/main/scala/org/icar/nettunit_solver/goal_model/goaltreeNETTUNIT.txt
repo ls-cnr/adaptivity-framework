@@ -1,0 +1,30 @@
+GOAL Managing_emergency IS AND OF {
+
+GOAL send_team_to_evaluate : WHEN true THEN THE safety_manager ROLE SHALL ADDRESS alarm_state(attention)
+
+GOAL activate_internal_security_plan : WHEN alarm_state(attention) OR alarm_state(pre_alert) THEN THE plant_operator ROLE SHALL ADDRESS internal_plan_active(true)
+
+GOAL notify_competent_body_internal_plan : WHEN internal_plan_active(true) AND alarm_state(attention) THEN THE nettunit ROLE SHALL ADDRESS informed_authority(prefect, attention) AND informed_authority(mayor, attention)
+
+GOAL inform_technical_rescue_organisation_internal_plan : WHEN internal_plan_active(true) AND alarm_state(attention) THEN THE nettunit ROLE SHALL ADDRESS informed(commander_fire_brigade, attention)
+
+GOAL fire_brigade_assessment : WHEN internal_plan_active(true) AND alarm_state(attention) AND NOT fire_extinguished THEN THE nettunit ROLE SHALL ADDRESS update(event, fire_extinguished) AND alarm_state(pre_alert)
+
+GOAL prepare_tech_report : WHEN NOT fire_extinguished AND internal_plan_active(true) THEN THE commander_fire_brigade ROLE SHALL ADDRESS tech_report(event)
+
+GOAL coordinate_firefighter_intervention : WHEN alarm_state(pre_alert) AND internal_plan_active(true) AND NOT fire_extinguished THEN THE nettunit ROLE SHALL ADDRESS coordinated_firefighter_intervention
+
+GOAL declare_pre_alert_state : WHEN alarm_state(attention) AND internal_plan_active(true) AND second_explosion THEN THE nettunit ROLE SHALL ADDRESS alarm_state(pre_alert)
+
+GOAL inform_technical_rescue_organisation_alert : WHEN alarm_state(pre_alert) THEN THE nettunit ROLE SHALL ADDRESS informed(118, alert) AND informed(ASP, alert) AND informed(ARPA, pre_alert)
+
+GOAL evaluate_fire_radiant_energy : WHEN informed(ARPA, pre_alert) AND alarm_state(pre_alert) THEN THE arpa ROLE SHALL ADDRESS evaluated_fire_radiant_energy
+
+GOAL declare_alarm_state : WHEN evaluated_fire_radiant_energy AND alarm_state(pre_alert) AND NOT fire_extinguished THEN THE commander_fire_brigade ROLE SHALL ADDRESS alarm_state(alarm)
+
+GOAL ensure_presence_of_qualified_personnel : WHEN alarm_state(alarm) THEN THE nettunit ROLE SHALL ADDRESS informed(civil_protection,event) AND informed_authority(municipality,event)
+
+GOAL ensure_presence_of_representative : WHEN alarm_state(alarm) THEN THE nettunit ROLE SHALL ADDRESS informed_authority(questor,event)
+
+GOAL do_crossborder_communication : WHEN evaluated_fire_radiant_energy AND alarm_state(alert) THEN THE nettunit ROLE SHALL ADDRESS crossborder_inform
+}
