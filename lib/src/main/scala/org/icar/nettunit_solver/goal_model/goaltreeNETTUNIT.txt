@@ -1,6 +1,6 @@
 GOAL Managing_emergency IS AND OF {
 
-GOAL send_team_to_evaluate : WHEN true THEN THE safety_manager ROLE SHALL ADDRESS alarm_state(attention)
+GOAL send_team_to_evaluate : WHEN emergency_location(refinery) THEN THE safety_manager ROLE SHALL ADDRESS alarm_state(attention)
 
 GOAL activate_internal_security_plan : WHEN alarm_state(attention) OR alarm_state(pre_alert) THEN THE plant_operator ROLE SHALL ADDRESS internal_plan_active(done)
 

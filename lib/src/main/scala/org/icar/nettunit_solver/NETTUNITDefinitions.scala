@@ -61,11 +61,13 @@ object NETTUNITDefinitions {
   /* capability */
   val send_team_to_evaluate = AbstractCapability(
     /*
-    GOAL send_team_to_evaluate : WHEN true THEN THE safety_manager ROLE SHALL ADDRESS alarm_state(attention)
+    GOAL send_team_to_evaluate : WHEN emergency_location(refinery) THEN THE safety_manager ROLE SHALL ADDRESS alarm_state(attention)
     */
     id = "send_team_to_evaluate",
     params = List(),
-    pre = True(),
+
+    pre = GroundPredicate("emergency_location", List(AtomTerm("refinery"))),
+
     post = GroundPredicate("alarm_state", List(AtomTerm("attention"))),
     effects = Array(
       EvolutionGrounding("attention_state", Array[EvoOperator](
@@ -396,7 +398,7 @@ object NETTUNITDefinitions {
   val env_action: Array[AbstractCapability] = Array.empty
 
   /* the problem */
-  val initial = StateOfWorld(List())
+  val initial = StateOfWorld(List(GroundPredicate("emergency_location", List(AtomTerm("refinery")))))
 
   val availableActions = AvailableActions(sys_action, env_action)
 }
