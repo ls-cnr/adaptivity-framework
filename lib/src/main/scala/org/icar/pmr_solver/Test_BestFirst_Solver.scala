@@ -1,19 +1,17 @@
 package org.icar.pmr_solver
 
-import org.icar.GoalSPECParser.{Goal2BPMN, testParserImpl}
-import org.icar.GoalSPECParser.testParserImpl.demo_goal
+import org.icar.GoalSPECParser.Goal2BPMN
 import org.icar.bpmn2goal.bpmn_parser
 import org.icar.grounding.NETTUNIT.{AAL4E_Repository, NETTUNITProcessDecoratorStrategy, Test_BestFirstSolver_Repository}
 import org.icar.grounding.SolutionGrounder
 import org.icar.grounding.groundingStrategy.TabuGroundingStrategy
 import org.icar.pmr_solver.best_first_planner.{Solver, WTS2Solution}
 import org.icar.pmr_solver.planning_domain.{AAL4E_cognitive_stimulation, GenericPlannerExecutor, IDS_like_domain, RandomlyGeneratedDomain}
-import org.icar.service.BPMN2GoalSPEC
 import org.icar.sublevel.{HL2Raw_Map, RawState}
 import org.icar.symbolic.{Domain, Problem}
-import scalaj.http.{Http, HttpOptions}
+import scalaj.http.Http
 
-import java.io.{ByteArrayInputStream, InputStream}
+import java.io.ByteArrayInputStream
 import scala.Console.{BLACK_B, BOLD, RESET, YELLOW}
 
 object Test_Solver_AAL4E extends App {
@@ -68,6 +66,17 @@ object Test_Solver_AAL4E extends App {
   }
 
   def executeWithFlowable(processDef: String): Unit = {
+    val resultDeploy = Http(s"http://localhost:8080/AAL4E/deployProcess/${bpmnProcessID}")
+      .postData(processDef)
+      .header("Content-Type", "application/xml").asString
+
+    val requestBody = s"{\n  \"processID\":\"$bpmnProcessID\",\n  \"requestDescription\":\"ciao\"\n}"
+    val resultApply = Http(s"http://localhost:8080/AAL4E/apply")
+      .postData(requestBody)
+      .header("Content-Type", "application/json").asString
+  }
+
+  def executeWithFlowable2(processDef: String): Unit = {
     Console.out.println(s"${RESET}${BLACK_B}${YELLOW}${BOLD}DEPLOYING BPMN PROCESS${RESET}")
     //replace tee with a dummy variable...
     val teeSymbol = "\u22A4"

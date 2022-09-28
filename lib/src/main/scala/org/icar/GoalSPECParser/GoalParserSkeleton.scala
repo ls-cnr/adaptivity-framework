@@ -1,7 +1,5 @@
 package org.icar.GoalSPECParser
 
-import org.icar.GoalSPECParser.testParserImpl.{final_condition, parseAll}
-
 import scala.util.parsing.combinator.JavaTokenParsers
 
 class GoalParserSkeleton extends JavaTokenParsers {

@@ -1,30 +1,34 @@
 package org.icar.nettunit_solver
 
-import org.icar.GoalSPECParser.{Goal2BPMN, testParserImpl}
+import org.icar.GoalSPECParser.Goal2BPMN
+import org.icar.GoalSPECParser.NETTUNIT.NETTUNITParser
 import org.icar.bpmn2goal.bpmn_parser
-import org.icar.grounding.NETTUNIT.{AAL4E_Repository, NETTUNITProcessDecoratorStrategy, Test_BestFirstSolver_Repository}
+import org.icar.grounding.NETTUNIT.{AAL4E_Repository, NETTUNITProcessDecoratorStrategy}
 import org.icar.grounding.SolutionGrounder
 import org.icar.grounding.groundingStrategy.TabuGroundingStrategy
-import org.icar.pmr_solver.{IterationTermination, SolutionConfiguration, SolverConfiguration}
 import org.icar.pmr_solver.best_first_planner.{Solver, WTS2Solution}
-import org.icar.pmr_solver.planning_domain.{AAL4E_cognitive_stimulation, GenericPlannerExecutor, IDS_like_domain, RandomlyGeneratedDomain}
-import org.icar.service.BPMN2GoalSPEC
-import org.icar.sublevel.{HL2Raw_Map, RawState}
-import org.icar.symbolic.{Domain, Problem}
-import scalaj.http.{Http, HttpOptions}
+import org.icar.pmr_solver.{IterationTermination, SolutionConfiguration, SolverConfiguration}
+import org.icar.sublevel.RawState
+import org.icar.symbolic.Problem
 
-import java.io.{ByteArrayInputStream, InputStream}
+import java.io.ByteArrayInputStream
 import scala.Console.{BLACK_B, BOLD, RESET, YELLOW}
 
 object Test_NETTUNIT extends App {
   val bpmnProcessID = "NETTUNITProcess"
 
 
+  //GoalModel(Array(
+  val goalModel = NETTUNITParser.loadGoalModelFromFile("/Users/dguastel/Desktop/goaltreeNETTUNIT.txt")
 
-  val my_domain = AAL4E_cognitive_stimulation.my_domain
-  val my_problem = AAL4E_cognitive_stimulation.my_problem
-  val map = AAL4E_cognitive_stimulation.map
-  val qos: RawState => Float = AAL4E_cognitive_stimulation.qos
+
+  val my_problem = Problem(NETTUNITDefinitions.initial, goalModel, NETTUNITDefinitions.availableActions)
+
+
+  val my_domain = NETTUNITDefinitions.my_domain
+  //val my_problem = AAL4E_cognitive_stimulation.my_problem
+  val map = NETTUNITDefinitions.map
+  val qos: RawState => Float = NETTUNITDefinitions.qos
   val conf = SolverConfiguration(
     IterationTermination(50),
     SolutionConfiguration(
@@ -46,8 +50,11 @@ object Test_NETTUNIT extends App {
       print("wts size= " + wts.nodes.size)
       println("=> time = " + total_time)
 
-      //val list_of_goals = testParserImpl.demo_goal()
+      val wtsDot = wts.to_graphviz(s=>s.toString)
+      val solutionDot = wts.to_graphviz(s=>s.toString)
 
+      //val list_of_goals = testParserImpl.demo_goal()
+/*
       val capabilityRepository = AAL4E_Repository(my_problem.actions.sys_action.toList)
       val grounder = new SolutionGrounder(capabilityRepository, new TabuGroundingStrategy(2))
       grounder.setProcessDecorator(NETTUNITProcessDecoratorStrategy)
@@ -65,7 +72,7 @@ object Test_NETTUNIT extends App {
       Console.out.println(s"${RESET}${BLACK_B}${YELLOW}${BOLD}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${RESET}")
 
       //executeWithFlowable(theBPMN.toString())
-
+*/
     }
   }
 }
