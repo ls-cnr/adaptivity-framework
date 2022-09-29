@@ -51,7 +51,7 @@ object Test_NETTUNIT extends App {
         val solutionDot = wts.to_graphviz(s => s.toString)
 
         //val list_of_goals = testParserImpl.demo_goal()
-        /*
+
               val capabilityRepository = AAL4E_Repository(my_problem.actions.sys_action.toList)
               val grounder = new SolutionGrounder(capabilityRepository, new TabuGroundingStrategy(2))
               grounder.setProcessDecorator(NETTUNITProcessDecoratorStrategy)
@@ -69,7 +69,7 @@ object Test_NETTUNIT extends App {
               Console.out.println(s"${RESET}${BLACK_B}${YELLOW}${BOLD}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${RESET}")
 
               //executeWithFlowable(theBPMN.toString())
-        */
+
       }
     }
   }

@@ -1,6 +1,7 @@
 package org.icar.nettunit_solver
 
 import org.icar.sublevel.{HL2Raw_Map, RawState}
+import org.icar.symbolic
 import org.icar.symbolic._
 
 object NETTUNITDefinitions {
@@ -12,6 +13,7 @@ object NETTUNITDefinitions {
     StringEnum_DomainType("AUTHORITY_ROLE", Array("prefect", "mayor", "questor", "municipality")),
     StringEnum_DomainType("COMPETENT_BODY_ROLE", Array("commander_fire_brigade", "mayor", "questor", "n118", "ASP", "ARPA", "civil_protection")),
     StringEnum_DomainType("EVENT_TYPE", Array("fire", "explosion", "smoke_diffusion")),
+    StringEnum_DomainType("INTERNAL_PLAN_STATE", Array("active", "over")),
   )
 
   val preds: Array[DomainPredicate] = Array(
@@ -38,7 +40,7 @@ object NETTUNITDefinitions {
     )),
 
     DomainPredicate("internal_plan_active", List(
-      DomainConstant("done"),
+      DomainVariable("state", "INTERNAL_PLAN_STATE"),
     )),
 
     DomainPredicate("fire_extinguished", List()),
@@ -86,10 +88,10 @@ object NETTUNITDefinitions {
     id = "activate_internal_security_plan",
     params = List(),
     pre = GroundPredicate("alarm_state", List(AtomTerm("attention"))),
-    post = GroundPredicate("internal_plan_active", List(AtomTerm("done"))),
+    post = GroundPredicate("internal_plan_active", List(AtomTerm("active"))),
     effects = Array(
       EvolutionGrounding("activate_internal_plan", Array[EvoOperator](
-        AddOperator(Predicate("internal_plan_active", List(AtomTerm("done"))))
+        AddOperator(Predicate("internal_plan_active", List(AtomTerm("active"))))
       )),
     ),
     future = List.empty
@@ -103,7 +105,7 @@ object NETTUNITDefinitions {
     id = "notify_competent_body_internal_plan",
     params = List(),
     pre = Conjunction(List(
-      GroundPredicate("internal_plan_active", List(AtomTerm("done"))),
+      GroundPredicate("internal_plan_active", List(AtomTerm("active"))),
       GroundPredicate("alarm_state", List(AtomTerm("attention")))
     )),
     post = Conjunction(List(
@@ -127,7 +129,7 @@ object NETTUNITDefinitions {
     id = "inform_technical_rescue_organisation_internal_plan",
     params = List(),
     pre = Conjunction(List(
-      GroundPredicate("internal_plan_active", List(AtomTerm("done"))),
+      GroundPredicate("internal_plan_active", List(AtomTerm("active"))),
       GroundPredicate("alarm_state", List(AtomTerm("attention"))),
     )),
     post = GroundPredicate("informed", List(AtomTerm("commander_fire_brigade"), AtomTerm("attention"))),
@@ -215,7 +217,9 @@ object NETTUNITDefinitions {
 
     effects = Array(
       EvolutionGrounding("pre_alert", Array[EvoOperator](
-        AddOperator(Predicate("alarm_state", List(AtomTerm("pre_alert"))))
+        RmvOperator(Predicate("alarm_state", List(AtomTerm("attention")))),
+        AddOperator(Predicate("alarm_state", List(AtomTerm("pre_alert")))),
+        RmvOperator(Predicate("internal_plan_active", List(AtomTerm("active")))),
       )),
     ),
 
@@ -284,7 +288,8 @@ object NETTUNITDefinitions {
     post = GroundPredicate("alarm_state", List(AtomTerm("alert"))),
     effects = Array(
       EvolutionGrounding("pre_alert", Array[EvoOperator](
-        AddOperator(Predicate("alarm_state", List(AtomTerm("alert"))))
+        AddOperator(Predicate("alarm_state", List(AtomTerm("alert")))),
+        RmvOperator(Predicate("alarm_state", List(AtomTerm("pre_alert"))))
       )),
     ),
 
