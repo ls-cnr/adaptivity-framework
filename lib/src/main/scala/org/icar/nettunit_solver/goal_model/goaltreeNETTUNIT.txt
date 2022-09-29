@@ -10,16 +10,9 @@ GOAL notify_competent_body_internal_plan : WHEN internal_plan_active(done) AND a
 
 
 
-GOAL inform_technical_rescue_organisation_internal_plan : WHEN internal_plan_active(done) AND alarm_state(attention) THEN
-THE nettunit ROLE SHALL ADDRESS informed(commander_fire_brigade,attention)
+GOAL inform_technical_rescue_organisation_internal_plan : WHEN internal_plan_active(done) AND alarm_state(attention) THEN THE nettunit ROLE SHALL ADDRESS informed(commander_fire_brigade,attention)
 
-GOAL fire_brigade_assessment : WHEN informed(commander_fire_brigade, attention) THEN
-THE nettunit ROLE SHALL ADDRESS fire_brigade_assessment_done(attention)
-
-
-
-
-
+GOAL fire_brigade_assessment : WHEN informed(commander_fire_brigade, attention) THEN THE nettunit ROLE SHALL ADDRESS fire_brigade_assessment_done(attention)
 
 
 
