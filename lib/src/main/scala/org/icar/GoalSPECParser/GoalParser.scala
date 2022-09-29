@@ -153,7 +153,7 @@ class GoalParserImpl extends JavaTokenParsers {
 
   def constant: Parser[ConstantTerm] =
     floatingPointNumber ^^ (x => NumeralTerm(x.toDouble)) |
-      ident ^^ (x => StringTerm(x)) |
+      ident ^^ (x => AtomTerm(x)) |
       "'" ~> ident <~ "'" ^^ (x => StringTerm(x)) |
       "\"" ~> ident <~ "\"" ^^ (x => StringTerm(x))
 

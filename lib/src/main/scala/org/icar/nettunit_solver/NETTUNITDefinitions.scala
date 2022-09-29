@@ -10,7 +10,7 @@ object NETTUNITDefinitions {
     StringEnum_DomainType("TARGET_LOCATION", Array("refinery", "alt_location1", "alt_location2")),
     StringEnum_DomainType("ALARM_STATE", Array("attention", "pre_alert", "alert")),
     StringEnum_DomainType("AUTHORITY_ROLE", Array("prefect", "mayor", "questor", "municipality")),
-    StringEnum_DomainType("COMPETENT_BODY_ROLE", Array("commander_fire_brigade", "mayor", "questor", "118", "ASP", "ARPA", "civil_protection")),
+    StringEnum_DomainType("COMPETENT_BODY_ROLE", Array("commander_fire_brigade", "mayor", "questor", "n118", "ASP", "ARPA", "civil_protection")),
     StringEnum_DomainType("EVENT_TYPE", Array("fire", "explosion", "smoke_diffusion")),
   )
 
@@ -230,7 +230,7 @@ object NETTUNITDefinitions {
   )
   val inform_technical_rescue_organisation_alert = AbstractCapability(
     /*GOAL inform_technical_rescue_organisation_alert : WHEN alarm_state(pre_alert)
-    THEN THE nettunit ROLE SHALL ADDRESS informed(118, pre_alert) AND informed(ASP, pre_alert) AND informed(ARPA, pre_alert)
+    THEN THE nettunit ROLE SHALL ADDRESS informed(n118, pre_alert) AND informed(ASP, pre_alert) AND informed(ARPA, pre_alert)
      */
     id = "inform_technical_rescue_organisation_alert",
     params = List(),
@@ -238,14 +238,14 @@ object NETTUNITDefinitions {
     pre = GroundPredicate("alarm_state", List(AtomTerm("pre_alert"))),
 
     post = Conjunction(List(
-      GroundPredicate("informed", List(AtomTerm("118"), AtomTerm("pre_alert"))),
+      GroundPredicate("informed", List(AtomTerm("n118"), AtomTerm("pre_alert"))),
       GroundPredicate("informed", List(AtomTerm("ASP"), AtomTerm("pre_alert"))),
       GroundPredicate("informed", List(AtomTerm("ARPA"), AtomTerm("pre_alert")))
     )),
 
     effects = Array(
-      EvolutionGrounding("118", Array[EvoOperator](
-        AddOperator(Predicate("informed", List(AtomTerm("118"), AtomTerm("pre_alert"))))
+      EvolutionGrounding("n118", Array[EvoOperator](
+        AddOperator(Predicate("informed", List(AtomTerm("n118"), AtomTerm("pre_alert"))))
       )),
       EvolutionGrounding("asp", Array[EvoOperator](
         AddOperator(Predicate("informed", List(AtomTerm("ASP"), AtomTerm("pre_alert"))))
