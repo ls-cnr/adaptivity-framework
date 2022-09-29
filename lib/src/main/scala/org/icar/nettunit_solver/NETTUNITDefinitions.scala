@@ -53,6 +53,10 @@ object NETTUNITDefinitions {
       DomainVariable("state", "ALARM_STATE"),
     )),
 
+    DomainPredicate("notified_authorities", List(
+      DomainVariable("state", "ALARM_STATE"),
+    )),
+
   )
 
   val my_domain = Domain("NETTUNIT", preds, dom_types, Array.empty)
@@ -65,16 +69,13 @@ object NETTUNITDefinitions {
     */
     id = "send_team_to_evaluate",
     params = List(),
-
     pre = GroundPredicate("emergency_location", List(AtomTerm("refinery"))),
-
     post = GroundPredicate("alarm_state", List(AtomTerm("attention"))),
     effects = Array(
       EvolutionGrounding("attention_state", Array[EvoOperator](
         AddOperator(Predicate("alarm_state", List(AtomTerm("attention"))))
       )),
     ),
-
     future = List.empty
   )
 
@@ -84,12 +85,7 @@ object NETTUNITDefinitions {
     */
     id = "activate_internal_security_plan",
     params = List(),
-    pre = Disjunction(List(
-      GroundPredicate("alarm_state", List(AtomTerm("attention"))),
-      GroundPredicate("alarm_state", List(AtomTerm("pre_alert")))
-    )),
-
-
+    pre = GroundPredicate("alarm_state", List(AtomTerm("attention"))),
     post = GroundPredicate("internal_plan_active", List(AtomTerm("done"))),
     effects = Array(
       EvolutionGrounding("activate_internal_plan", Array[EvoOperator](
@@ -101,21 +97,19 @@ object NETTUNITDefinitions {
 
   val notify_competent_body_internal_plan = AbstractCapability(
     /*
-    GOAL notify_competent_body_internal_plan : WHEN internal_plan_active(true) AND alarm_state(attention) THEN THE nettunit ROLE SHALL ADDRESS informed_authority(prefect, attention) AND informed_authority(mayor, attention)
+    GOAL notify_competent_body_internal_plan : WHEN internal_plan_active(true) AND alarm_state(attention)
+    THEN THE nettunit ROLE SHALL ADDRESS informed_authority(prefect, attention) AND informed_authority(mayor, attention) AND notified_authorities(attention)
      */
     id = "notify_competent_body_internal_plan",
     params = List(),
-
     pre = Conjunction(List(
       GroundPredicate("internal_plan_active", List(AtomTerm("done"))),
       GroundPredicate("alarm_state", List(AtomTerm("attention")))
     )),
-
     post = Conjunction(List(
       GroundPredicate("informed_authority", List(AtomTerm("prefect"), AtomTerm("attention"))),
       GroundPredicate("informed_authority", List(AtomTerm("mayor"), AtomTerm("attention"))),
     )),
-
     effects = Array(
       EvolutionGrounding("mayor", Array[EvoOperator](
         AddOperator(Predicate("informed_authority", List(AtomTerm("mayor"), AtomTerm("attention"))))
@@ -129,61 +123,51 @@ object NETTUNITDefinitions {
 
   val inform_technical_rescue_organisation_internal_plan = AbstractCapability(
     /*
-    GOAL inform_technical_rescue_organisation_internal_plan : WHEN internal_plan_active(true) AND alarm_state(attention) THEN THE nettunit ROLE SHALL ADDRESS informed(commander_fire_brigade, attention)
+    GOAL inform_technical_rescue_organisation_internal_plan : WHEN notified_authorities(attention) AND internal_plan_active(true)
+    AND alarm_state(attention) THEN THE nettunit ROLE SHALL ADDRESS informed(commander_fire_brigade, attention)
      */
     id = "inform_technical_rescue_organisation_internal_plan",
     params = List(),
-
     pre = Conjunction(List(
       GroundPredicate("internal_plan_active", List(AtomTerm("done"))),
-      GroundPredicate("alarm_state", List(AtomTerm("attention")))
+      GroundPredicate("alarm_state", List(AtomTerm("attention"))),
     )),
-
     post = GroundPredicate("informed", List(AtomTerm("commander_fire_brigade"), AtomTerm("attention"))),
 
-    effects = Array(EvolutionGrounding("fire_brigade", Array[EvoOperator](
-      AddOperator(Predicate("informed", List(AtomTerm("commander_fire_brigade"), AtomTerm("attention"))))
-    ))),
-
+    effects = Array(
+      EvolutionGrounding("fire_brigade", Array[EvoOperator](
+        AddOperator(Predicate("informed", List(AtomTerm("commander_fire_brigade"), AtomTerm("attention"))))
+      ))
+    ),
     future = List.empty
   )
   val fire_brigade_assessment = AbstractCapability(
     /*
-    GOAL fire_brigade_assessment : WHEN internal_plan_active(done) AND alarm_state(attention)
-    THEN THE nettunit ROLE SHALL ADDRESS fire_brigade_assessment_done(attention) AND NOT fire_extinguished
+    GOAL fire_brigade_assessment : WHEN internal_plan_active(done) AND alarm_state(attention) AND
+    informed(commander_fire_brigade, attention) THEN THE nettunit ROLE SHALL ADDRESS fire_brigade_assessment_done(attention)
      */
     id = "fire_brigade_assessment",
     params = List(),
 
-    pre = Conjunction(List(
-      GroundPredicate("internal_plan_active", List(AtomTerm("done"))),
-      GroundPredicate("alarm_state", List(AtomTerm("attention"))),
-      //Negation(GroundPredicate("fire_extinguished", List())) //TODO verifica
-    )),
+    pre = GroundPredicate("informed", List(AtomTerm("commander_fire_brigade"), AtomTerm("attention"))),
 
-    post = Conjunction(List(
-      GroundPredicate("fire_brigade_assessment_done", List(AtomTerm("attention"))),
-      Negation(GroundPredicate("fire_extinguished", List())) //TODO verifica
-    )),
-
+    post = GroundPredicate("fire_brigade_assessment_done", List(AtomTerm("attention"))),
     effects = Array(
-      EvolutionGrounding("assessment", Array[EvoOperator](
+      EvolutionGrounding("assess", Array[EvoOperator](
         AddOperator(Predicate("fire_brigade_assessment_done", List(AtomTerm("attention"))))
       )),
     ),
-
     future = List.empty
   )
   val prepare_tech_report = AbstractCapability(
     /*
-    GOAL prepare_tech_report : WHEN NOT fire_extinguished AND internal_plan_active(true) AND fire_brigade_assessment_done(attention) THEN THE commander_fire_brigade ROLE SHALL ADDRESS tech_report(event,attention)
+    GOAL prepare_tech_report : WHEN NOT fire_extinguished AND fire_brigade_assessment_done(attention) THEN THE commander_fire_brigade ROLE SHALL ADDRESS tech_report(event,attention)
      */
     id = "prepare_tech_report",
     params = List(),
 
     pre = Conjunction(List(
       Negation(GroundPredicate("fire_extinguished", List())), //TODO verifica
-      GroundPredicate("internal_plan_active", List(AtomTerm("done"))),
       GroundPredicate("fire_brigade_assessment_done", List(AtomTerm("attention"))),
     )),
 
@@ -205,14 +189,24 @@ object NETTUNITDefinitions {
     pre = Conjunction(List(
       GroundPredicate("fire_brigade_assessment_done", List(AtomTerm("attention"))),
       Negation(GroundPredicate("fire_extinguished", List())), //TODO verifica
+      GroundPredicate("tech_report", List(AtomTerm("fire"), AtomTerm("attention"))),
     )),
 
 
-    post = GroundPredicate("coordinated_firefighter_intervention", List()),
+    post = Conjunction(List(
+      GroundPredicate("coordinated_firefighter_intervention", List()),
+      GroundPredicate("second_explosion", List())
+    )),
 
-    effects = Array(EvolutionGrounding("report", Array[EvoOperator](
-      AddOperator(Predicate("coordinated_firefighter_intervention", List()))
-    ))),
+
+    effects = Array(
+      EvolutionGrounding("report", Array[EvoOperator](
+        AddOperator(Predicate("coordinated_firefighter_intervention", List()))
+      )),
+      EvolutionGrounding("explosion", Array[EvoOperator](
+        AddOperator(Predicate("second_explosion", List()))
+      )),
+    ),
 
     future = List.empty
   )
@@ -223,11 +217,12 @@ object NETTUNITDefinitions {
     id = "declare_pre_alert_state",
     params = List(),
     pre = Conjunction(List(
-      GroundPredicate("alarm_state", List(AtomTerm("attention"))),
-      GroundPredicate("internal_plan_active", List(AtomTerm("done"))),
+      GroundPredicate("coordinated_firefighter_intervention", List()),
       GroundPredicate("second_explosion", List())
     )),
+
     post = GroundPredicate("alarm_state", List(AtomTerm("pre_alert"))),
+
     effects = Array(
       EvolutionGrounding("pre_alert", Array[EvoOperator](
         AddOperator(Predicate("alarm_state", List(AtomTerm("pre_alert"))))
