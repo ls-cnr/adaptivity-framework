@@ -112,9 +112,7 @@ object NETTUNITDefinitions {
     )),
     effects = Array(
       EvolutionGrounding("mayor", Array[EvoOperator](
-        AddOperator(Predicate("informed_authority", List(AtomTerm("mayor"), AtomTerm("attention"))))
-      )),
-      EvolutionGrounding("prefect", Array[EvoOperator](
+        AddOperator(Predicate("informed_authority", List(AtomTerm("mayor"), AtomTerm("attention")))),
         AddOperator(Predicate("informed_authority", List(AtomTerm("prefect"), AtomTerm("attention"))))
       )),
     ),
@@ -164,7 +162,7 @@ object NETTUNITDefinitions {
     params = List(),
 
     pre = Conjunction(List(
-      Negation(GroundPredicate("fire_extinguished", List())), //TODO verifica
+      //Negation(GroundPredicate("fire_extinguished", List())), //TODO verifica
       GroundPredicate("fire_brigade_assessment_done", List(AtomTerm("attention"))),
     )),
 
@@ -198,9 +196,7 @@ object NETTUNITDefinitions {
 
     effects = Array(
       EvolutionGrounding("report", Array[EvoOperator](
-        AddOperator(Predicate("coordinated_firefighter_intervention", List()))
-      )),
-      EvolutionGrounding("explosion", Array[EvoOperator](
+        AddOperator(Predicate("coordinated_firefighter_intervention", List())),
         AddOperator(Predicate("second_explosion", List()))
       )),
     ),
@@ -245,12 +241,8 @@ object NETTUNITDefinitions {
 
     effects = Array(
       EvolutionGrounding("n118", Array[EvoOperator](
-        AddOperator(Predicate("informed", List(AtomTerm("n118"), AtomTerm("pre_alert"))))
-      )),
-      EvolutionGrounding("asp", Array[EvoOperator](
-        AddOperator(Predicate("informed", List(AtomTerm("ASP"), AtomTerm("pre_alert"))))
-      )),
-      EvolutionGrounding("arpa", Array[EvoOperator](
+        AddOperator(Predicate("informed", List(AtomTerm("n118"), AtomTerm("pre_alert")))),
+        AddOperator(Predicate("informed", List(AtomTerm("ASP"), AtomTerm("pre_alert")))),
         AddOperator(Predicate("informed", List(AtomTerm("ARPA"), AtomTerm("pre_alert"))))
       ))
     ),
@@ -319,9 +311,7 @@ object NETTUNITDefinitions {
 
     effects = Array(
       EvolutionGrounding("municipality", Array[EvoOperator](
-        AddOperator(Predicate("informed_authority", List(AtomTerm("municipality"), AtomTerm("alert"))))
-      )),
-      EvolutionGrounding("civil_protection", Array[EvoOperator](
+        AddOperator(Predicate("informed_authority", List(AtomTerm("municipality"), AtomTerm("alert")))),
         AddOperator(Predicate("informed", List(AtomTerm("civil_protection"), AtomTerm("alert"))))
       )),
     ),
