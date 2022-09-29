@@ -18,7 +18,8 @@ import scala.Console.{BLACK_B, BOLD, RESET, YELLOW}
 object Test_NETTUNIT extends App {
   val bpmnProcessID = "NETTUNITProcess"
 
-  val goalModel = NETTUNITParser.loadGoalModelFromFile("/Users/luca/Documents/devel/Idea-projects/adaptivity-framework/lib/src/main/scala/org/icar/nettunit_solver/goal_model/goaltreeNETTUNIT.txt")
+  val goalModelPath = getClass.getResource("/NETTUNIT/goaltreeNETTUNIT.txt").getFile
+  val goalModel = NETTUNITParser.loadGoalModelFromFile(goalModelPath)
   val my_problem = Problem(NETTUNITDefinitions.initial, goalModel, NETTUNITDefinitions.availableActions)
   val my_domain = NETTUNITDefinitions.my_domain
   val map = NETTUNITDefinitions.map

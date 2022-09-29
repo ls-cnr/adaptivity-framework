@@ -161,10 +161,7 @@ object NETTUNITDefinitions {
     id = "prepare_tech_report",
     params = List(),
 
-    pre = Conjunction(List(
-      //Negation(GroundPredicate("fire_extinguished", List())), //TODO verifica
-      GroundPredicate("fire_brigade_assessment_done", List(AtomTerm("attention"))),
-    )),
+    pre = GroundPredicate("fire_brigade_assessment_done", List(AtomTerm("attention"))),
 
     post = GroundPredicate("tech_report", List(AtomTerm("fire"), AtomTerm("attention"))),
 
@@ -183,7 +180,7 @@ object NETTUNITDefinitions {
 
     pre = Conjunction(List(
       GroundPredicate("fire_brigade_assessment_done", List(AtomTerm("attention"))),
-      Negation(GroundPredicate("fire_extinguished", List())), //TODO verifica
+      //Negation(GroundPredicate("fire_extinguished", List())), //TODO verifica
       GroundPredicate("tech_report", List(AtomTerm("fire"), AtomTerm("attention"))),
     )),
 

@@ -42,8 +42,8 @@ object GenericPlannerExecutor {
         //converter.apply_pattern(StructuredLoop("2.3","my_cond2"))
         println(converter.to_graphviz_with_states())
       }
-    }
-*/
+    }*/
+
 
 
     if (!solver.solution_set.wts_list.isEmpty) {
