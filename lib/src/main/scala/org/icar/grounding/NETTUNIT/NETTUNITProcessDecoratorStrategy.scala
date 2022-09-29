@@ -7,7 +7,7 @@ import org.icar.grounding.processDecorator.ProcessDecoratorStrategy
 object NETTUNITProcessDecoratorStrategy extends ProcessDecoratorStrategy {
 
   val boundaryErrorEventErrCode = "REQUIRE_ORCHESTRATION"
-  val readaptationClassName = "com.flowable.myAdaptationClass"
+  val readaptationClassName = "nettunit.handler.adaptation.MUSAOrchestrationHandler"
   val adaptationRequestTask = ServiceTask("adaptationTask", "adaptationTask", readaptationClassName, None)
   val adaptationEndEvent = Event("failureEndEvent", "failureEndEvent", EventType.End.toString, null)
   val adaptationTaskSeqFlow = SequenceFlow(s"adaptationTaskFlowEnd", adaptationRequestTask, adaptationEndEvent, None)

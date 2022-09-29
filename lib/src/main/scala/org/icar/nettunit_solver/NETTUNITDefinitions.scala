@@ -1,7 +1,6 @@
 package org.icar.nettunit_solver
 
 import org.icar.sublevel.{HL2Raw_Map, RawState}
-import org.icar.symbolic
 import org.icar.symbolic._
 
 object NETTUNITDefinitions {
@@ -48,6 +47,7 @@ object NETTUNITDefinitions {
     DomainPredicate("second_explosion", List()),
     DomainPredicate("evaluated_fire_radiant_energy", List()),
     DomainPredicate("crossborder_inform", List()),
+    DomainPredicate("assessed_emergency", List()),
 
 
     DomainPredicate("tech_report", List(
@@ -71,11 +71,19 @@ object NETTUNITDefinitions {
     */
     id = "send_team_to_evaluate",
     params = List(),
-    pre = GroundPredicate("emergency_location", List(AtomTerm("refinery"))),
+    //pre = GroundPredicate("emergency_location", List(AtomTerm("refinery"))),
+    pre = Conjunction(List(
+      GroundPredicate("emergency_location", List(AtomTerm("refinery"))),
+      Negation(GroundPredicate("assessed_emergency", List()))
+    )),
     post = GroundPredicate("alarm_state", List(AtomTerm("attention"))),
+
+
     effects = Array(
       EvolutionGrounding("attention_state", Array[EvoOperator](
-        AddOperator(Predicate("alarm_state", List(AtomTerm("attention"))))
+        AddOperator(Predicate("alarm_state", List(AtomTerm("attention")))),
+        //RmvOperator(Predicate("emergency_location", List(AtomTerm("refinery"))))
+        //AddOperator(Predicate("assessed_emergency", List()))
       )),
     ),
     future = List.empty
@@ -162,15 +170,11 @@ object NETTUNITDefinitions {
      */
     id = "prepare_tech_report",
     params = List(),
-
     pre = GroundPredicate("fire_brigade_assessment_done", List(AtomTerm("attention"))),
-
     post = GroundPredicate("tech_report", List(AtomTerm("fire"), AtomTerm("attention"))),
-
     effects = Array(EvolutionGrounding("report", Array[EvoOperator](
       AddOperator(Predicate("tech_report", List(AtomTerm("fire"), AtomTerm("attention"))))
     ))),
-
     future = List.empty
   )
   val coordinate_firefighter_intervention = AbstractCapability(
@@ -179,20 +183,11 @@ object NETTUNITDefinitions {
      */
     id = "coordinate_firefighter_intervention",
     params = List(),
-
-    pre = Conjunction(List(
-      GroundPredicate("fire_brigade_assessment_done", List(AtomTerm("attention"))),
-      //Negation(GroundPredicate("fire_extinguished", List())), //TODO verifica
-      GroundPredicate("tech_report", List(AtomTerm("fire"), AtomTerm("attention"))),
-    )),
-
-
+    pre = GroundPredicate("tech_report", List(AtomTerm("fire"), AtomTerm("attention"))),
     post = Conjunction(List(
       GroundPredicate("coordinated_firefighter_intervention", List()),
       GroundPredicate("second_explosion", List())
     )),
-
-
     effects = Array(
       EvolutionGrounding("report", Array[EvoOperator](
         AddOperator(Predicate("coordinated_firefighter_intervention", List())),
@@ -217,9 +212,9 @@ object NETTUNITDefinitions {
 
     effects = Array(
       EvolutionGrounding("pre_alert", Array[EvoOperator](
-        RmvOperator(Predicate("alarm_state", List(AtomTerm("attention")))),
+        //RmvOperator(Predicate("alarm_state", List(AtomTerm("attention")))),
         AddOperator(Predicate("alarm_state", List(AtomTerm("pre_alert")))),
-        RmvOperator(Predicate("internal_plan_active", List(AtomTerm("active")))),
+        //RmvOperator(Predicate("internal_plan_active", List(AtomTerm("active")))),
       )),
     ),
 
@@ -289,7 +284,7 @@ object NETTUNITDefinitions {
     effects = Array(
       EvolutionGrounding("pre_alert", Array[EvoOperator](
         AddOperator(Predicate("alarm_state", List(AtomTerm("alert")))),
-        RmvOperator(Predicate("alarm_state", List(AtomTerm("pre_alert"))))
+        //RmvOperator(Predicate("alarm_state", List(AtomTerm("pre_alert"))))
       )),
     ),
 

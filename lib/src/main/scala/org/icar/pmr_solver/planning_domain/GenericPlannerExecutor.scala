@@ -32,7 +32,7 @@ object GenericPlannerExecutor {
     println()
     //println( solver.opt_solution_set.get.all_solutions_to_graphviz(node => node.toString) )
 
-/*
+
     if (!solver.solution_set.partial_wts.isEmpty) {
       for (wts <- solver.solution_set.partial_wts) {
         println(wts.to_decorated_graphviz(node => node.toString))
@@ -42,7 +42,7 @@ object GenericPlannerExecutor {
         //converter.apply_pattern(StructuredLoop("2.3","my_cond2"))
         println(converter.to_graphviz_with_states())
       }
-    }*/
+    }
 
 
 

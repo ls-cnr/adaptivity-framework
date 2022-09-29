@@ -2,7 +2,8 @@ package org.icar.pmr_solver
 
 import org.icar.GoalSPECParser.Goal2BPMN
 import org.icar.bpmn2goal.bpmn_parser
-import org.icar.grounding.NETTUNIT.{AAL4E_Repository, NETTUNITProcessDecoratorStrategy, Test_BestFirstSolver_Repository}
+import org.icar.grounding.AAL4E.AAL4E_Repository
+import org.icar.grounding.NETTUNIT.{NETTUNITProcessDecoratorStrategy, Test_BestFirstSolver_Repository}
 import org.icar.grounding.SolutionGrounder
 import org.icar.grounding.groundingStrategy.TabuGroundingStrategy
 import org.icar.pmr_solver.best_first_planner.{Solver, WTS2Solution}

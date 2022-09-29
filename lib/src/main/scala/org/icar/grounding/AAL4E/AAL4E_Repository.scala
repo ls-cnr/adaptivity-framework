@@ -1,4 +1,4 @@
-package org.icar.grounding.NETTUNIT
+package org.icar.grounding.AAL4E
 
 import org.icar.grounding.{CapabilityRepository, ConcreteCapability}
 import org.icar.symbolic.AbstractCapability
