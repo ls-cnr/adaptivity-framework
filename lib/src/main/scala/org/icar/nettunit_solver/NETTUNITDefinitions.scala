@@ -133,7 +133,6 @@ object NETTUNITDefinitions {
       GroundPredicate("alarm_state", List(AtomTerm("attention"))),
     )),
     post = GroundPredicate("informed", List(AtomTerm("commander_fire_brigade"), AtomTerm("attention"))),
-
     effects = Array(
       EvolutionGrounding("fire_brigade", Array[EvoOperator](
         AddOperator(Predicate("informed", List(AtomTerm("commander_fire_brigade"), AtomTerm("attention"))))
@@ -148,9 +147,7 @@ object NETTUNITDefinitions {
      */
     id = "fire_brigade_assessment",
     params = List(),
-
     pre = GroundPredicate("informed", List(AtomTerm("commander_fire_brigade"), AtomTerm("attention"))),
-
     post = GroundPredicate("fire_brigade_assessment_done", List(AtomTerm("attention"))),
     effects = Array(
       EvolutionGrounding("assess", Array[EvoOperator](

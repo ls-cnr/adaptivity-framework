@@ -131,6 +131,8 @@ class GoalParserImpl extends JavaTokenParsers {
 
   def argument_list: Parser[List[Term]] = repsep(argument, ",")
 
+  //creare una constant argument list oppure fare mapping
+
   def variable_list: Parser[List[VariableTerm]] = repsep(variable, ",")
 
   /*---------------------------------------------FOL QUANTIFIER---------------------------------------------*/
@@ -145,9 +147,9 @@ class GoalParserImpl extends JavaTokenParsers {
     case (terms: List[Term]) ~ (formula: HL_PredicateFormula) => ExistQuantifier(terms, formula)
   }
 
-  def predicate: Parser[Predicate] =
-    ident ~ "(" ~ argument_list <~ ")" ^^ { case f ~ _ ~ t => Predicate(f, t) } |
-      ident ^^ { x => Predicate(x, List()) }
+  def predicate: Parser[GroundPredicate] =
+    ident ~ "(" ~ argument_list <~ ")" ^^ { case f ~ _ ~ t => GroundPredicate(f, t.map(x=>x.asInstanceOf[ConstantTerm])) } |
+      ident ^^ { x => GroundPredicate(x, List()) }
 
   def constant: Parser[ConstantTerm] =
     floatingPointNumber ^^ (x => NumeralTerm(x.toDouble)) |
