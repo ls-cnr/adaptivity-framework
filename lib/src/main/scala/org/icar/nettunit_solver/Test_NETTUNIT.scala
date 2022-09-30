@@ -65,7 +65,7 @@ object Test_NETTUNIT extends App {
       Console.out.println(s"${RESET}${BLACK_B}${YELLOW}${BOLD}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${RESET}")
 
       // WF to execution (flowable)
-      executeWithFlowable(theBPMN.toString())
+      //executeWithFlowable(theBPMN.toString())
     }
   }
 

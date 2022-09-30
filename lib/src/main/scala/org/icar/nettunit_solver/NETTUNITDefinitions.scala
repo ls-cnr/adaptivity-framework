@@ -19,42 +19,33 @@ object NETTUNITDefinitions {
     DomainPredicate("emergency_location", List(
       DomainVariable("location", "TARGET_LOCATION"),
     )),
-
     DomainPredicate("alarm_state", List(
       DomainVariable("state", "ALARM_STATE"),
     )),
-
     DomainPredicate("informed_authority", List(
       DomainVariable("role", "AUTHORITY_ROLE"),
       DomainVariable("state", "ALARM_STATE"),
     )),
-
     DomainPredicate("informed", List(
       DomainVariable("role", "COMPETENT_BODY_ROLE"),
       DomainVariable("state", "ALARM_STATE"),
     )),
-
     DomainPredicate("fire_brigade_assessment_done", List(
       DomainVariable("state", "ALARM_STATE"),
     )),
-
     DomainPredicate("internal_plan_active", List(
       DomainVariable("state", "INTERNAL_PLAN_STATE"),
     )),
-
     DomainPredicate("fire_extinguished", List()),
     DomainPredicate("coordinated_firefighter_intervention", List()),
     DomainPredicate("second_explosion", List()),
     DomainPredicate("evaluated_fire_radiant_energy", List()),
     DomainPredicate("crossborder_inform", List()),
     DomainPredicate("assessed_emergency", List()),
-
-
     DomainPredicate("tech_report", List(
       DomainVariable("event", "EVENT_TYPE"),
       DomainVariable("state", "ALARM_STATE"),
     )),
-
     DomainPredicate("notified_authorities", List(
       DomainVariable("state", "ALARM_STATE"),
     )),
@@ -70,9 +61,8 @@ object NETTUNITDefinitions {
     GOAL send_team_to_evaluate : WHEN emergency_location(refinery) THEN THE safety_manager ROLE SHALL ADDRESS alarm_state(attention)
     */
     id = "send_team_to_evaluate",
-    isHuman = false,
+    isHuman = true,
     params = List(),
-    //pre = GroundPredicate("emergency_location", List(AtomTerm("refinery"))),
     pre = Conjunction(List(
       GroundPredicate("emergency_location", List(AtomTerm("refinery"))),
       Negation(GroundPredicate("assessed_emergency", List()))
@@ -83,8 +73,6 @@ object NETTUNITDefinitions {
     effects = Array(
       EvolutionGrounding("attention_state", Array[EvoOperator](
         AddOperator(Predicate("alarm_state", List(AtomTerm("attention")))),
-        //RmvOperator(Predicate("emergency_location", List(AtomTerm("refinery"))))
-        //AddOperator(Predicate("assessed_emergency", List()))
       )),
     ),
     future = List.empty
@@ -95,7 +83,7 @@ object NETTUNITDefinitions {
     GOAL activate_internal_security_plan : WHEN alarm_state(attention) OR alarm_state(pre_alert) THEN THE plant_operator ROLE SHALL ADDRESS internal_plan_active(true)
     */
     id = "activate_internal_security_plan",
-    isHuman = false,
+    isHuman = true,
     params = List(),
     pre = GroundPredicate("alarm_state", List(AtomTerm("attention"))),
     post = GroundPredicate("internal_plan_active", List(AtomTerm("active"))),
@@ -158,7 +146,7 @@ object NETTUNITDefinitions {
     informed(commander_fire_brigade, attention) THEN THE nettunit ROLE SHALL ADDRESS fire_brigade_assessment_done(attention)
      */
     id = "fire_brigade_assessment",
-    isHuman = false,
+    isHuman = true,
     params = List(),
     pre = GroundPredicate("informed", List(AtomTerm("commander_fire_brigade"), AtomTerm("attention"))),
     post = GroundPredicate("fire_brigade_assessment_done", List(AtomTerm("attention"))),
@@ -209,20 +197,16 @@ object NETTUNITDefinitions {
     GOAL declare_pre_alert_state : WHEN alarm_state(attention) AND internal_plan_active(done) AND second_explosion THEN THE nettunit ROLE SHALL ADDRESS alarm_state(pre_alert)
      */
     id = "declare_pre_alert_state",
-    isHuman = false,
+    isHuman = true,
     params = List(),
     pre = Conjunction(List(
       GroundPredicate("coordinated_firefighter_intervention", List()),
       GroundPredicate("second_explosion", List())
     )),
-
     post = GroundPredicate("alarm_state", List(AtomTerm("pre_alert"))),
-
     effects = Array(
       EvolutionGrounding("pre_alert", Array[EvoOperator](
-        //RmvOperator(Predicate("alarm_state", List(AtomTerm("attention")))),
         AddOperator(Predicate("alarm_state", List(AtomTerm("pre_alert")))),
-        //RmvOperator(Predicate("internal_plan_active", List(AtomTerm("active")))),
       )),
     ),
 
@@ -235,15 +219,12 @@ object NETTUNITDefinitions {
     id = "inform_technical_rescue_organisation_alert",
     params = List(),
     isHuman = false,
-
     pre = GroundPredicate("alarm_state", List(AtomTerm("pre_alert"))),
-
     post = Conjunction(List(
       GroundPredicate("informed", List(AtomTerm("n118"), AtomTerm("pre_alert"))),
       GroundPredicate("informed", List(AtomTerm("ASP"), AtomTerm("pre_alert"))),
       GroundPredicate("informed", List(AtomTerm("ARPA"), AtomTerm("pre_alert")))
     )),
-
     effects = Array(
       EvolutionGrounding("n118", Array[EvoOperator](
         AddOperator(Predicate("informed", List(AtomTerm("n118"), AtomTerm("pre_alert")))),
@@ -251,7 +232,6 @@ object NETTUNITDefinitions {
         AddOperator(Predicate("informed", List(AtomTerm("ARPA"), AtomTerm("pre_alert"))))
       ))
     ),
-
     future = List.empty
   )
   val evaluate_fire_radiant_energy = AbstractCapability(
@@ -259,16 +239,13 @@ object NETTUNITDefinitions {
     GOAL evaluate_fire_radiant_energy : WHEN informed(ARPA, pre_alert) AND alarm_state(pre_alert) THEN THE ARPA ROLE SHALL ADDRESS evaluated_fire_radiant_energy
      */
     id = "evaluate_fire_radiant_energy",
-    isHuman = false,
+    isHuman = true,
     params = List(),
-
     pre = Conjunction(List(
       GroundPredicate("informed", List(AtomTerm("ARPA"), AtomTerm("pre_alert"))),
       GroundPredicate("alarm_state", List(AtomTerm("pre_alert")))
     )),
-
     post = GroundPredicate("evaluated_fire_radiant_energy", List()),
-
     effects = Array(
       EvolutionGrounding("evaluate", Array[EvoOperator](
         AddOperator(Predicate("evaluated_fire_radiant_energy", List()))
@@ -282,20 +259,17 @@ object NETTUNITDefinitions {
     THEN THE commander_fire_brigade ROLE SHALL ADDRESS alarm_state(alert)
      */
     id = "declare_alarm_state",
-    isHuman = false,
+    isHuman = true,
     params = List(),
-
     pre = Conjunction(List(
       GroundPredicate("evaluated_fire_radiant_energy", List()),
       GroundPredicate("alarm_state", List(AtomTerm("pre_alert"))),
       Negation(GroundPredicate("fire_extinguished", List())), //TODO verifica
     )),
-
     post = GroundPredicate("alarm_state", List(AtomTerm("alert"))),
     effects = Array(
       EvolutionGrounding("pre_alert", Array[EvoOperator](
         AddOperator(Predicate("alarm_state", List(AtomTerm("alert")))),
-        //RmvOperator(Predicate("alarm_state", List(AtomTerm("pre_alert"))))
       )),
     ),
 
@@ -310,14 +284,11 @@ object NETTUNITDefinitions {
     id = "ensure_presence_of_qualified_personnel",
     isHuman = false,
     params = List(),
-
     pre = GroundPredicate("alarm_state", List(AtomTerm("alert"))),
-
     post = Conjunction(List(
       GroundPredicate("informed", List(AtomTerm("civil_protection"), AtomTerm("alert"))),
       GroundPredicate("informed_authority", List(AtomTerm("municipality"), AtomTerm("alert"))),
     )),
-
     effects = Array(
       EvolutionGrounding("municipality", Array[EvoOperator](
         AddOperator(Predicate("informed_authority", List(AtomTerm("municipality"), AtomTerm("alert")))),
@@ -335,13 +306,10 @@ object NETTUNITDefinitions {
     id = "ensure_presence_of_representative",
     isHuman = false,
     params = List(),
-
     pre = GroundPredicate("alarm_state", List(AtomTerm("alert"))),
-
     post = Conjunction(List(
       GroundPredicate("informed_authority", List(AtomTerm("questor"), AtomTerm("alert"))),
     )),
-
     effects = Array(
       EvolutionGrounding("questor", Array[EvoOperator](
         AddOperator(Predicate("informed_authority", List(AtomTerm("questor"), AtomTerm("alert"))))
@@ -358,11 +326,8 @@ object NETTUNITDefinitions {
     id = "do_crossborder_communication",
     isHuman = false,
     params = List(),
-
     pre = GroundPredicate("alarm_state", List(AtomTerm("alert"))),
-
     post = GroundPredicate("crossborder_inform", List()),
-
     effects = Array(
       EvolutionGrounding("inform_tunisian_bodies", Array[EvoOperator](
         AddOperator(Predicate("crossborder_inform", List()))

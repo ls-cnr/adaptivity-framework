@@ -120,6 +120,10 @@ class SolutionGrounder(repository: CapabilityRepository, groundingStrategy: Grou
         val fromItem = allItems.find(st => st.id == head.from.getStringID()).orNull
         val toItem = allItems.find(st => st.id == head.to.getStringID()).orNull
 
+        if (fromItem == null || toItem == null) {
+          println("here")
+        }
+
         aux(tail, allItems, itemID + 1) ++ List(org.icar.bpmn2goal.SequenceFlow(s"SequenceFlow_${itemID}",
           fromItem,
           toItem,
@@ -154,12 +158,12 @@ class SolutionGrounder(repository: CapabilityRepository, groundingStrategy: Grou
    * of this class.
    */
   def groundSolutionTasks(solutionTasks: List[SolutionTask], applyConstraints: Boolean): List[Item] = {
-    groundHumanTasks(solutionTasks, applyConstraints) ++ groundNonHumanTasks(solutionTasks, applyConstraints)
+    groundHumanTasks(solutionTasks.filter(task => task.grounding.capability.isHuman)) ++
+      groundNonHumanTasks(solutionTasks.filter(task => !task.grounding.capability.isHuman), applyConstraints)
   }
 
-  def groundHumanTasks(taskList: List[SolutionTask], applyConstraints: Boolean): List[Item] = {
-    List.empty[Item]
-  }
+  def groundHumanTasks(taskList: List[SolutionTask]): List[Item] =
+    taskList.map(t => Task(s"ht_${t.id}", t.grounding.capability.id, tasktype = "human"))
 
   def groundNonHumanTasks(taskList: List[SolutionTask], applyConstraints: Boolean): List[Item] = {
     val outputTasks = new ListBuffer[Item]()
@@ -178,6 +182,7 @@ class SolutionGrounder(repository: CapabilityRepository, groundingStrategy: Grou
 
       if (concreteCapabilities.length > 0) {
         //Get the first available capability according to the chosen grounding strategy
+        //NOTE: concrete capabilities are SERVICE TASKS
         val concreteCapability = groundingStrategy.apply(concreteCapabilities).withID(solutionTaskID).toServiceTask()
         outputTasks.addOne(concreteCapability)
       }

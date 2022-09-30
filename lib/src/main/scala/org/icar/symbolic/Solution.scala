@@ -1,12 +1,15 @@
 package org.icar.symbolic
 
+import org.icar.bpmn2goal.Task
+
 import java.io.{File, PrintWriter}
 
 abstract class WorkflowItem {
   def getStringID(): String = this match {
     case _: StartEvent => s"startEv_${this.asInstanceOf[StartEvent].id}"
     case _: EndEvent => s"endEv_${this.asInstanceOf[EndEvent].id}"
-    case _: SolutionTask => s"st_${this.asInstanceOf[SolutionTask].id}"
+    case st: SolutionTask if !st.grounding.capability.isHuman => s"st_${this.asInstanceOf[SolutionTask].id}"
+    case st: SolutionTask if st.grounding.capability.isHuman => s"ht_${this.asInstanceOf[SolutionTask].id}"
     case _: SplitGateway => s"split_${this.asInstanceOf[SplitGateway].id}"
     case _: JoinGateway => s"join_${this.asInstanceOf[JoinGateway].id}"
     case _: ExclusiveGateway => s"exclusive_${this.asInstanceOf[ExclusiveGateway].id}"
