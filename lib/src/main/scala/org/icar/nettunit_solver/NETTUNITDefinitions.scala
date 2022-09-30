@@ -70,6 +70,7 @@ object NETTUNITDefinitions {
     GOAL send_team_to_evaluate : WHEN emergency_location(refinery) THEN THE safety_manager ROLE SHALL ADDRESS alarm_state(attention)
     */
     id = "send_team_to_evaluate",
+    isHuman = false,
     params = List(),
     //pre = GroundPredicate("emergency_location", List(AtomTerm("refinery"))),
     pre = Conjunction(List(
@@ -94,6 +95,7 @@ object NETTUNITDefinitions {
     GOAL activate_internal_security_plan : WHEN alarm_state(attention) OR alarm_state(pre_alert) THEN THE plant_operator ROLE SHALL ADDRESS internal_plan_active(true)
     */
     id = "activate_internal_security_plan",
+    isHuman = false,
     params = List(),
     pre = GroundPredicate("alarm_state", List(AtomTerm("attention"))),
     post = GroundPredicate("internal_plan_active", List(AtomTerm("active"))),
@@ -111,6 +113,7 @@ object NETTUNITDefinitions {
     THEN THE nettunit ROLE SHALL ADDRESS informed_authority(prefect, attention) AND informed_authority(mayor, attention) AND notified_authorities(attention)
      */
     id = "notify_competent_body_internal_plan",
+    isHuman = false,
     params = List(),
     pre = Conjunction(List(
       GroundPredicate("internal_plan_active", List(AtomTerm("active"))),
@@ -135,6 +138,7 @@ object NETTUNITDefinitions {
     AND alarm_state(attention) THEN THE nettunit ROLE SHALL ADDRESS informed(commander_fire_brigade, attention)
      */
     id = "inform_technical_rescue_organisation_internal_plan",
+    isHuman = false,
     params = List(),
     pre = Conjunction(List(
       GroundPredicate("internal_plan_active", List(AtomTerm("active"))),
@@ -154,6 +158,7 @@ object NETTUNITDefinitions {
     informed(commander_fire_brigade, attention) THEN THE nettunit ROLE SHALL ADDRESS fire_brigade_assessment_done(attention)
      */
     id = "fire_brigade_assessment",
+    isHuman = false,
     params = List(),
     pre = GroundPredicate("informed", List(AtomTerm("commander_fire_brigade"), AtomTerm("attention"))),
     post = GroundPredicate("fire_brigade_assessment_done", List(AtomTerm("attention"))),
@@ -169,6 +174,7 @@ object NETTUNITDefinitions {
     GOAL prepare_tech_report : WHEN NOT fire_extinguished AND fire_brigade_assessment_done(attention) THEN THE commander_fire_brigade ROLE SHALL ADDRESS tech_report(event,attention)
      */
     id = "prepare_tech_report",
+    isHuman = false,
     params = List(),
     pre = GroundPredicate("fire_brigade_assessment_done", List(AtomTerm("attention"))),
     post = GroundPredicate("tech_report", List(AtomTerm("fire"), AtomTerm("attention"))),
@@ -182,6 +188,7 @@ object NETTUNITDefinitions {
     GOAL coordinate_firefighter_intervention : WHEN fire_brigade_assessment_done(attention) AND NOT fire_extinguished THEN THE nettunit ROLE SHALL ADDRESS coordinated_firefighter_intervention
      */
     id = "coordinate_firefighter_intervention",
+    isHuman = false,
     params = List(),
     pre = GroundPredicate("tech_report", List(AtomTerm("fire"), AtomTerm("attention"))),
     post = Conjunction(List(
@@ -202,6 +209,7 @@ object NETTUNITDefinitions {
     GOAL declare_pre_alert_state : WHEN alarm_state(attention) AND internal_plan_active(done) AND second_explosion THEN THE nettunit ROLE SHALL ADDRESS alarm_state(pre_alert)
      */
     id = "declare_pre_alert_state",
+    isHuman = false,
     params = List(),
     pre = Conjunction(List(
       GroundPredicate("coordinated_firefighter_intervention", List()),
@@ -226,6 +234,7 @@ object NETTUNITDefinitions {
      */
     id = "inform_technical_rescue_organisation_alert",
     params = List(),
+    isHuman = false,
 
     pre = GroundPredicate("alarm_state", List(AtomTerm("pre_alert"))),
 
@@ -250,6 +259,7 @@ object NETTUNITDefinitions {
     GOAL evaluate_fire_radiant_energy : WHEN informed(ARPA, pre_alert) AND alarm_state(pre_alert) THEN THE ARPA ROLE SHALL ADDRESS evaluated_fire_radiant_energy
      */
     id = "evaluate_fire_radiant_energy",
+    isHuman = false,
     params = List(),
 
     pre = Conjunction(List(
@@ -272,6 +282,7 @@ object NETTUNITDefinitions {
     THEN THE commander_fire_brigade ROLE SHALL ADDRESS alarm_state(alert)
      */
     id = "declare_alarm_state",
+    isHuman = false,
     params = List(),
 
     pre = Conjunction(List(
@@ -297,6 +308,7 @@ object NETTUNITDefinitions {
     THEN THE nettunit ROLE SHALL ADDRESS informed(civil_protection,alert) AND informed_authority(municipality,alert)
      */
     id = "ensure_presence_of_qualified_personnel",
+    isHuman = false,
     params = List(),
 
     pre = GroundPredicate("alarm_state", List(AtomTerm("alert"))),
@@ -321,6 +333,7 @@ object NETTUNITDefinitions {
      * THEN THE nettunit ROLE SHALL ADDRESS informed_authority(questor,alert)
      */
     id = "ensure_presence_of_representative",
+    isHuman = false,
     params = List(),
 
     pre = GroundPredicate("alarm_state", List(AtomTerm("alert"))),
@@ -343,6 +356,7 @@ object NETTUNITDefinitions {
     THEN THE nettunit ROLE SHALL ADDRESS crossborder_inform
      */
     id = "do_crossborder_communication",
+    isHuman = false,
     params = List(),
 
     pre = GroundPredicate("alarm_state", List(AtomTerm("alert"))),

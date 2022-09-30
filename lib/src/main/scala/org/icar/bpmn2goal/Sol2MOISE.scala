@@ -274,6 +274,7 @@ object Sol2MOISETest extends App {
 		/* capability*/
 		val s1 = ServiceDescr("a1",AbstractCapability(
 			id = "prepare",
+			isHuman = false,
 			params = List(),//DomainVariable("TYPE","doc_type")
 
 			pre = Predicate("received", List(AtomTerm("issue_vote_list"))),
@@ -291,6 +292,7 @@ object Sol2MOISETest extends App {
 
 		val s2 = ServiceDescr("a1",AbstractCapability(
 			id = "discussion",
+			isHuman = false,
 			params = List(),//DomainVariable("TYPE","doc_type")
 
 			pre = Disjunction( List(
@@ -317,6 +319,7 @@ object Sol2MOISETest extends App {
 
 		val s3 = ServiceDescr("a2",AbstractCapability(
 			id = "voting",
+			isHuman = false,
 			params = List(),//DomainVariable("TYPE","doc_type")
 
 			pre = Predicate("ready", List(AtomTerm("issue_list"))),

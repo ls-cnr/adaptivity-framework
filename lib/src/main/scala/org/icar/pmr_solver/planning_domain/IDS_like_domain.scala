@@ -25,6 +25,7 @@ object IDS_like_domain {
   /* capability */
   val register = AbstractCapability(
     id = "register",
+    isHuman = false,
     params = List(DomainVariable("TYPE","doc_type")),
 
     pre = ExistQuantifier(
@@ -48,6 +49,7 @@ object IDS_like_domain {
 
   val work = AbstractCapability(
     id = "work",
+    isHuman = false,
     params = List(DomainVariable("TYPE","doc_type")),
 
     pre = Disjunction ( List(
@@ -78,6 +80,7 @@ object IDS_like_domain {
 
   val supervise = AbstractCapability(
     id = "supervise",
+    isHuman = false,
     params = List(DomainVariable("TYPE","doc_type")),
 
     pre = ExistQuantifier(

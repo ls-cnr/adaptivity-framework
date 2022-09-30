@@ -40,6 +40,7 @@ object AAL4E_cognitive_stimulation {
   /* capability */
   val find_user = AbstractCapability(
     id = "find_user",
+    isHuman = false,
     params = List(
       DomainVariable("SearchPosition", "ROOM")
     ),
@@ -48,7 +49,7 @@ object AAL4E_cognitive_stimulation {
 
     post = Disjunction(List(
       ExistQuantifier(List(VariableTerm("Position")), Predicate("user_location", List(VariableTerm("Position")))),
-      GroundPredicate("user_localization",List(AtomTerm("otherwise")))
+      GroundPredicate("user_localization", List(AtomTerm("otherwise")))
     )),
 
     effects = Array(
@@ -66,7 +67,7 @@ object AAL4E_cognitive_stimulation {
   val propose_engage = AbstractCapability(
     id = "propose_engage",
     params = List.empty,
-
+    isHuman = false,
     pre = GroundPredicate("user_location", List(AtomTerm("living_room"))),
 
     post = Disjunction(List(
@@ -96,7 +97,7 @@ object AAL4E_cognitive_stimulation {
 
   val provide_social_activity = AbstractCapability(
     id = "provide_social_activity",
-
+    isHuman = false,
     params = List.empty,
 
     pre = Conjunction(List(
@@ -117,7 +118,7 @@ object AAL4E_cognitive_stimulation {
 
   val provide_cognitive_exercise = AbstractCapability(
     id = "provide_cognitive_exercise",
-
+    isHuman = false,
     params = List.empty,
 
     pre = Conjunction(List(
@@ -138,7 +139,7 @@ object AAL4E_cognitive_stimulation {
 
   val provide_entertainment = AbstractCapability(
     id = "provide_entertainment",
-
+    isHuman = false,
     params = List.empty,
 
     pre = Conjunction(List(
@@ -160,7 +161,7 @@ object AAL4E_cognitive_stimulation {
 
   val select_content = AbstractCapability(
     id = "select_content",
-
+    isHuman = false,
     params = List.empty,
 
     pre = GroundPredicate("user_engagement", List(AtomTerm("passive"))),
@@ -178,7 +179,7 @@ object AAL4E_cognitive_stimulation {
 
   val log_activity = AbstractCapability(
     id = "log_activity",
-
+    isHuman = false,
     params = List.empty,
 
     pre = Disjunction(List(
@@ -215,12 +216,12 @@ object AAL4E_cognitive_stimulation {
         GroundPredicate("performed", List(AtomTerm("cognitive_exercise"))),
         GroundPredicate("performed", List(AtomTerm("entertainment"))),
       )),
-      post=Finally(GroundPredicate("activity_registered", List(AtomTerm("done")))
+      post = Finally(GroundPredicate("activity_registered", List(AtomTerm("done")))
       ))
   ))
 
   val goalset2 = GoalModel(Array(
-    GoalSPEC("1",True(),Finally(Disjunction(List(
+    GoalSPEC("1", True(), Finally(Disjunction(List(
       GroundPredicate("user_engagement", List(AtomTerm("not_interested"))),
       GroundPredicate("user_engagement", List(AtomTerm("social"))),
       GroundPredicate("user_engagement", List(AtomTerm("open_mind"))),
@@ -228,37 +229,37 @@ object AAL4E_cognitive_stimulation {
     )))),
 
     GoalSPEC("2.1",
-      pre=GroundPredicate("user_engagement", List(AtomTerm("social"))),
-      post=Finally(GroundPredicate("performed", List(AtomTerm("social_activity"))))
+      pre = GroundPredicate("user_engagement", List(AtomTerm("social"))),
+      post = Finally(GroundPredicate("performed", List(AtomTerm("social_activity"))))
     ),
     GoalSPEC("2.2",
-      pre=GroundPredicate("user_engagement", List(AtomTerm("open_mind"))),
-      post=Finally(GroundPredicate("performed", List(AtomTerm("cognitive_exercise"))))
+      pre = GroundPredicate("user_engagement", List(AtomTerm("open_mind"))),
+      post = Finally(GroundPredicate("performed", List(AtomTerm("cognitive_exercise"))))
     ),
     GoalSPEC("2.3",
-      pre=GroundPredicate("user_engagement", List(AtomTerm("passive"))),
-      post=Finally(GroundPredicate("performed", List(AtomTerm("entertainment"))))
+      pre = GroundPredicate("user_engagement", List(AtomTerm("passive"))),
+      post = Finally(GroundPredicate("performed", List(AtomTerm("entertainment"))))
     ),
 
     GoalSPEC("3.1",
-      pre=GroundPredicate("user_localization", List(AtomTerm("otherwise"))),
-      post=Finally(GroundPredicate("activity_registered", List(AtomTerm("done"))))
+      pre = GroundPredicate("user_localization", List(AtomTerm("otherwise"))),
+      post = Finally(GroundPredicate("activity_registered", List(AtomTerm("done"))))
     ),
     GoalSPEC("3.2",
-      pre=GroundPredicate("user_engagement", List(AtomTerm("not_interested"))),
-      post=Finally(GroundPredicate("activity_registered", List(AtomTerm("done"))))
+      pre = GroundPredicate("user_engagement", List(AtomTerm("not_interested"))),
+      post = Finally(GroundPredicate("activity_registered", List(AtomTerm("done"))))
     ),
     GoalSPEC("3.3",
-      pre=GroundPredicate("performed", List(AtomTerm("social_activity"))),
-      post=Finally(GroundPredicate("activity_registered", List(AtomTerm("done"))))
+      pre = GroundPredicate("performed", List(AtomTerm("social_activity"))),
+      post = Finally(GroundPredicate("activity_registered", List(AtomTerm("done"))))
     ),
     GoalSPEC("3.4",
-      pre=GroundPredicate("performed", List(AtomTerm("cognitive_exercise"))),
-      post=Finally(GroundPredicate("activity_registered", List(AtomTerm("done"))))
+      pre = GroundPredicate("performed", List(AtomTerm("cognitive_exercise"))),
+      post = Finally(GroundPredicate("activity_registered", List(AtomTerm("done"))))
     ),
     GoalSPEC("3.5",
-      pre=GroundPredicate("performed", List(AtomTerm("entertainment"))),
-      post=Finally(GroundPredicate("activity_registered", List(AtomTerm("done"))))
+      pre = GroundPredicate("performed", List(AtomTerm("entertainment"))),
+      post = Finally(GroundPredicate("activity_registered", List(AtomTerm("done"))))
     ),
 
   ))
