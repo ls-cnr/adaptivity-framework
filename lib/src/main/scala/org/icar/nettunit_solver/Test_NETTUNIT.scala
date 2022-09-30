@@ -3,12 +3,10 @@ package org.icar.nettunit_solver
 import org.icar.GoalSPECParser.Goal2BPMN
 import org.icar.GoalSPECParser.NETTUNIT.NETTUNITParser
 import org.icar.bpmn2goal.bpmn_parser
-import org.icar.grounding.AAL4E.AAL4E_Repository
 import org.icar.grounding.NETTUNIT.{NETTUNITProcessDecoratorStrategy, NETTUNITRepository}
 import org.icar.grounding.SolutionGrounder
 import org.icar.grounding.groundingStrategy.TabuGroundingStrategy
 import org.icar.pmr_solver.best_first_planner.{Solver, WTS2Solution}
-import org.icar.pmr_solver.planning_domain.GenericPlannerExecutor
 import org.icar.pmr_solver.{IterationTermination, SolutionConfiguration, SolverConfiguration}
 import org.icar.sublevel.RawState
 import org.icar.symbolic.Problem
@@ -83,7 +81,7 @@ object Test_NETTUNIT extends App {
 
     Console.out.println(s"${RESET}${BLACK_B}${YELLOW}${BOLD}EXECUTING BPMN PROCESS${RESET}")
 
-    val body = s"{\n  \"emergencyID\":\"$bpmnProcessID\",\n  \"empName\":\"safety_manager\",\n  \"requestDescription\":\"fire in refinery\"\n}"
+    val body = s"{\n  \"emergencyPlanID\":\"$bpmnProcessID\",\n  \"empName\":\"safety_manager\",\n  \"requestDescription\":\"fire in refinery\"\n}"
     //val requestBody = s"{\n  \"emergencyID\":\"$bpmnProcessID\",\n  \"requestDescription\":\"ciao\"\n}"
     val resultApply = Http(s"http://localhost:8080/NETTUNIT/incident/apply")
       .postData(body)
