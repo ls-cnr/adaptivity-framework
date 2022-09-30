@@ -154,9 +154,17 @@ class SolutionGrounder(repository: CapabilityRepository, groundingStrategy: Grou
    * of this class.
    */
   def groundSolutionTasks(solutionTasks: List[SolutionTask], applyConstraints: Boolean): List[Item] = {
+    groundHumanTasks(solutionTasks, applyConstraints) ++ groundNonHumanTasks(solutionTasks, applyConstraints)
+  }
+
+  def groundHumanTasks(taskList: List[SolutionTask], applyConstraints: Boolean): List[Item] = {
+    List.empty[Item]
+  }
+
+  def groundNonHumanTasks(taskList: List[SolutionTask], applyConstraints: Boolean): List[Item] = {
     val outputTasks = new ListBuffer[Item]()
 
-    for (task <- solutionTasks) {
+    for (task <- taskList) {
       val serviceName = task.grounding.capability.id
       val solutionTaskID = task.id
 
