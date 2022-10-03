@@ -7,12 +7,18 @@ import scala.io.Source
 
 object NETTUNITParser extends GoalParserImpl {
 
-  def loadGoalModelFromFile(fname:String):GoalModel={
-    //val fname = "/Users/dguastel/Desktop/goaltreeNETTUNIT.txt"
+  def loadGoalModelFromFile(fname: String): GoalModel = {
     val fileContent = Source.fromFile(fname).getLines().filterNot(x => x.isEmpty).mkString("\n")
     val ll = parseAll(goal, fileContent)
     GoalModel(ll.get.toArray)
   }
+
+  /**
+   *
+   * @param goalModelString the goal model as a unique string
+   * @return
+   */
+  def loadGoalModel(goalModelString: String) = GoalModel(parseAll(goal, goalModelString).get.toArray)
 
   def main(args: Array[String]): Unit = {
     val fname = "/Users/dguastel/Desktop/goaltreeNETTUNIT.txt"
