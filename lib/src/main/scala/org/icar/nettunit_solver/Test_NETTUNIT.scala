@@ -52,7 +52,7 @@ object Test_NETTUNIT extends App {
 
       // Abstract WF to BPMN
       val capabilityRepository = NETTUNITRepository
-      val grounder = new SolutionGrounder(capabilityRepository, new TabuGroundingStrategy(2))
+      val grounder = new SolutionGrounder(capabilityRepository, new TabuGroundingStrategy(1))
       grounder.setProcessDecorator(NETTUNITProcessDecoratorStrategy)
       val solution = grounder.groundSolution(converter)
       val theBPMN = Goal2BPMN.getBPMN(solution, "myBPMNProcess", bpmnProcessID)
