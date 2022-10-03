@@ -20,6 +20,11 @@ object NETTUNITParser extends GoalParserImpl {
    */
   def loadGoalModel(goalModelString: String) = GoalModel(parseAll(goal, goalModelString).get.toArray)
 
+  /**
+   * TEST START POINT
+   *
+   * @param args
+   */
   def main(args: Array[String]): Unit = {
     val fname = "/Users/dguastel/Desktop/goaltreeNETTUNIT.txt"
     val fileContent = Source.fromFile(fname).getLines().filterNot(x => x.isEmpty).mkString("\n")
@@ -30,7 +35,7 @@ object NETTUNITParser extends GoalParserImpl {
     println(ll)
   }
 
-  def old_parser_tests(): Unit = {
+  private def old_parser_tests(): Unit = {
 
     val goalExample_1 = "GOAL accept_new_issues_goal : WHEN MESSAGE issue_vote_list(?IssueList) RECEIVED FROM THE user ROLE THEN THE issue_manager ROLE SHALL ADDRESS FINALLY accepted(?IssueList)"
 

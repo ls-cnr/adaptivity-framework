@@ -12,16 +12,20 @@ import org.icar.symbolic.{GoalModel, Problem}
 import scalaj.http.Http
 import scala.Console.{BLACK_B, BOLD, RESET, YELLOW}
 
-object Test_NETTUNIT extends App {
+object Test_NETTUNIT /*extends App */{
   val bpmnProcessID = "NETTUNITProcess"
-
   val FlowableAddress = "localhost"
   val FlowablePort = "8080"
-
+  val deployAndExecuteFromMUSA = false
   val goalModelPath = getClass.getResource("/NETTUNIT/goaltreeNETTUNIT.txt").getFile
   val goalModel = NETTUNITParser.loadGoalModelFromFile(goalModelPath)
 
-  goalModel2BPMN(goalModel)
+  val groundingStrategy = new TabuGroundingStrategy(1)
+
+  def main(args: Array[String]): Unit = {
+    goalModel2BPMN(goalModel)
+  }
+
 
   def goalModel2BPMN(goalModel: GoalModel, processName: String = "myBPMNProcess"): String = {
     val my_problem = Problem(NETTUNITDefinitions.initial, goalModel, NETTUNITDefinitions.availableActions)
@@ -36,40 +40,28 @@ object Test_NETTUNIT extends App {
         allow_loop = true,
         allow_parallel_action = true))
 
-    //val r = GenericPlannerExecutor.run_solver(my_problem, my_domain, qos, map, conf)
+    val solver = Solver(my_problem, my_domain, qos, conf)
+    val its = solver.iterate_until_termination()
+    if (!solver.solution_set.wts_list.isEmpty) {
+      val wts = solver.solution_set.full_wts(0) //Get first working WTS
+      val converter = new WTS2Solution(wts, my_problem.I)
 
-    val do_only_generic_planner = false
-    if (!do_only_generic_planner) {
-      val solver = Solver(my_problem, my_domain, qos, conf)
-      val its = solver.iterate_until_termination()
-      if (!solver.solution_set.wts_list.isEmpty) {
-        val wts = solver.solution_set.full_wts(0) //Get first working WTS
-        val start_time: Long = System.currentTimeMillis()
-        val converter = new WTS2Solution(wts, my_problem.I)
-        val end_time: Long = System.currentTimeMillis()
-        val total_time: Long = end_time - start_time
-        print("wts size= " + wts.nodes.size)
-        println("=> time = " + total_time)
-
-        // Abstract WF to BPMN
-        val capabilityRepository = NETTUNITRepository
-        val grounder = new SolutionGrounder(capabilityRepository, new TabuGroundingStrategy(1))
-        grounder.setProcessDecorator(NETTUNITProcessDecoratorStrategy)
-        val solution = grounder.groundSolution(converter)
-        val theBPMN = Goal2BPMN.getBPMN(solution, processName, bpmnProcessID)
-        //val is = new ByteArrayInputStream(theBPMN.toString().getBytes)
-        //val parser = new bpmn_parser(is)
-        //val goalString = parser.fullFromInputStream
-
-        Console.out.println(s"${RESET}${BLACK_B}${YELLOW}${BOLD}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${RESET}")
-        Console.out.println(s"${RESET}${BLACK_B}${YELLOW}${BOLD}BPMN PROCESS!${RESET}")
-        Console.out.println(s"${RESET}${BLACK_B}${YELLOW}${BOLD}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${RESET}")
-        Console.out.println(theBPMN.toString())
-        Console.out.println(s"${RESET}${BLACK_B}${YELLOW}${BOLD}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${RESET}")
-        theBPMN.toString()
+      // Abstract WF to BPMN
+      val capabilityRepository = NETTUNITRepository
+      val grounder = new SolutionGrounder(capabilityRepository, groundingStrategy)
+      grounder.setProcessDecorator(NETTUNITProcessDecoratorStrategy)
+      val solution = grounder.groundSolution(converter)
+      val theBPMN = Goal2BPMN.getBPMN(solution, processName, bpmnProcessID)
+      if (deployAndExecuteFromMUSA) {
+        executeWithFlowable(theBPMN.toString())
       }
+      theBPMN.toString()
+
     }
-    ""
+    else {
+      ""
+    }
+
   }
 
   def executeWithFlowable(processDef: String): Unit = {

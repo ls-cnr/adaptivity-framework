@@ -57,6 +57,7 @@ dependencies {
     implementation 'com.typesafe.akka:akka-actor_2.13:2.7.0-M3'
 // https://mvnrepository.com/artifact/com.typesafe.akka/akka-stream
     implementation 'com.typesafe.akka:akka-stream_2.13:2.7.0-M3'
+    implementation 'net.liftweb:lift-json_2.13:3.5.0'
 
 
 
