@@ -120,10 +120,6 @@ class SolutionGrounder(repository: CapabilityRepository, groundingStrategy: Grou
         val fromItem = allItems.find(st => st.id == head.from.getStringID()).orNull
         val toItem = allItems.find(st => st.id == head.to.getStringID()).orNull
 
-        if (fromItem == null || toItem == null) {
-          println("here")
-        }
-
         aux(tail, allItems, itemID + 1) ++ List(org.icar.bpmn2goal.SequenceFlow(s"SequenceFlow_${itemID}",
           fromItem,
           toItem,

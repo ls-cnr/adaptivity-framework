@@ -18,6 +18,9 @@ import scala.Console.{BLACK_B, BOLD, RESET, YELLOW}
 object Test_NETTUNIT extends App {
   val bpmnProcessID = "NETTUNITProcess"
 
+  val NETTUNITAddress = "localhost"
+  val NETTUNITAddressPort = "8080"
+
   val goalModelPath = getClass.getResource("/NETTUNIT/goaltreeNETTUNIT.txt").getFile
   val goalModel = NETTUNITParser.loadGoalModelFromFile(goalModelPath)
   val my_problem = Problem(NETTUNITDefinitions.initial, goalModel, NETTUNITDefinitions.availableActions)
@@ -75,15 +78,14 @@ object Test_NETTUNIT extends App {
     val teeSymbol = "\u22A4"
     val repl = "${myVariable}"
     val newProcessDef = processDef.replace(teeSymbol, repl)
-    val resultDeploy = Http(s"http://localhost:8080/NETTUNIT/deployProcess/${bpmnProcessID}")
+    val resultDeploy = Http(s"http://${NETTUNITAddress}:${NETTUNITAddressPort}/NETTUNIT/deployProcess/${bpmnProcessID}")
       .postData(newProcessDef)
       .header("Content-Type", "application/xml").asString
 
     Console.out.println(s"${RESET}${BLACK_B}${YELLOW}${BOLD}EXECUTING BPMN PROCESS${RESET}")
 
     val body = s"{\n  \"emergencyPlanID\":\"$bpmnProcessID\",\n  \"empName\":\"safety_manager\",\n  \"requestDescription\":\"fire in refinery\"\n}"
-    //val requestBody = s"{\n  \"emergencyID\":\"$bpmnProcessID\",\n  \"requestDescription\":\"ciao\"\n}"
-    val resultApply = Http(s"http://localhost:8080/NETTUNIT/incident/apply")
+    val resultApply = Http(s"http://${NETTUNITAddress}:${NETTUNITAddressPort}/NETTUNIT/incident/apply")
       .postData(body)
       .header("Content-Type", "application/json").asString
   }
