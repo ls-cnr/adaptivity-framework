@@ -31,10 +31,10 @@ object NETTUNITRepository extends CapabilityRepository {
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
-  add("fire_brigade_assessment",
+  add("decide_response_type",
     ConcreteCapability(4,
-      "fire_brigade_assessment",
-      "nettunit.handler.fire_brigade_assessment",
+      "decide_response_type",
+      "nettunit.handler.decide_response_type",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
@@ -45,10 +45,10 @@ object NETTUNITRepository extends CapabilityRepository {
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
-  add("coordinate_firefighter_intervention",
+  add("keep_update_involved_personnel",
     ConcreteCapability(6,
-      "coordinate_firefighter_intervention",
-      "nettunit.handler.coordinate_firefighter_intervention",
+      "keep_update_involved_personnel",
+      "nettunit.handler.keep_update_involved_personnel",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )

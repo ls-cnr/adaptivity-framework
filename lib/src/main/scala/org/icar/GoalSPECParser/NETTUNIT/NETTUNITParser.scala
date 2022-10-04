@@ -18,7 +18,9 @@ object NETTUNITParser extends GoalParserImpl {
    * @param goalModelString the goal model as a unique string
    * @return
    */
-  def loadGoalModel(goalModelString: String) = GoalModel(parseAll(goal, goalModelString).get.toArray)
+  def loadGoalModel(goalModelString: String) = {
+    GoalModel(parseAll(goal, goalModelString).get.toArray)
+  }
 
   /**
    * TEST START POINT

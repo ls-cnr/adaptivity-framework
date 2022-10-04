@@ -72,7 +72,7 @@ object NETTUNITServer {
         }
       },
       path("Goal2BPMN") {
-        get {
+        post {
           decodeRequest {
             // unmarshal as string
             entity(as[String]) { str =>

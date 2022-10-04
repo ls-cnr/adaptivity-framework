@@ -8,11 +8,11 @@ GOAL notify_competent_body_internal_plan : WHEN internal_plan_active(active) AND
 
 GOAL inform_technical_rescue_organisation_internal_plan : WHEN internal_plan_active(active) AND alarm_state(attention) THEN THE nettunit ROLE SHALL ADDRESS FINALLY informed(commander_fire_brigade,attention)
 
-GOAL fire_brigade_assessment : WHEN informed(commander_fire_brigade, attention) THEN THE nettunit ROLE SHALL ADDRESS FINALLY fire_brigade_assessment_done(attention)
+GOAL decide_response_type : WHEN informed(commander_fire_brigade, attention) THEN THE nettunit ROLE SHALL ADDRESS FINALLY fire_brigade_assessment_done(attention)
 
 GOAL prepare_tech_report : WHEN fire_brigade_assessment_done(attention) THEN THE commander_fire_brigade ROLE SHALL ADDRESS FINALLY tech_report(fire,attention)
 
-GOAL coordinate_firefighter_intervention : WHEN tech_report(fire,attention) THEN THE nettunit ROLE SHALL ADDRESS FINALLY coordinated_firefighter_intervention AND second_explosion
+GOAL keep_update_involved_personnel : WHEN tech_report(fire,attention) THEN THE nettunit ROLE SHALL ADDRESS FINALLY coordinated_firefighter_intervention AND second_explosion
 
 GOAL declare_pre_alert_state : WHEN coordinated_firefighter_intervention AND second_explosion THEN THE nettunit ROLE SHALL ADDRESS FINALLY alarm_state(pre_alert)
 

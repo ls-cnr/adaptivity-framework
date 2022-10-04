@@ -140,12 +140,12 @@ object NETTUNITDefinitions {
     ),
     future = List.empty
   )
-  val fire_brigade_assessment = AbstractCapability(
+  val decide_response_type = AbstractCapability(
     /*
-    GOAL fire_brigade_assessment : WHEN internal_plan_active(done) AND alarm_state(attention) AND
+    GOAL decide_response_type : WHEN internal_plan_active(done) AND alarm_state(attention) AND
     informed(commander_fire_brigade, attention) THEN THE nettunit ROLE SHALL ADDRESS fire_brigade_assessment_done(attention)
      */
-    id = "fire_brigade_assessment",
+    id = "decide_response_type",
     isHuman = true,
     params = List(),
     pre = GroundPredicate("informed", List(AtomTerm("commander_fire_brigade"), AtomTerm("attention"))),
@@ -171,11 +171,11 @@ object NETTUNITDefinitions {
     ))),
     future = List.empty
   )
-  val coordinate_firefighter_intervention = AbstractCapability(
+  val keep_update_involved_personnel = AbstractCapability(
     /*
     GOAL coordinate_firefighter_intervention : WHEN fire_brigade_assessment_done(attention) AND NOT fire_extinguished THEN THE nettunit ROLE SHALL ADDRESS coordinated_firefighter_intervention
      */
-    id = "coordinate_firefighter_intervention",
+    id = "keep_update_involved_personnel",
     isHuman = false,
     params = List(),
     pre = GroundPredicate("tech_report", List(AtomTerm("fire"), AtomTerm("attention"))),
@@ -342,9 +342,9 @@ object NETTUNITDefinitions {
     activate_internal_security_plan,
     notify_competent_body_internal_plan,
     inform_technical_rescue_organisation_internal_plan,
-    fire_brigade_assessment,
+    decide_response_type,
     prepare_tech_report,
-    coordinate_firefighter_intervention,
+    keep_update_involved_personnel,
     declare_pre_alert_state,
     inform_technical_rescue_organisation_alert,
     evaluate_fire_radiant_energy,

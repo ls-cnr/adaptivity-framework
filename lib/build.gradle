@@ -35,8 +35,8 @@ repositories {
 
     //jacamo repository
     maven {
-      url "http://jacamo.sourceforge.net/maven2"
-      allowInsecureProtocol = true
+        url "http://jacamo.sourceforge.net/maven2"
+        allowInsecureProtocol = true
     }
     // MOISE with exceptions
     maven { url "https://moise-exceptions.sourceforge.io/maven2" }
@@ -55,13 +55,9 @@ dependencies {
     implementation 'com.typesafe.akka:akka-http_2.13:10.4.0-M1'
     // https://mvnrepository.com/artifact/com.typesafe.akka/akka-actor
     implementation 'com.typesafe.akka:akka-actor_2.13:2.7.0-M3'
-// https://mvnrepository.com/artifact/com.typesafe.akka/akka-stream
+    // https://mvnrepository.com/artifact/com.typesafe.akka/akka-stream
     implementation 'com.typesafe.akka:akka-stream_2.13:2.7.0-M3'
     implementation 'net.liftweb:lift-json_2.13:3.5.0'
-
-
-
-
 
 
     // Use Scala 2.13 in our library project
@@ -73,8 +69,8 @@ dependencies {
     testImplementation 'org.scalatestplus:junit-4-13_2.13:3.2.2.0'
 
     // Use Jacamo and MOISE with Exceptions
-    implementation group: 'org.jacamo',   name: 'jacamo',           version: '0.8'
-    implementation group: 'org.jacamo',   name: 'npl' ,             version: '0.5-SNAPSHOT', changing: true, transitive: false
+    implementation group: 'org.jacamo', name: 'jacamo', version: '0.8'
+    implementation group: 'org.jacamo', name: 'npl', version: '0.5-SNAPSHOT', changing: true, transitive: false
     implementation group: 'it.unito.di', name: 'moise-exceptions', version: '0.2', changing: true
     implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.14.1'
     implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.14.1'
@@ -83,8 +79,8 @@ dependencies {
     implementation 'javax.servlet:javax.servlet-api:3.0.1'
     implementation group: 'org.json', name: 'json', version: '20211205'
 
-    implementation group: 'io.github.hughsimpson',   name: 'scalameter_2.13',           version: '0.22'
-    implementation group: 'org.mongodb',   name: 'casbah_2.11',           version: '3.1.1'
+    implementation group: 'io.github.hughsimpson', name: 'scalameter_2.13', version: '0.22'
+    implementation group: 'org.mongodb', name: 'casbah_2.11', version: '3.1.1'
 
 }
 
@@ -99,7 +95,7 @@ configurations.all {
 sourceSets {
     main {
         java {
-          srcDirs = []
+            srcDirs = []
         }
         scala {
             srcDir 'src/main/scala'
@@ -115,9 +111,9 @@ sourceSets {
 //        }
     }
     test {
-      java {
-        srcDirs = []
-      }
+        java {
+            srcDirs = []
+        }
         scala {
             srcDirs 'src/test/scala'
         }
@@ -126,9 +122,8 @@ sourceSets {
 }
 
 
-
 task uberJarJacamo(type: Jar, dependsOn: 'classes') {
-    group      'JaCaMo'
+    group 'JaCaMo'
     description 'creates a single runnable jar file with all dependencies'
 
     manifest {
@@ -136,13 +131,13 @@ task uberJarJacamo(type: Jar, dependsOn: 'classes') {
     }
     archiveBaseName = 'jacamo-MUSA' // the name must start with jacamo so that jacamo...jar is found in the classpath
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-    from (project.projectDir.absolutePath) {
+    from(project.projectDir.absolutePath) {
         include '**/*.asl'
         include '**/*.xml'
         include '**/*.jcm'
         include '*.properties'
     }
-    from (project.buildDir.absolutePath + '/jcm') {
+    from(project.buildDir.absolutePath + '/jcm') {
         include '**/*'
     }
     with jar
@@ -150,7 +145,7 @@ task uberJarJacamo(type: Jar, dependsOn: 'classes') {
     doFirst {
         copy {
             from 'MUSA.jcm'
-            rename 'MUSA.jcm','default.jcm'
+            rename 'MUSA.jcm', 'default.jcm'
             into project.buildDir.absolutePath + '/jcm'
         }
     }
@@ -162,12 +157,12 @@ clean {
     delete 'log'
 }
 
-task wrapper(type: Wrapper){
+task wrapper(type: Wrapper) {
     gradleVersion = '7.2'
 }
 
 
-task launchAgents (type: JavaExec, dependsOn: 'classes') {
+task launchAgents(type: JavaExec, dependsOn: 'classes') {
     description 'runs the application'
     group 'JaCaMo'
     doFirst {
@@ -178,7 +173,7 @@ task launchAgents (type: JavaExec, dependsOn: 'classes') {
     classpath sourceSets.main.runtimeClasspath
 }
 
-task runGoalExtractor (type: JavaExec, dependsOn: 'classes') {
+task runGoalExtractor(type: JavaExec, dependsOn: 'classes') {
     description 'goal_extractor'
     group 'execution'
     mainClass = 'org.icar.bpmn2goal.goal_extractor'
@@ -186,21 +181,21 @@ task runGoalExtractor (type: JavaExec, dependsOn: 'classes') {
     classpath sourceSets.main.runtimeClasspath
 }
 
-task runPMRExample (type: JavaExec, dependsOn: 'classes') {
+task runPMRExample(type: JavaExec, dependsOn: 'classes') {
     description 'example of pmr'
     group 'execution'
     mainClass = 'org.icar.pmr_solver.Test_Solver_IDSlike'
     classpath sourceSets.main.runtimeClasspath
 }
 
-task runAAL4E (type: JavaExec, dependsOn: 'classes') {
+task runAAL4E(type: JavaExec, dependsOn: 'classes') {
     description 'example of pmr'
     group 'execution'
     mainClass = 'org.icar.pmr_solver.Test_Solver_AAL4E'
     classpath sourceSets.main.runtimeClasspath
 }
 
-task runPerfTest (type: JavaExec, dependsOn: 'classes') {
+task runPerfTest(type: JavaExec, dependsOn: 'classes') {
     description 'benchmark of WTS2Sol'
     group 'execution'
     mainClass = 'org.icar.pmr_solver.WTS2Solution__Benchmark'
@@ -208,7 +203,7 @@ task runPerfTest (type: JavaExec, dependsOn: 'classes') {
 }
 
 
-task testSup (type: JavaExec, dependsOn: 'classes') {
+task testSup(type: JavaExec, dependsOn: 'classes') {
     description 'test_supervisor'
     group 'execution'
     mainClass = 'org.icar.sublevel.test_RawSupervisor'
