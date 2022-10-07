@@ -86,6 +86,17 @@ object NETTUNITServer {
             }
           }
         }
+      },
+      path("FailCapability") {
+        post {
+          decodeRequest {
+            // unmarshal as string
+            entity(as[String]) { capabilityServiceClass =>
+              println(s"FAILED SERVICE: $capabilityServiceClass")
+              complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "Failed task: " + capabilityServiceClass))
+            }
+          }
+        }
       }
     )
 

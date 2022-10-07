@@ -4,15 +4,16 @@ import org.icar.GoalSPECParser.Goal2BPMN
 import org.icar.GoalSPECParser.NETTUNIT.NETTUNITParser
 import org.icar.grounding.NETTUNIT.{NETTUNITProcessDecoratorStrategy, NETTUNITRepository}
 import org.icar.grounding.SolutionGrounder
-import org.icar.grounding.groundingStrategy.TabuGroundingStrategy
+import org.icar.grounding.groundingStrategy.{FirstWorkingGroundingStrategy, TabuGroundingStrategy}
 import org.icar.pmr_solver.best_first_planner.{Solver, WTS2Solution}
 import org.icar.pmr_solver.{IterationTermination, SolutionConfiguration, SolverConfiguration}
 import org.icar.sublevel.RawState
 import org.icar.symbolic.{GoalModel, Problem}
 import scalaj.http.Http
+
 import scala.Console.{BLACK_B, BOLD, RESET, YELLOW}
 
-object Test_NETTUNIT /*extends App */{
+object Test_NETTUNIT /*extends App */ {
   val bpmnProcessID = "NETTUNITProcess"
   val FlowableAddress = "localhost"
   val FlowablePort = "8080"
@@ -20,12 +21,19 @@ object Test_NETTUNIT /*extends App */{
   val goalModelPath = getClass.getResource("/NETTUNIT/goaltreeNETTUNIT.txt").getFile
   val goalModel = NETTUNITParser.loadGoalModelFromFile(goalModelPath)
 
-  val groundingStrategy = new TabuGroundingStrategy(1)
+  /**
+   *
+   */
+  //val groundingStrategy = new TabuGroundingStrategy(3)
+  val groundingStrategy = new FirstWorkingGroundingStrategy
 
   def main(args: Array[String]): Unit = {
     goalModel2BPMN(goalModel)
   }
 
+  def failCapability(serviceClass: String): Unit = {
+
+  }
 
   def goalModel2BPMN(goalModel: GoalModel, processName: String = "myBPMNProcess"): String = {
     val my_problem = Problem(NETTUNITDefinitions.initial, goalModel, NETTUNITDefinitions.availableActions)
@@ -55,6 +63,9 @@ object Test_NETTUNIT /*extends App */{
       if (deployAndExecuteFromMUSA) {
         executeWithFlowable(theBPMN.toString())
       }
+
+      groundingStrategy.update()
+
       theBPMN.toString()
 
     }

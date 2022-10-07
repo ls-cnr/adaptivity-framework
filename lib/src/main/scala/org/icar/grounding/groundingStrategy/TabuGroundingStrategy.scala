@@ -32,7 +32,13 @@ class TabuGroundingStrategy(tabuTurns: Int) extends GroundingStrategy {
   }
 
   override def apply(inputCapabilities: List[ConcreteCapability]): ConcreteCapability = {
-    val theMap = inputCapabilities.filter(cp => !tabuList.contains(cp)).map(cp => (cp, fitness(cp))).toMap
+    var theMap = inputCapabilities.filter(cp => !tabuList.contains(cp)).map(cp => (cp, fitness(cp))).toMap
+
+    //backup solution: if no alternative capability is found, then choose the previous one...
+    if (theMap.isEmpty){
+      theMap = inputCapabilities.map(cp => (cp, fitness(cp))).toMap
+    }
+
     val bestCapability = theMap.maxBy { case (_, fitness) => fitness }._1
     tabuList.update(bestCapability, tabuTurns)
     bestCapability

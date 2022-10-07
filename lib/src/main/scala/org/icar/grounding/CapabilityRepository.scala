@@ -33,8 +33,10 @@ abstract class CapabilityRepository {
    * @param serviceName the name of the service to be grounded
    * @param realization the concrete capability grounding
    */
-  def add(serviceName: String, realization: ConcreteCapability): Unit =
+  def add(serviceName: String, realization: ConcreteCapability): Unit = {
     groundings.addOne(ConcreteCapabilityGrounding(serviceName, realization))
+
+  }
 
 }
 

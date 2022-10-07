@@ -24,6 +24,13 @@ object NETTUNITRepository extends CapabilityRepository {
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
+  add("notify_competent_body_internal_plan",
+    ConcreteCapability(14,
+      "notify_competent_body_internal_plan",
+      "nettunit.handler.alternative_services.notify_competent_body_internal_plan_alt", //Alternative service implementation
+      Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
+      Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
+  )
   add("inform_technical_rescue_organisation_internal_plan",
     ConcreteCapability(3,
       "inform_technical_rescue_organisation_internal_plan",
