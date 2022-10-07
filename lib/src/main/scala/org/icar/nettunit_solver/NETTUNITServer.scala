@@ -93,6 +93,7 @@ object NETTUNITServer {
             // unmarshal as string
             entity(as[String]) { capabilityServiceClass =>
               println(s"FAILED SERVICE: $capabilityServiceClass")
+              Test_NETTUNIT.failCapability(capabilityServiceClass)
               complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "Failed task: " + capabilityServiceClass))
             }
           }

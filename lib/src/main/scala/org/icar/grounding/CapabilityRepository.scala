@@ -27,6 +27,16 @@ abstract class CapabilityRepository {
     aux(serviceName, groundings.toList)
   }
 
+  def getFromServiceImplName(className: String): List[ConcreteCapabilityGrounding] = {
+    def aux(sn: String, the_groundings: List[ConcreteCapabilityGrounding]): List[ConcreteCapabilityGrounding] = the_groundings match {
+      case head :: tail if head.realization.className == sn => head :: aux(sn, tail)
+      case _ :: tail => aux(sn, tail)
+      case Nil => List()
+    }
+
+    aux(className, groundings.toList)
+  }
+
   /**
    * Add a new capability grounding
    *

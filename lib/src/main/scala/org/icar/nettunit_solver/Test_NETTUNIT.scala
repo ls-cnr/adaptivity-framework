@@ -26,13 +26,17 @@ object Test_NETTUNIT /*extends App */ {
    */
   //val groundingStrategy = new TabuGroundingStrategy(3)
   val groundingStrategy = new FirstWorkingGroundingStrategy
+  val capabilityRepository = NETTUNITRepository
+  val grounder = new SolutionGrounder(capabilityRepository, groundingStrategy)
+  grounder.setProcessDecorator(NETTUNITProcessDecoratorStrategy)
 
   def main(args: Array[String]): Unit = {
     goalModel2BPMN(goalModel)
   }
 
-  def failCapability(serviceClass: String): Unit = {
-
+  def failCapability(className: String): Unit = {
+    val theCapabilities = capabilityRepository.getFromServiceImplName(className)
+    theCapabilities.foreach(cap => groundingStrategy.notWorkingCapability(cap.realization))
   }
 
   def goalModel2BPMN(goalModel: GoalModel, processName: String = "myBPMNProcess"): String = {
@@ -55,9 +59,6 @@ object Test_NETTUNIT /*extends App */ {
       val converter = new WTS2Solution(wts, my_problem.I)
 
       // Abstract WF to BPMN
-      val capabilityRepository = NETTUNITRepository
-      val grounder = new SolutionGrounder(capabilityRepository, groundingStrategy)
-      grounder.setProcessDecorator(NETTUNITProcessDecoratorStrategy)
       val solution = grounder.groundSolution(converter)
       val theBPMN = Goal2BPMN.getBPMN(solution, processName, bpmnProcessID)
       if (deployAndExecuteFromMUSA) {

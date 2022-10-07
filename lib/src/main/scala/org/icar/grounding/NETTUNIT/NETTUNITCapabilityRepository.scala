@@ -38,6 +38,13 @@ object NETTUNITRepository extends CapabilityRepository {
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
+  add("inform_technical_rescue_organisation_internal_plan",
+    ConcreteCapability(15,
+      "inform_technical_rescue_organisation_internal_plan",
+      "nettunit.handler.alternative_services.inform_technical_rescue_organisation_internal_plan_alt", //Alternative service implementation
+      Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
+      Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
+  )
   add("decide_response_type",
     ConcreteCapability(4,
       "decide_response_type",
