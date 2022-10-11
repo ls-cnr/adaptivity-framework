@@ -154,12 +154,18 @@ class SolutionGrounder(repository: CapabilityRepository, groundingStrategy: Grou
    * of this class.
    */
   def groundSolutionTasks(solutionTasks: List[SolutionTask], applyConstraints: Boolean): List[Item] = {
-    groundHumanTasks(solutionTasks.filter(task => task.grounding.capability.isHuman)) ++
-      groundNonHumanTasks(solutionTasks.filter(task => !task.grounding.capability.isHuman), applyConstraints)
+    //groundHumanTasks(solutionTasks.filter(task => task.grounding.capability.isHuman)) ++
+     // groundNonHumanTasks(solutionTasks.filter(task => !task.grounding.capability.isHuman), applyConstraints)
+    groundNonHumanTasks(solutionTasks, applyConstraints)
   }
 
+  //def groundHumanTasks(taskList: List[SolutionTask]): List[Item] =
+  //  taskList.map(t => Task(s"ht_${t.id}", t.grounding.capability.id, tasktype = "human"))
+
   def groundHumanTasks(taskList: List[SolutionTask]): List[Item] =
-    taskList.map(t => Task(s"ht_${t.id}", t.grounding.capability.id, tasktype = "human"))
+    taskList.map(t => {
+      Task(s"ht_${t.id}", t.grounding.capability.id, tasktype = "human")
+    })
 
   def groundNonHumanTasks(taskList: List[SolutionTask], applyConstraints: Boolean): List[Item] = {
     val outputTasks = new ListBuffer[Item]()
@@ -179,7 +185,7 @@ class SolutionGrounder(repository: CapabilityRepository, groundingStrategy: Grou
       if (concreteCapabilities.length > 0) {
         //Get the first available capability according to the chosen grounding strategy
         //NOTE: concrete capabilities are SERVICE TASKS
-        val concreteCapability = groundingStrategy.apply(concreteCapabilities).withID(solutionTaskID).toServiceTask()
+        val concreteCapability = groundingStrategy.apply(concreteCapabilities).withID(solutionTaskID).toBPMNTask()
         outputTasks.addOne(concreteCapability)
       }
     }

@@ -14,6 +14,8 @@ case class AAL4E_Repository(capabilities: List[AbstractCapability]) extends Capa
         add(cap.id, // -> the service name
           ConcreteCapability(typeID,
             cap.id, // -> the service name (here we are in a concrete capability)
+            false,
+            s"${cap.id}_type${typeID}", // -> the title of the task
             s"aal4e.handler.${cap.id}_type${typeID}", // -> the class that is used to realize the service
             Some(s"aal4e.listener.TaskStartedExecutionListenerImpl"),
             Some(s"aal4e.listener.TaskEndendExecutionListenerImpl"))) // -> the listener executed when the BPMN task associated to this capability begins its execution

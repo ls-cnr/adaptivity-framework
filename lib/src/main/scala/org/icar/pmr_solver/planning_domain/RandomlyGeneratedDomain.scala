@@ -89,7 +89,7 @@ class RandomlyGeneratedDomain(SIZE_ARGS: Int, SIZE_PREDS: Int) {
     // NON DETERMINISTIC
     AbstractCapability(
       id = "NON" + cap_id,
-      isHuman = false,
+
       params = List(),
       pre = GroundPredicate(preds(p_index_pre).functor, List(AtomTerm(args(a_index_pre)))),
       post = Disjunction(List(
@@ -125,7 +125,7 @@ class RandomlyGeneratedDomain(SIZE_ARGS: Int, SIZE_PREDS: Int) {
     // NON DETERMINISTIC
     AbstractCapability(
       id = "NON" + cap_id,
-      isHuman = false,
+
       params = List(),
       pre = GroundPredicate(preds(p_index_pre).functor, List(AtomTerm(args(a_index_pre)))),
       post = Disjunction(List(
@@ -163,7 +163,7 @@ class RandomlyGeneratedDomain(SIZE_ARGS: Int, SIZE_PREDS: Int) {
     // DETERMINISTIC
     AbstractCapability(
       id = "CAP" + cap_id,
-      isHuman = false,
+
       params = List(),
       pre = GroundPredicate(preds(p_index_pre).functor, List(AtomTerm(args(a_index_pre)))),
       post = GroundPredicate(preds(p_index_post).functor, List(AtomTerm(args(a_index_post)))),
@@ -194,7 +194,7 @@ class RandomlyGeneratedDomain(SIZE_ARGS: Int, SIZE_PREDS: Int) {
 
     AbstractCapability(
       id = "CAP" + (cap_id).toString,
-      isHuman = false,
+
       params = List(),
       pre = GroundPredicate(preds(p_index_pre).functor, List(AtomTerm(args(a_index_pre)))),
       post = GroundPredicate(preds(p_index_post).functor, List(AtomTerm(args(a_index_post)))),

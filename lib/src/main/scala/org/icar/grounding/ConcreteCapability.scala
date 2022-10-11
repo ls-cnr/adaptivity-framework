@@ -1,6 +1,6 @@
 package org.icar.grounding
 
-import org.icar.bpmn2goal.{EventType, FlowableExecutionListener, FlowableExtentionElements, ServiceTask}
+import org.icar.bpmn2goal.{EventType, FlowableExecutionListener, FlowableExtentionElements, Item, ServiceTask, Task}
 
 /**
  * A concrete capability specifies the realization of a service described by an abstract capability in MUSA
@@ -21,19 +21,22 @@ import org.icar.bpmn2goal.{EventType, FlowableExecutionListener, FlowableExtenti
  * @author Davide Guastella
  */
 case class ConcreteCapability(id: Int, // the ID of this concrete capability.
+                              title: String,
+                              isHuman: Boolean, //[davide] is true, then the capability that realizes this service
+                              // must be carried out by a human operator
                               serviceName: String, //the id of the abstract capability
                               className: String,
                               startEventClassName: Option[String] = None,
                               endEventClassName: Option[String] = None) {
 
-  def withID(theID: Int): ConcreteCapability = ConcreteCapability(theID, serviceName, className, startEventClassName, endEventClassName)
+  def withID(theID: Int): ConcreteCapability = ConcreteCapability(theID, title, isHuman, serviceName, className, startEventClassName, endEventClassName)
 
   /**
    * Convert this capability to a [[ServiceTask]]
    *
    * @return
    */
-  def toServiceTask(): ServiceTask = {
+  def toBPMNTask(): Item = {
     var listeners = List[FlowableExecutionListener]()
     startEventClassName match {
       case Some(s) => listeners = listeners ++ List(FlowableExecutionListener(EventType.Start.toString.toLowerCase(), s))
@@ -43,8 +46,14 @@ case class ConcreteCapability(id: Int, // the ID of this concrete capability.
       case Some(s) => listeners = listeners ++ List(FlowableExecutionListener(EventType.End.toString.toLowerCase(), s))
       case None =>
     }
-    //ServiceTask(s"${serviceName}_${id}", serviceName, className, Some(FlowableExtentionElements(listeners)))
-    ServiceTask(s"st_${id}", serviceName, className, Some(FlowableExtentionElements(listeners)))
+    //ServiceTask(s"st_${id}", serviceName, className, Some(FlowableExtentionElements(listeners)))
+
+    isHuman match {
+      case true => Task(s"st_${id}", title, tasktype = "human")
+      case false => ServiceTask(s"st_${id}", title, className, Some(FlowableExtentionElements(listeners)))
+    }
+
+
   }
 
 }

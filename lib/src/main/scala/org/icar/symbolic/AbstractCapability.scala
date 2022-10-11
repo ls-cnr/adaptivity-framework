@@ -19,8 +19,6 @@ package org.icar.symbolic
  */
 case class AbstractCapability(
                                id: String,
-                               isHuman: Boolean, //[davide] is true, then the capability that realizes this service
-                               // must be carried out by a human operator
                                params: List[DomainArgument],
                                //constraints : List[DomainVariableConstraint],
                                pre: HL_PredicateFormula,
@@ -33,9 +31,9 @@ case class AbstractCapability(
  * Builder for empty AbstractCapability
  */
 object AbstractCapability {
-  def empty(name: String): AbstractCapability = AbstractCapability(name, false, List.empty, True(), True(), Array(), List.empty)
+  def empty(name: String): AbstractCapability = AbstractCapability(name, List.empty, True(), True(), Array(), List.empty)
 
-  def emptyHuman(name: String): AbstractCapability = AbstractCapability(name, true, List.empty, True(), True(), Array(), List.empty)
+  //def emptyHuman(name: String): AbstractCapability = AbstractCapability(name,  List.empty, True(), True(), Array(), List.empty)
 
 }
 

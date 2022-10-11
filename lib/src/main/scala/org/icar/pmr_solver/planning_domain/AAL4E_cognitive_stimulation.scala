@@ -40,7 +40,7 @@ object AAL4E_cognitive_stimulation {
   /* capability */
   val find_user = AbstractCapability(
     id = "find_user",
-    isHuman = false,
+
     params = List(
       DomainVariable("SearchPosition", "ROOM")
     ),
@@ -67,7 +67,7 @@ object AAL4E_cognitive_stimulation {
   val propose_engage = AbstractCapability(
     id = "propose_engage",
     params = List.empty,
-    isHuman = false,
+
     pre = GroundPredicate("user_location", List(AtomTerm("living_room"))),
 
     post = Disjunction(List(
@@ -97,7 +97,7 @@ object AAL4E_cognitive_stimulation {
 
   val provide_social_activity = AbstractCapability(
     id = "provide_social_activity",
-    isHuman = false,
+
     params = List.empty,
 
     pre = Conjunction(List(
@@ -118,7 +118,7 @@ object AAL4E_cognitive_stimulation {
 
   val provide_cognitive_exercise = AbstractCapability(
     id = "provide_cognitive_exercise",
-    isHuman = false,
+
     params = List.empty,
 
     pre = Conjunction(List(
@@ -139,7 +139,7 @@ object AAL4E_cognitive_stimulation {
 
   val provide_entertainment = AbstractCapability(
     id = "provide_entertainment",
-    isHuman = false,
+
     params = List.empty,
 
     pre = Conjunction(List(
@@ -161,7 +161,7 @@ object AAL4E_cognitive_stimulation {
 
   val select_content = AbstractCapability(
     id = "select_content",
-    isHuman = false,
+
     params = List.empty,
 
     pre = GroundPredicate("user_engagement", List(AtomTerm("passive"))),
@@ -179,7 +179,7 @@ object AAL4E_cognitive_stimulation {
 
   val log_activity = AbstractCapability(
     id = "log_activity",
-    isHuman = false,
+
     params = List.empty,
 
     pre = Disjunction(List(
