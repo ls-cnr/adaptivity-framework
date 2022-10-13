@@ -36,7 +36,7 @@ class TimerBoundaryEventDecorator extends NETTUNITProcessDecorator {
    * @param itemID
    * @return
    */
-  def decorateSequenceFlows(items: List[Item]): List[Flow] = {
+  def decorateSequenceFlows(items: List[Item], flows:List[Flow]): List[Flow] = {
     def decorateSequenceFlowsAux(items: List[Item], itemID: Int): List[Flow] = items match {
       case (ev: Event) :: tail if ev.eventtype == EventType.Boundary.toString => {
         val seqFlow = SequenceFlow(s"flow_boundaryTimer_${ev.id}", ev, adaptationRequestTask, None)

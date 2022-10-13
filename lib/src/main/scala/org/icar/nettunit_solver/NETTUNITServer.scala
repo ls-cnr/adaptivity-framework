@@ -4,8 +4,9 @@ import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model._
 import akka.http.scaladsl.server.Directives._
+import net.liftweb.json.{DefaultFormats, JsonParser, Serialization}
 import org.icar.GoalSPECParser.NETTUNIT.NETTUNITParser
-import net.liftweb.json.{DefaultFormats, parse}
+import org.icar.bpmn2goal.{ServiceTask, Task}
 
 import scala.io.StdIn
 
@@ -52,7 +53,7 @@ object NETTUNITServer {
           decodeRequest {
             // unmarshal as string
             entity(as[String]) { interventionRequestJSon =>
-              val parsed = parse(interventionRequestJSon)
+              val parsed = JsonParser.parse(interventionRequestJSon)
               val entity = parsed.extract[InterventionRequest]
               executeProcess(entity.empName, entity.requestDescription)
               complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, s"Process ${entity.emergencyPlanID} execution started in Flowable."))
@@ -95,6 +96,32 @@ object NETTUNITServer {
               println(s"FAILED SERVICE: $capabilityServiceClass")
               Test_NETTUNIT.failCapability(capabilityServiceClass)
               complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "Failed task: " + capabilityServiceClass))
+            }
+          }
+        }
+      },
+      path("ServiceTasks") {
+        post {
+          decodeRequest {
+            // unmarshal as string
+            entity(as[String]) { str =>
+              val goalModel = NETTUNITParser.loadGoalModel(str)
+              val values = Test_NETTUNIT.getSolutionItems[ServiceTask](goalModel)
+              val valuesJSonString = Serialization.write(values)
+              complete(HttpEntity(ContentTypes.`application/json`, valuesJSonString))
+            }
+          }
+        }
+      },
+      path("UserTasks") {
+        post {
+          decodeRequest {
+            // unmarshal as string
+            entity(as[String]) { str =>
+              val goalModel = NETTUNITParser.loadGoalModel(str)
+              val values = Test_NETTUNIT.getSolutionItems[Task](goalModel)
+              val valuesJSonString = Serialization.write(values)
+              complete(HttpEntity(ContentTypes.`application/json`, valuesJSonString))
             }
           }
         }
