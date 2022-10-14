@@ -40,6 +40,11 @@ object Test_NETTUNIT /*extends App */ {
     theCapabilities.foreach(cap => groundingStrategy.notWorkingCapability(cap.realization))
   }
 
+  def restoreCapability(className: String): Unit = {
+    val theCapabilities = capabilityRepository.getFromServiceImplName(className)
+    theCapabilities.foreach(cap => groundingStrategy.workingCapability(cap.realization))
+  }
+
   def getSolutionItems[T <: Item : Manifest](goalModel: GoalModel): List[T] = {
     val my_problem = Problem(NETTUNITDefinitions.initial, goalModel, NETTUNITDefinitions.availableActions)
     val my_domain = NETTUNITDefinitions.my_domain
@@ -72,7 +77,7 @@ object Test_NETTUNIT /*extends App */ {
 
   }
 
-  def goalModel2BPMN(goalModel: GoalModel, processName: String = "myBPMNProcess"): String = {
+  def goalModel2BPMN(goalModel: GoalModel, processName: String = "CrossBorderEmergencyPlan"): String = {
     val my_problem = Problem(NETTUNITDefinitions.initial, goalModel, NETTUNITDefinitions.availableActions)
     val my_domain = NETTUNITDefinitions.my_domain
     val map = NETTUNITDefinitions.map

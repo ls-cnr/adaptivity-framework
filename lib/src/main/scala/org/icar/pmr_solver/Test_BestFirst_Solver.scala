@@ -49,7 +49,7 @@ object Test_Solver_AAL4E extends App {
       val grounder = new SolutionGrounder(capabilityRepository, new TabuGroundingStrategy(2))
       grounder.setProcessDecorator(NETTUNITProcessDecoratorStrategy)
       val solution = grounder.groundSolution(converter)
-      val theBPMN = Goal2BPMN.getBPMN(solution, "myBPMNProcess", bpmnProcessID)
+      val theBPMN = Goal2BPMN.getBPMN(solution, "CrossBorderEmergencyPlan", bpmnProcessID)
 
       val is = new ByteArrayInputStream(theBPMN.toString().getBytes)
       val parser = new bpmn_parser(is)
@@ -151,7 +151,7 @@ object Test_Solver_Random extends App {
         val grounder = new SolutionGrounder(capabilityRepository, new TabuGroundingStrategy(2))
         grounder.setProcessDecorator(NETTUNITProcessDecoratorStrategy)
         val solution = grounder.groundSolution(converter)
-        val theBPMN = Goal2BPMN.getBPMN(solution, "myBPMNProcess", "process_0")
+        val theBPMN = Goal2BPMN.getBPMN(solution, "CrossBorderEmergencyPlan", "process_0")
 
         Console.out.println(s"${RESET}${BLACK_B}${YELLOW}${BOLD}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${RESET}")
         Console.out.println(s"${RESET}${BLACK_B}${YELLOW}${BOLD}BPMN PROCESS!${RESET}")

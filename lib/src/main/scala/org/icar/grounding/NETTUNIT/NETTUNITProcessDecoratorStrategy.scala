@@ -63,7 +63,7 @@ object NETTUNITProcessDecoratorStrategy extends ProcessDecoratorStrategy {
     aux(items)
   }
 
-  addDecorator(new IgnoreExecutedActivitiesDecorator(true))
+  //addDecorator(new IgnoreExecutedActivitiesDecorator(true))
   addDecorator(new BoundaryErrorEventDecorator)
   addDecorator(new TimerBoundaryEventDecorator)
 

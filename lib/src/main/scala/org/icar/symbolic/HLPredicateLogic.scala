@@ -27,7 +27,8 @@ case class UnivQuantifier(vars : List[VariableTerm], formula : HL_PredicateFormu
 }
 
 case class Negation[A](formula : A) extends HL_PredicateFormula with HL_LTLFormula {
-	override def toString: String = "-"+formula
+	//override def toString: String = "-"+formula
+	override def toString: String = "!("+formula+")"
 }
 case class Conjunction[A](formulas : List[A]) extends HL_PredicateFormula with HL_LTLFormula {
 	override def toString: String = "("+formulas.mkString(" and ")+")"

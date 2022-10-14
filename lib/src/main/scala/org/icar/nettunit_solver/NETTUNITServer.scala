@@ -78,11 +78,12 @@ object NETTUNITServer {
             // unmarshal as string
             entity(as[String]) { str =>
               val goalModel = NETTUNITParser.loadGoalModel(str)
-
               val bpmn_string = Test_NETTUNIT.goalModel2BPMN(goalModel)
-              val teeSymbol = "\u22A4"
-              val repl = "${myVariable}"
-              val correct_bpmn_def = bpmn_string.replace(teeSymbol, repl)
+              val teeSymbol = "\u22A4" //true
+              val teeDownSymbol = "\u22A5" //false
+              var correct_bpmn_def = bpmn_string.replace(teeSymbol, "myVariable")
+              correct_bpmn_def = correct_bpmn_def.replace(teeDownSymbol, "!myVariable")
+
               complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, correct_bpmn_def))
             }
           }
@@ -100,28 +101,14 @@ object NETTUNITServer {
           }
         }
       },
-      path("ServiceTasks") {
+      path("RestoreCapability") {
         post {
           decodeRequest {
             // unmarshal as string
-            entity(as[String]) { str =>
-              val goalModel = NETTUNITParser.loadGoalModel(str)
-              val values = Test_NETTUNIT.getSolutionItems[ServiceTask](goalModel)
-              val valuesJSonString = Serialization.write(values)
-              complete(HttpEntity(ContentTypes.`application/json`, valuesJSonString))
-            }
-          }
-        }
-      },
-      path("UserTasks") {
-        post {
-          decodeRequest {
-            // unmarshal as string
-            entity(as[String]) { str =>
-              val goalModel = NETTUNITParser.loadGoalModel(str)
-              val values = Test_NETTUNIT.getSolutionItems[Task](goalModel)
-              val valuesJSonString = Serialization.write(values)
-              complete(HttpEntity(ContentTypes.`application/json`, valuesJSonString))
+            entity(as[String]) { capabilityServiceClass =>
+              println(s"RESTORED SERVICE: $capabilityServiceClass")
+              Test_NETTUNIT.restoreCapability(capabilityServiceClass)
+              complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "Failed task: " + capabilityServiceClass))
             }
           }
         }

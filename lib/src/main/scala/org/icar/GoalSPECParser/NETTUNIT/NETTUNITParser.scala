@@ -1,7 +1,7 @@
 package org.icar.GoalSPECParser.NETTUNIT
 
 import org.icar.GoalSPECParser.GoalParserImpl
-import org.icar.symbolic.GoalModel
+import org.icar.symbolic.{GoalModel, HL_PredicateFormula}
 
 import scala.io.Source
 
@@ -20,6 +20,11 @@ object NETTUNITParser extends GoalParserImpl {
    */
   def loadGoalModel(goalModelString: String) = {
     GoalModel(parseAll(goal, goalModelString).get.toArray)
+  }
+
+
+  def parseFormula(formula: String)= {
+    parseAll(state, formula).get.toString
   }
 
   /**
