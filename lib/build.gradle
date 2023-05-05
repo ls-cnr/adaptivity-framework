@@ -6,13 +6,19 @@
  * User Manual available at https://docs.gradle.org/7.3/userguide/building_java_projects.html
  */
 
+import com.github.jengelman.gradle.plugins.shadow.transformers.AppendingTransformer
+
+
 plugins {
     id 'scala'
     id 'java'
     id 'java-library'
     //id 'maven-publish'
 
+    id "com.github.johnrengelman.shadow" version "7.0.0"
+
     id 'war'
+    id("io.ktor.plugin") version "2.3.0" //for fat jar
 }
 
 //java {
@@ -202,10 +208,20 @@ task runPerfTest(type: JavaExec, dependsOn: 'classes') {
     classpath sourceSets.main.runtimeClasspath
 }
 
-
 task testSup(type: JavaExec, dependsOn: 'classes') {
     description 'test_supervisor'
     group 'execution'
     mainClass = 'org.icar.sublevel.test_RawSupervisor'
     classpath sourceSets.main.runtimeClasspath
+}
+
+shadowJar {
+    append 'reference.conf'
+    append 'version.conf'
+    archiveName = 'NETTUNIT_MUSA_Server.jar'
+    with jar
+}
+
+application {
+    mainClass.set("org.icar.nettunit_solver.NETTUNITServer")
 }

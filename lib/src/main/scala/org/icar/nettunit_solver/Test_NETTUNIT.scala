@@ -20,7 +20,7 @@ object Test_NETTUNIT /*extends App */ {
   val FlowablePort = "8080"
   val deployAndExecuteFromMUSA = false
   val goalModelPath = getClass.getResource("/NETTUNIT/goaltreeNETTUNIT.txt").getFile
-  val goalModel = NETTUNITParser.loadGoalModelFromFile(goalModelPath)
+
 
   /**
    *
@@ -32,6 +32,7 @@ object Test_NETTUNIT /*extends App */ {
   grounder.setProcessDecorator(NETTUNITProcessDecoratorStrategy)
 
   def main(args: Array[String]): Unit = {
+    val goalModel = NETTUNITParser.loadGoalModelFromFile(goalModelPath)
     goalModel2BPMN(goalModel)
   }
 

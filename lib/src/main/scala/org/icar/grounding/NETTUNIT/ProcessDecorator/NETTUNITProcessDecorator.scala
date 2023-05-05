@@ -5,11 +5,11 @@ import org.icar.grounding.NETTUNIT.NETTUNITProcessDecoratorStrategy
 import org.icar.grounding.NETTUNIT.NETTUNITProcessDecoratorStrategy.{adaptationEndEvent, adaptationRequestTask, adaptationTaskSeqFlow}
 import org.icar.grounding.processDecorator.ProcessDecorator
 
-abstract class NETTUNITProcessDecorator(replaceFlows:Boolean = false) extends ProcessDecorator {
+abstract class NETTUNITProcessDecorator(replaceFlows: Boolean = false) extends ProcessDecorator {
 
   def decorateItems(items: List[Item]): List[Item]
 
-  def decorateSequenceFlows(items: List[Item], flows:List[Flow]): List[Flow]
+  def decorateSequenceFlows(items: List[Item], flows: List[Flow]): List[Flow]
 
   override def apply(wf: Workflow): Workflow = {
 
@@ -23,15 +23,13 @@ abstract class NETTUNITProcessDecorator(replaceFlows:Boolean = false) extends Pr
     }
 
     var previousFlows = wf.flows.toList
-    if (replaceFlows){
+    if (replaceFlows) {
       previousFlows = List()
     }
 
     val seqFlows = NETTUNITProcessDecoratorStrategy.containsFailureFlows(wf.flows.toList) match {
       case true => decorateSequenceFlows(decoratedItems, wf.flows.toList) ++ previousFlows
       case false => decorateSequenceFlows(decoratedItems, wf.flows.toList) ++ previousFlows ++ List(adaptationTaskSeqFlow)
-      /*case true => decorateSequenceFlows(decoratedItems, wf.flows.toList) ++ wf.flows.toList
-      case false => decorateSequenceFlows(decoratedItems, wf.flows.toList) ++ wf.flows.toList ++ List(adaptationTaskSeqFlow)*/
     }
 
     // return the decorated workflow

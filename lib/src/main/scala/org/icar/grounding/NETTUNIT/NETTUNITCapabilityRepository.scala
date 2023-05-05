@@ -29,6 +29,9 @@ object NETTUNITRepository extends CapabilityRepository {
   )
 
 
+
+
+
   add("notify_competent_body_internal_plan",
     ConcreteCapability(2,
       "Notify competent body",

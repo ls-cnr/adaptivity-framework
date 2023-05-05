@@ -33,7 +33,7 @@ abstract class ProcessDecoratorStrategy {
     for (decorator <- decorators) {
       theWf = decorator.apply(theWf)
     }
-    theWf
+    theWf // the output workflow (the decorated one)
   }
 
 }

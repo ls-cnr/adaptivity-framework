@@ -1,9 +1,11 @@
 package org.icar.grounding.NETTUNIT.ProcessDecorator
 
-import org.icar.bpmn2goal.{Diverging, Event, EventType, Flow, FlowableErrorEventDefinition, Gateway, GatewayType, Item, SequenceFlow, ServiceTask, Task}
-import org.icar.grounding.NETTUNIT.NETTUNITProcessDecoratorStrategy.{adaptationRequestTask, boundaryErrorEventErrCode}
+import org.icar.bpmn2goal._
 import org.icar.symbolic.{AtomTerm, False, Negation, True}
 
+/*
+still not working...
+*/
 class IgnoreExecutedActivitiesDecorator(replaceFlows: Boolean = false) extends NETTUNITProcessDecorator(replaceFlows) {
 
   val alterntive_end_event = Event("alternative_end_event", "end", EventType.End.toString, null)

@@ -46,7 +46,6 @@ case class ConcreteCapability(id: Int, // the ID of this concrete capability.
       case Some(s) => listeners = listeners ++ List(FlowableExecutionListener(EventType.End.toString.toLowerCase(), s))
       case None =>
     }
-    //ServiceTask(s"st_${id}", serviceName, className, Some(FlowableExtentionElements(listeners)))
 
     isHuman match {
       case true => Task(s"st_${id}", title, tasktype = "human")
