@@ -164,7 +164,7 @@ task wrapper(type: Wrapper) {
 task runNETTUNIT(type: JavaExec, dependsOn: 'classes') {
     description 'runs the NETTUNIT application'
     group 'execution'
-    args 'org.icar.nettunit_solver.NETTUNITServer'
+    mainClass = 'org.icar.nettunit_solver.NETTUNITServer'
     classpath sourceSets.main.runtimeClasspath
 }
 
