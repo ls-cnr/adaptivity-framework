@@ -20,7 +20,9 @@ class FirstWorkingGroundingStrategy extends GroundingStrategy {
   def notWorkingCapability(cap: ConcreteCapability): Unit = notWorkingCapabilities += cap
 
   override def apply(inputCapabilities: List[ConcreteCapability]): ConcreteCapability = {
-    print(s"Not available capabilities: ${notWorkingCapabilities.map(x=>x.toString).toList.mkString(";")}")
+    val notAvailableCapabilities = notWorkingCapabilities.map(x => x.toString).toList.mkString(";")
+    if (notAvailableCapabilities.nonEmpty)
+      println(s"Not available capabilities: ${notAvailableCapabilities}")
     inputCapabilities.filter(cp => !notWorkingCapabilities.contains(cp)).headOption match {
       case cap if cap.isDefined => cap.get
       case _ => inputCapabilities.head

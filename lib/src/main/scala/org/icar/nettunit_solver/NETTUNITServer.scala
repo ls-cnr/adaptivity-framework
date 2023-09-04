@@ -112,7 +112,45 @@ object NETTUNITServer {
             }
           }
         }
+      },
+      path("UpdateStateOfWorld") {
+        post {
+          decodeRequest {
+            // unmarshal as string
+            entity(as[String]) { capabilityServiceClass =>
+
+              // input -> riferimento del processo (evento) + capability fallita
+
+
+
+              println(s"UPDATED STATE OF WORLD. Executed capability: $capabilityServiceClass")
+              Test_NETTUNIT.restoreCapability(capabilityServiceClass)
+              complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "Failed task: " + capabilityServiceClass))
+            }
+          }
+        }
+      },
+      path("StartedProcess") {
+        post {
+          decodeRequest {
+            // unmarshal as string
+            entity(as[String]) { capabilityServiceClass =>
+
+              // aggiungo al registro degli stati del mondo il riferimento
+              // al processo iniziato
+
+
+
+              println(s"UPDATED STATE OF WORLD. Executed capability: $capabilityServiceClass")
+              Test_NETTUNIT.restoreCapability(capabilityServiceClass)
+              complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "Failed task: " + capabilityServiceClass))
+            }
+          }
+        }
       }
+
+
+
     )
 
     val bindingFuture = Http().newServerAt(MUSAAddress, MUSAPort).bind(route)
