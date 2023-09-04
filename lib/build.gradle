@@ -198,3 +198,13 @@ task testSup (type: JavaExec, dependsOn: 'classes') {
     mainClass = 'org.icar.sublevel.test_RawSupervisor'
     classpath sourceSets.main.runtimeClasspath
 }
+
+
+task runNETTUNIT(type: JavaExec, dependsOn: 'classes') {
+    description 'runs the NETTUNIT application'
+    group 'execution'
+    args 'org.icar.nettunit_solver.NETTUNITServer'
+    classpath sourceSets.main.runtimeClasspath
+}
+
+
