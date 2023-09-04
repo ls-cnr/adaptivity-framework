@@ -4,8 +4,9 @@ import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model._
 import akka.http.scaladsl.server.Directives._
+import net.liftweb.json.{DefaultFormats, JsonParser, Serialization}
 import org.icar.GoalSPECParser.NETTUNIT.NETTUNITParser
-import net.liftweb.json.{DefaultFormats, parse}
+import org.icar.bpmn2goal.{ServiceTask, Task}
 
 import scala.io.StdIn
 
@@ -52,7 +53,7 @@ object NETTUNITServer {
           decodeRequest {
             // unmarshal as string
             entity(as[String]) { interventionRequestJSon =>
-              val parsed = parse(interventionRequestJSon)
+              val parsed = JsonParser.parse(interventionRequestJSon)
               val entity = parsed.extract[InterventionRequest]
               executeProcess(entity.empName, entity.requestDescription)
               complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, s"Process ${entity.emergencyPlanID} execution started in Flowable."))
@@ -77,11 +78,12 @@ object NETTUNITServer {
             // unmarshal as string
             entity(as[String]) { str =>
               val goalModel = NETTUNITParser.loadGoalModel(str)
-
               val bpmn_string = Test_NETTUNIT.goalModel2BPMN(goalModel)
-              val teeSymbol = "\u22A4"
-              val repl = "${myVariable}"
-              val correct_bpmn_def = bpmn_string.replace(teeSymbol, repl)
+              val teeSymbol = "\u22A4" //true
+              val teeDownSymbol = "\u22A5" //false
+              var correct_bpmn_def = bpmn_string.replace(teeSymbol, "myVariable")
+              correct_bpmn_def = correct_bpmn_def.replace(teeDownSymbol, "!myVariable")
+
               complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, correct_bpmn_def))
             }
           }
@@ -94,6 +96,18 @@ object NETTUNITServer {
             entity(as[String]) { capabilityServiceClass =>
               println(s"FAILED SERVICE: $capabilityServiceClass")
               Test_NETTUNIT.failCapability(capabilityServiceClass)
+              complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "Failed task: " + capabilityServiceClass))
+            }
+          }
+        }
+      },
+      path("RestoreCapability") {
+        post {
+          decodeRequest {
+            // unmarshal as string
+            entity(as[String]) { capabilityServiceClass =>
+              println(s"RESTORED SERVICE: $capabilityServiceClass")
+              Test_NETTUNIT.restoreCapability(capabilityServiceClass)
               complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "Failed task: " + capabilityServiceClass))
             }
           }

@@ -127,7 +127,7 @@ object Goal2BPMN {
 
   def conditionalExpr(expression: String): Elem =
     <conditionExpression xsi:type="tFormalExpression">
-      {scala.xml.Unparsed("<![CDATA[%s]]>".format(expression))}
+      {scala.xml.Unparsed("<![CDATA[${%s}]]>".format(expression))/*scala.xml.Unparsed("<![CDATA[%s]]>".format(expression))*/}
     </conditionExpression>
 
 }
