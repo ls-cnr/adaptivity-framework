@@ -3,7 +3,7 @@ package org.icar.pmr_solver.montecarlo
 import org.icar.pmr_solver.TerminationDescription
 import org.icar.symbolic.{Domain, Problem}
 import org.icar.rete.RETEBuilder
-import org.icar.sublevel.{HL2Raw_Map, RawGoal, RawLTL, RawState}
+import org.icar.sublevel.{HL2Raw_Map, RawAction, RawGoal, RawLTL, RawState}
 
 import scala.util.Random
 
@@ -18,7 +18,7 @@ class NMCSolver(val problem: Problem,val domain: Domain) {
 
 	val specifications: Array[RawGoal] = for (g<-problem.goal_model.goals) yield map.goal_spec(g)
 	//val specifications: Array[RawLTL] = for (g<-problem.goal_model.goals) yield map.ltl_formula(g)
-	val available_actions = (for (a<-problem.actions.sys_action) yield map.system_action(a)).flatten
+	val available_actions: Array[RawAction] = (for (a<-problem.actions.sys_action) yield map.system_action(a)).flatten
 
 	var tree = new WTSTree(rete,available_actions,specifications)
 

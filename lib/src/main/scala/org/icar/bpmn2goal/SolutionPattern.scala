@@ -2,6 +2,7 @@ package org.icar.bpmn2goal
 
 import org.icar.symbolic.{EndEvent, JoinGateway, Solution, SplitGateway, StartEvent, WorkflowItem, SolutionTask => WorkflowTask}
 
+/* this class hierarchy is useful for the Sol2MOISE */
 abstract class WorkflowPattern()
 case class ActivityPattern(task: WorkflowTask) extends WorkflowPattern
 case class SequencePattern(children:List[WorkflowPattern]) extends WorkflowPattern
