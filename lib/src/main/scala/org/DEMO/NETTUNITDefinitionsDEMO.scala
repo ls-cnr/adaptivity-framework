@@ -65,7 +65,7 @@ object NETTUNITDefinitionsDEMO {
 
 
   /*GOAL managing_emergency IS AND OF {
-        GOAL identifying_incident: WHEN emergency_location(refinery) AND NOT assessed_emergency THEN THE ingv ROLE SHALL ADDRESS FINALLY identified_incident
+        GOAL identifying_incident: WHEN emergency_location(volcano) AND NOT assessed_emergency THEN THE ingv ROLE SHALL ADDRESS FINALLY identified_incident
         GOAL involve_pertinent_roles_pcrs: WHEN identified_incident THEN THE pcrs ROLE SHALL ADDRESS involved_pertinent_bodies_pcrs
         GOAL evaluate_incident_scenario: WHEN involved_pertinent_bodies_pcrs THEN THE pcrs ROLE SHALL ADDRESS FINALLY scenario_evaluated
         GOAL ask_for_airborne_dispersion_estimate: WHEN scenario_evaluated THEN THE pcrs ROLE SHALL ADDRESS FINALLY obtained_airborne_estimate
@@ -82,20 +82,20 @@ object NETTUNITDefinitionsDEMO {
   val identifying_incident = AbstractCapability(
 
     /*
-    GOAL identifying_incident: WHEN emergency_location(refinery) AND NOT assessed_emergency THEN THE ingv ROLE SHALL ADDRESS FINALLY identified_incident
+    GOAL identifying_incident: WHEN emergency_location(volcano) AND NOT assessed_emergency THEN THE ingv ROLE SHALL ADDRESS FINALLY identified_incident
     */
     id = "identifying_incident",
 
     params = List(),
     pre = Conjunction(List(
-      GroundPredicate("emergency_location", List(AtomTerm("refinery"))),
+      GroundPredicate("emergency_location", List(AtomTerm("volcano"))),
       Negation(GroundPredicate("assessed_emergency", List()))
     )),
-    post = GroundPredicate("identified_incident", List(AtomTerm("refinery"))),
+    post = GroundPredicate("identified_incident", List(AtomTerm("volcano"))),
 
     effects = Array(
       EvolutionGrounding("identified", Array[EvoOperator](
-        AddOperator(Predicate("identified_incident", List(AtomTerm("refinery")))),
+        AddOperator(Predicate("identified_incident", List(AtomTerm("volcano")))),
       )),
     ),
     future = List.empty
@@ -103,13 +103,13 @@ object NETTUNITDefinitionsDEMO {
 
   val involve_pertinent_roles_pcrs = AbstractCapability(
     /*
-    GOAL involve_pertinent_roles_pcrs: WHEN identified_incident(refinery) THEN THE pcrs ROLE SHALL ADDRESS involved_pertinent_bodies(pcrs)
+    GOAL involve_pertinent_roles_pcrs: WHEN identified_incident(volcano) THEN THE pcrs ROLE SHALL ADDRESS involved_pertinent_bodies(pcrs)
     */
     id = "involve_pertinent_roles_pcrs",
 
     params = List(),
 
-    pre = GroundPredicate("identified_incident", List(AtomTerm("refinery"))),
+    pre = GroundPredicate("identified_incident", List(AtomTerm("volcano"))),
     post = GroundPredicate("involved_pertinent_bodies", List(AtomTerm("pcrs"))),
 
     effects = Array(
