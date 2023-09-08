@@ -1,0 +1,7 @@
+GOAL process_regions_tn IS AND OF {
+    GOAL regions_tn_involve_competent_roles: WHEN involved_local_authorities_tn THEN THE regions_tn ROLE SHALL ADDRESS FINALLY involved_competent_roles_tn(regions_tn)
+    GOAL regions_tn_decide_response_type: WHEN involved_competent_roles_tn(regions_tn) THEN THE regions_tn ROLE SHALL ADDRESS FINALLY decided_response_type_tn(regions_tn)
+    GOAL regions_tn_inform_citizen: WHEN decided_response_type_tn(regions_tn) THEN THE regions_tn ROLE SHALL ADDRESS FINALLY informed_citizens_tn(regions_tn)
+    GOAL regions_tn_monitor_event_severity: WHEN informed_citizens_tn(regions_tn) THEN THE regions_tn ROLE SHALL ADDRESS FINALLY assessed_event_severity_tn(regions_tn)
+    GOAL regions_tn_inform_citizen_via_app: WHEN assessed_event_severity_tn(regions_tn) THEN THE regions_tn ROLE SHALL ADDRESS FINALLY  inform_via_app_tn(regions_tn)
+}

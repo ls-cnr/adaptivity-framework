@@ -5,6 +5,7 @@ import akka.http.scaladsl.Http
 import akka.http.scaladsl.model._
 import akka.http.scaladsl.server.Directives._
 import net.liftweb.json.{DefaultFormats, JsonParser, Serialization}
+import org.DEMO.{NETTUNITDefinitionsDEMO, Test_NETTUNIT_DEMO}
 import org.icar.GoalSPECParser.NETTUNIT.NETTUNITParser
 import org.icar.bpmn2goal.{ServiceTask, Task}
 
@@ -77,8 +78,15 @@ object NETTUNITServer {
           decodeRequest {
             // unmarshal as string
             entity(as[String]) { str =>
-              val goalModel = NETTUNITParser.loadGoalModel(str)
-              val bpmn_string = Test_NETTUNIT.goalModel2BPMN(goalModel)
+
+              val the_model = str.split(":",2)
+              val process_name = the_model(0)
+              val goalModel = NETTUNITParser.loadGoalModel(the_model(1))
+              //val goalModel = NETTUNITParser.loadGoalModel(str)
+
+              //val bpmn_string = Test_NETTUNIT.goalModel2BPMN(goalModel)
+              val bpmn_string = Test_NETTUNIT_DEMO.goalModelDEMO2BPMN(NETTUNITDefinitionsDEMO.initial_arianaregions,goalModel,process_name)
+
               val teeSymbol = "\u22A4" //true
               val teeDownSymbol = "\u22A5" //false
               var correct_bpmn_def = bpmn_string.replace(teeSymbol, "myVariable")

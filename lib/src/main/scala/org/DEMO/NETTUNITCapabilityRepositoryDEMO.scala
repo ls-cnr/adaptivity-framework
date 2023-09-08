@@ -203,5 +203,211 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
 
+  /** ******************************************** */
+  /** ******************************************** */
+  /*TN*/
+  /** ******************************************** */
+  /** ******************************************** */
+  add("identifying_incident_tn",
+    ConcreteCapability(20,
+      "Identifying Incident TN",
+      false,
+      "identifying_incident_tn",
+      "nettunit.handler.identifying_incident_tn",
+      Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
+      Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
+  )
+
+  add("involve_pertinent_roles_pctn",
+    ConcreteCapability(21,
+      "Involve Pertinent Roles Pctn",
+      false,
+      "involve_pertinent_roles_pctn",
+      "nettunit.handler.involve_pertinent_roles_pctn",
+      Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
+      Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
+  )
+
+  add("evaluate_incident_scenario_tn",
+    ConcreteCapability(22,
+      "Evaluate Incident Scenario tn",
+      false,
+      "evaluate_incident_scenario_tn",
+      "nettunit.handler.evaluate_incident_scenario_tn",
+      Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
+      Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
+  )
+
+  add("ask_for_airborne_dispersion_estimate_tn",
+    ConcreteCapability(23,
+      "Ask For Airborne Dispersion Estimate_tn",
+      false,
+      "ask_for_airborne_dispersion_estimate_tn",
+      "nettunit.handler.ask_for_airborne_dispersion_estimate_tn",
+      Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
+      Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
+  )
+
+  add("involve_pertinent_roles_inm_tn",
+    ConcreteCapability(24,
+      "Involve Pertinent Roles Inm tn",
+      false,
+      "involve_pertinent_roles_inm_tn",
+      "nettunit.handler.involve_pertinent_roles_inm_tn",
+      Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
+      Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
+  )
+
+  add("update_airborne_dispersion_data_tn",
+    ConcreteCapability(25,
+      "Update Airborne Dispersion Data tn",
+      false,
+      "update_airborne_dispersion_data_tn",
+      "nettunit.handler.update_airborne_dispersion_data_tn",
+      Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
+      Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
+  )
+
+  add("ask_for_health_risk_estimate_tn",
+    ConcreteCapability(26,
+      "Ask For Health Risk Estimate tn",
+      false,
+      "ask_for_health_risk_estimate_tn",
+      "nettunit.handler.ask_for_health_risk_estimate_tn",
+      Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
+      Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
+  )
+
+  add("involve_pertinent_roles_hama",
+    ConcreteCapability(27,
+      "Involve Pertinent Roles hama",
+      false,
+      "involve_pertinent_roles_hama",
+      "nettunit.handler.involve_pertinent_roles_hama",
+      Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
+      Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
+  )
+
+  add("update_health_risk_data_tn",
+    ConcreteCapability(28,
+      "Update Health Risk Data tn",
+      false,
+      "update_health_risk_data_tn",
+      "nettunit.handler.update_health_risk_data_tn",
+      Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
+      Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
+  )
+
+  add("inform_involved_local_authorities_tn",
+    ConcreteCapability(29,
+      "Inform Involved Local Authorities tn",
+      false,
+      "inform_involved_local_authorities_tn",
+      "nettunit.handler.inform_involved_local_authorities_tn",
+      Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
+      Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
+  )
+  //subprocess regions
+  add("regions_tn_involve_competent_roles_tn",
+    ConcreteCapability(30,
+      "regions tn Involve Competent Roles tn",
+      false,
+      "regions_tn_involve_competent_roles",
+      "nettunit.handler.regions_tn_involve_competent_roles",
+      Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
+      Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
+  )
+
+  add("regions_tn_decide_response_type",
+    ConcreteCapability(31,
+      "regions tn Decide Response Type",
+      false,
+      "regions_tn_decide_response_type",
+      "nettunit.handler.regions_tn_decide_response_type",
+      Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
+      Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
+  )
+
+  add("regions_tn_inform_citizen",
+    ConcreteCapability(32,
+      "regions Inform Citizen",
+      false,
+      "regions_tn_inform_citizen",
+      "nettunit.handler.regions_tn_inform_citizen",
+      Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
+      Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
+  )
+
+  add("regions_tn_monitor_event_severity",
+    ConcreteCapability(33,
+      "regions Monitor Event Severity",
+      false,
+      "regions_tn_monitor_event_severity",
+      "nettunit.handler.regions_tn_monitor_event_severity",
+      Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
+      Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
+  )
+
+  add("regions_tn_inform_citizen_via_app",
+    ConcreteCapability(34,
+      "regions Inform Citizen Via App",
+      false,
+      "regions_tn_inform_citizen_via_app",
+      "nettunit.handler.regions_tn_inform_citizen_via_app",
+      Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
+      Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
+  )
+
+  //subprocess ariana
+  add("ariana_involve_competent_roles",
+    ConcreteCapability(35,
+      "ariana Involve Competent Roles",
+      false,
+      "ariana_involve_competent_roles",
+      "nettunit.handler.ariana_involve_competent_roles",
+      Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
+      Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
+  )
+
+  add("ariana_decide_response_type",
+    ConcreteCapability(36,
+      "ariana Decide Response Type",
+      false,
+      "ariana_decide_response_type",
+      "nettunit.handler.ariana_decide_response_type",
+      Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
+      Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
+  )
+
+  add("ariana_inform_citizen",
+    ConcreteCapability(37,
+      "ariana Inform Citizen",
+      false,
+      "ariana_inform_citizen",
+      "nettunit.handler.ariana_inform_citizen",
+      Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
+      Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
+  )
+
+  add("ariana_monitor_event_severity",
+    ConcreteCapability(38,
+      "ariana Monitor Event Severity",
+      false,
+      "ariana_monitor_event_severity",
+      "nettunit.handler.ariana_monitor_event_severity",
+      Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
+      Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
+  )
+
+  add("ariana_inform_citizen_via_app",
+    ConcreteCapability(39,
+      "ariana Inform Citizen Via App",
+      false,
+      "ariana_inform_citizen_via_app",
+      "nettunit.handler.ariana_inform_citizen_via_app",
+      Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
+      Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
+  )
+
 
 }

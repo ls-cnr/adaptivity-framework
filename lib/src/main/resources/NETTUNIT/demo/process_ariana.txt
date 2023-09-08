@@ -1,0 +1,7 @@
+GOAL process_ariana IS AND OF {
+    GOAL ariana_involve_competent_roles: WHEN involved_local_authorities_tn THEN THE ariana ROLE SHALL ADDRESS FINALLY involved_competent_roles_tn(ariana)
+    GOAL ariana_decide_response_type: WHEN involved_competent_roles_tn(ariana) THEN THE ariana ROLE SHALL ADDRESS FINALLY decided_response_type_tn(ariana)
+    GOAL ariana_inform_citizen: WHEN decided_response_type_tn(ariana) THEN THE ariana ROLE SHALL ADDRESS FINALLY informed_citizens_tn(ariana)
+    GOAL ariana_monitor_event_severity: WHEN informed_citizens_tn(ariana) THEN THE ariana ROLE SHALL ADDRESS FINALLY assessed_event_severity_tn(ariana)
+    GOAL ariana_inform_citizen_via_app: WHEN assessed_event_severity_tn(ariana) THEN THE ariana ROLE SHALL ADDRESS FINALLY  inform_via_app_tn(ariana)
+}

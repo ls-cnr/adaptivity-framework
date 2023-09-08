@@ -1,6 +1,6 @@
 GOAL managing_emergency IS AND OF {
-    GOAL identifying_incident: WHEN emergency_location(refinery) AND NOT assessed_emergency THEN THE ingv ROLE SHALL ADDRESS FINALLY identified_incident(refinery)
-    GOAL involve_pcrs: WHEN identified_incident(refinery) THEN THE pcrs ROLE SHALL ADDRESS FINALLY involved_pertinent_bodies(pcrs)
+    GOAL identifying_incident: WHEN emergency_location(volcano) AND NOT assessed_emergency THEN THE ingv ROLE SHALL ADDRESS FINALLY identified_incident(volcano)
+    GOAL involve_pcrs: WHEN identified_incident(volcano) THEN THE pcrs ROLE SHALL ADDRESS FINALLY involved_pertinent_bodies(pcrs)
     GOAL evaluate_incident_scenario: WHEN involved_pertinent_bodies(pcrs) THEN THE pcrs ROLE SHALL ADDRESS FINALLY scenario_evaluated
     GOAL ask_for_airborne_dispersion_estimate: WHEN scenario_evaluated THEN THE pcrs ROLE SHALL ADDRESS FINALLY obtained_airborne_estimate
     GOAL involve_pertinent_roles_inm: WHEN obtained_airborne_estimate THEN THE inm ROLE SHALL ADDRESS FINALLY involved_pertinent_bodies(inm)
