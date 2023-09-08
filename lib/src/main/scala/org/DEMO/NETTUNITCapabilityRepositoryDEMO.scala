@@ -8,7 +8,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       "Identifying Incident",
       false,
       "identifying_incident",
-      "nettunit.handler.identifying_incident",
+      "nettunit.handler.demo.it.identifying_incident",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
@@ -18,7 +18,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       "Involve Pertinent Roles Pcrs",
       false,
       "involve_pertinent_roles_pcrs",
-      "nettunit.handler.involve_pertinent_roles_pcrs",
+      "nettunit.handler.demo.it.involve_pertinent_roles_pcrs",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
@@ -28,7 +28,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       "Evaluate Incident Scenario",
       false,
       "evaluate_incident_scenario",
-      "nettunit.handler.evaluate_incident_scenario",
+      "nettunit.handler.demo.it.evaluate_incident_scenario",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
@@ -38,7 +38,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       "Ask For Airborne Dispersion Estimate",
       false,
       "ask_for_airborne_dispersion_estimate",
-      "nettunit.handler.ask_for_airborne_dispersion_estimate",
+      "nettunit.handler.demo.it.ask_for_airborne_dispersion_estimate",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
@@ -48,7 +48,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       "Involve Pertinent Roles Inm",
       false,
       "involve_pertinent_roles_inm",
-      "nettunit.handler.involve_pertinent_roles_inm",
+      "nettunit.handler.demo.it.involve_pertinent_roles_inm",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
@@ -58,7 +58,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       "Update Airborne Dispersion Data",
       false,
       "update_airborne_dispersion_data",
-      "nettunit.handler.update_airborne_dispersion_data",
+      "nettunit.handler.demo.it.update_airborne_dispersion_data",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
@@ -68,7 +68,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       "Ask For Health Risk Estimate",
       false,
       "ask_for_health_risk_estimate",
-      "nettunit.handler.ask_for_health_risk_estimate",
+      "nettunit.handler.demo.it.ask_for_health_risk_estimate",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
@@ -78,7 +78,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       "Involve Pertinent Roles Irib",
       false,
       "involve_pertinent_roles_irib",
-      "nettunit.handler.involve_pertinent_roles_irib",
+      "nettunit.handler.demo.it.involve_pertinent_roles_irib",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
@@ -88,7 +88,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       "Update Health Risk Data",
       false,
       "update_health_risk_data",
-      "nettunit.handler.update_health_risk_data",
+      "nettunit.handler.demo.it.update_health_risk_data",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
@@ -98,7 +98,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       "Inform Involved Local Authorities",
       false,
       "inform_involved_local_authorities",
-      "nettunit.handler.inform_involved_local_authorities",
+      "nettunit.handler.demo.it.inform_involved_local_authorities",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
@@ -108,7 +108,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       "Comune Involve Competent Roles",
       false,
       "comune_involve_competent_roles",
-      "nettunit.handler.comune_involve_competent_roles",
+      "nettunit.handler.demo.it.comune_involve_competent_roles",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
@@ -118,7 +118,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       "Comune Decide Response Type",
       false,
       "comune_decide_response_type",
-      "nettunit.handler.comune_decide_response_type",
+      "nettunit.handler.demo.it.comune_decide_response_type",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
@@ -128,7 +128,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       "Comune Inform Citizen",
       false,
       "comune_inform_citizen",
-      "nettunit.handler.comune_inform_citizen",
+      "nettunit.handler.demo.it.comune_inform_citizen",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
@@ -138,7 +138,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       "Comune Monitor Event Severity",
       false,
       "comune_monitor_event_severity",
-      "nettunit.handler.comune_monitor_event_severity",
+      "nettunit.handler.demo.it.comune_monitor_event_severity",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
@@ -148,7 +148,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       "Comune Inform Citizen Via App",
       false,
       "comune_inform_citizen_via_app",
-      "nettunit.handler.comune_inform_citizen_via_app",
+      "nettunit.handler.demo.it.comune_inform_citizen_via_app",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
@@ -158,7 +158,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       "Pc Ct Involve Competent Roles",
       false,
       "pcct_involve_competent_roles",
-      "nettunit.handler.pcct_involve_competent_roles",
+      "nettunit.handler.demo.it.pcct_involve_competent_roles",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
@@ -168,7 +168,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       "Pc Ct Decide Response Type",
       false,
       "pcct_decide_response_type",
-      "nettunit.handler.pcct_decide_response_type",
+      "nettunit.handler.demo.it.pcct_decide_response_type",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
@@ -178,7 +178,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       "Pc Ct Inform Citizen",
       false,
       "pcct_inform_citizen",
-      "nettunit.handler.pcct_inform_citizen",
+      "nettunit.handler.demo.it.pcct_inform_citizen",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
@@ -188,7 +188,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       "Pc Ct Monitor Event Severity",
       false,
       "pcct_monitor_event_severity",
-      "nettunit.handler.pcct_monitor_event_severity",
+      "nettunit.handler.demo.it.pcct_monitor_event_severity",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
@@ -198,7 +198,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       "Pc Ct Inform Citizen Via App",
       false,
       "pcct_inform_citizen_via_app",
-      "nettunit.handler.pcct_inform_citizen_via_app",
+      "nettunit.handler.demo.it.pcct_inform_citizen_via_app",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
@@ -213,7 +213,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       "Identifying Incident TN",
       false,
       "identifying_incident_tn",
-      "nettunit.handler.identifying_incident_tn",
+      "nettunit.handler.demo.tn.identifying_incident_tn",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
@@ -223,7 +223,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       "Involve Pertinent Roles Pctn",
       false,
       "involve_pertinent_roles_pctn",
-      "nettunit.handler.involve_pertinent_roles_pctn",
+      "nettunit.handler.demo.tn.involve_pertinent_roles_pctn",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
@@ -233,7 +233,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       "Evaluate Incident Scenario tn",
       false,
       "evaluate_incident_scenario_tn",
-      "nettunit.handler.evaluate_incident_scenario_tn",
+      "nettunit.handler.demo.tn.evaluate_incident_scenario_tn",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
@@ -243,7 +243,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       "Ask For Airborne Dispersion Estimate_tn",
       false,
       "ask_for_airborne_dispersion_estimate_tn",
-      "nettunit.handler.ask_for_airborne_dispersion_estimate_tn",
+      "nettunit.handler.demo.tn.ask_for_airborne_dispersion_estimate_tn",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
@@ -253,7 +253,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       "Involve Pertinent Roles Inm tn",
       false,
       "involve_pertinent_roles_inm_tn",
-      "nettunit.handler.involve_pertinent_roles_inm_tn",
+      "nettunit.handler.demo.tn.involve_pertinent_roles_inm_tn",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
@@ -263,7 +263,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       "Update Airborne Dispersion Data tn",
       false,
       "update_airborne_dispersion_data_tn",
-      "nettunit.handler.update_airborne_dispersion_data_tn",
+      "nettunit.handler.demo.tn.update_airborne_dispersion_data_tn",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
@@ -273,7 +273,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       "Ask For Health Risk Estimate tn",
       false,
       "ask_for_health_risk_estimate_tn",
-      "nettunit.handler.ask_for_health_risk_estimate_tn",
+      "nettunit.handler.demo.tn.ask_for_health_risk_estimate_tn",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
@@ -283,7 +283,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       "Involve Pertinent Roles hama",
       false,
       "involve_pertinent_roles_hama",
-      "nettunit.handler.involve_pertinent_roles_hama",
+      "nettunit.handler.demo.tn.involve_pertinent_roles_hama",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
@@ -293,7 +293,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       "Update Health Risk Data tn",
       false,
       "update_health_risk_data_tn",
-      "nettunit.handler.update_health_risk_data_tn",
+      "nettunit.handler.demo.tn.update_health_risk_data_tn",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
@@ -303,7 +303,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       "Inform Involved Local Authorities tn",
       false,
       "inform_involved_local_authorities_tn",
-      "nettunit.handler.inform_involved_local_authorities_tn",
+      "nettunit.handler.demo.tn.inform_involved_local_authorities_tn",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
@@ -313,7 +313,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       "regions tn Involve Competent Roles tn",
       false,
       "regions_tn_involve_competent_roles",
-      "nettunit.handler.regions_tn_involve_competent_roles",
+      "nettunit.handler.demo.tn.regions_tn_involve_competent_roles",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
@@ -323,7 +323,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       "regions tn Decide Response Type",
       false,
       "regions_tn_decide_response_type",
-      "nettunit.handler.regions_tn_decide_response_type",
+      "nettunit.handler.demo.tn.regions_tn_decide_response_type",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
@@ -333,7 +333,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       "regions Inform Citizen",
       false,
       "regions_tn_inform_citizen",
-      "nettunit.handler.regions_tn_inform_citizen",
+      "nettunit.handler.demo.tn.regions_tn_inform_citizen",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
@@ -343,7 +343,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       "regions Monitor Event Severity",
       false,
       "regions_tn_monitor_event_severity",
-      "nettunit.handler.regions_tn_monitor_event_severity",
+      "nettunit.handler.demo.tn.regions_tn_monitor_event_severity",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
@@ -353,7 +353,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       "regions Inform Citizen Via App",
       false,
       "regions_tn_inform_citizen_via_app",
-      "nettunit.handler.regions_tn_inform_citizen_via_app",
+      "nettunit.handler.demo.tn.regions_tn_inform_citizen_via_app",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
@@ -364,7 +364,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       "ariana Involve Competent Roles",
       false,
       "ariana_involve_competent_roles",
-      "nettunit.handler.ariana_involve_competent_roles",
+      "nettunit.handler.demo.tn.ariana_involve_competent_roles",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
@@ -374,7 +374,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       "ariana Decide Response Type",
       false,
       "ariana_decide_response_type",
-      "nettunit.handler.ariana_decide_response_type",
+      "nettunit.handler.demo.tn.ariana_decide_response_type",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
@@ -384,7 +384,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       "ariana Inform Citizen",
       false,
       "ariana_inform_citizen",
-      "nettunit.handler.ariana_inform_citizen",
+      "nettunit.handler.demo.tn.ariana_inform_citizen",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
@@ -394,7 +394,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       "ariana Monitor Event Severity",
       false,
       "ariana_monitor_event_severity",
-      "nettunit.handler.ariana_monitor_event_severity",
+      "nettunit.handler.demo.tn.ariana_monitor_event_severity",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
@@ -404,7 +404,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       "ariana Inform Citizen Via App",
       false,
       "ariana_inform_citizen_via_app",
-      "nettunit.handler.ariana_inform_citizen_via_app",
+      "nettunit.handler.demo.tn.ariana_inform_citizen_via_app",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
