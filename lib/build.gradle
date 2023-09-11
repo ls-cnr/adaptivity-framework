@@ -40,12 +40,12 @@ repositories {
     mavenCentral()
 
     //jacamo repository
-    maven {
-        url "http://jacamo.sourceforge.net/maven2"
-        allowInsecureProtocol = true
-    }
+    //maven {
+    //    url "http://jacamo.sourceforge.net/maven2"
+    //    allowInsecureProtocol = true
+    // }
     // MOISE with exceptions
-    maven { url "https://moise-exceptions.sourceforge.io/maven2" }
+    //maven { url "https://moise-exceptions.sourceforge.io/maven2" }
 
 //    flatDir {
 //       dirs 'lib'
@@ -75,9 +75,9 @@ dependencies {
     testImplementation 'org.scalatestplus:junit-4-13_2.13:3.2.2.0'
 
     // Use Jacamo and MOISE with Exceptions
-    implementation group: 'org.jacamo', name: 'jacamo', version: '0.8'
-    implementation group: 'org.jacamo', name: 'npl', version: '0.5-SNAPSHOT', changing: true, transitive: false
-    implementation group: 'it.unito.di', name: 'moise-exceptions', version: '0.2', changing: true
+    //implementation group: 'org.jacamo', name: 'jacamo', version: '0.9'
+    //implementation group: 'org.jacamo', name: 'npl', version: '0.4', changing: true, transitive: false
+    //implementation group: 'it.unito.di', name: 'moise-exceptions', version: '0.2', changing: true
     implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.14.1'
     implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.14.1'
 
@@ -91,7 +91,7 @@ dependencies {
 }
 
 configurations {
-    compile.exclude group: 'org.jacamo', module: 'moise'
+    //compile.exclude group: 'org.jacamo', module: 'moise'
 }
 configurations.all {
     // Check for updates every build
@@ -105,11 +105,11 @@ sourceSets {
         }
         scala {
             srcDir 'src/main/scala'
-            srcDir 'src/main/jacamo/scalaenv'
+            //srcDir 'src/main/jacamo/scalaenv'
             srcDir 'src/main/java'
-            srcDir 'src/main/jacamo/env'
-            srcDir 'src/main/jacamo/agt'
-            srcDir 'src/main/jacamo/org'
+            //srcDir 'src/main/jacamo/env'
+            //srcDir 'src/main/jacamo/agt'
+            //srcDir 'src/main/jacamo/org'
         }
 //        resources {
 //            srcDir 'src/main/resources'

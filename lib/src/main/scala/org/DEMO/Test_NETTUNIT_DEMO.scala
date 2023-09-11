@@ -134,7 +134,8 @@ object Test_NETTUNIT_DEMO /*extends App */ {
 
       // Abstract WF to BPMN
       val solution = grounder.groundSolution(converter)
-      val theBPMN = Goal2BPMN.getBPMN(solution, processName, bpmnProcessID)
+      //val theBPMN = Goal2BPMN.getBPMN(solution, processName, bpmnProcessID)
+      val theBPMN = Goal2BPMN.getBPMN(solution, processName, processName)
       if (deployAndExecuteFromMUSA) {
         executeWithFlowable(theBPMN.toString())
       }
