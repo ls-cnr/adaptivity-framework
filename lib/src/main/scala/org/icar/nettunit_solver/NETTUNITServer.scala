@@ -8,6 +8,7 @@ import net.liftweb.json.{DefaultFormats, JsonParser, Serialization}
 import org.DEMO.{NETTUNITDefinitionsDEMO, Test_NETTUNIT_DEMO}
 import org.icar.GoalSPECParser.NETTUNIT.NETTUNITParser
 import org.icar.bpmn2goal.{ServiceTask, Task}
+import org.icar.symbolic.{FormulaParser, GroundPredicate, Predicate, StateOfWorld}
 
 import scala.io.StdIn
 
@@ -24,6 +25,8 @@ object NETTUNITServer {
 
   val MUSAAddress = "localhost"
   val MUSAPort = 8081 //please, set different from rabbitMQ port, which by default is on 8080
+
+  var current_state : StateOfWorld = StateOfWorld(List.empty);
 
   def executeProcess(opeartorName: String, requestDescription: String): Unit = {
 
@@ -79,13 +82,16 @@ object NETTUNITServer {
             // unmarshal as string
             entity(as[String]) { str =>
 
+              if (current_state.statements.isEmpty)
+                current_state = NETTUNITDefinitionsDEMO.initial_arianaregions;
+
               val the_model = str.split(":",2)
               val process_name = the_model(0)
               val goalModel = NETTUNITParser.loadGoalModel(the_model(1))
               //val goalModel = NETTUNITParser.loadGoalModel(str)
 
               //val bpmn_string = Test_NETTUNIT.goalModel2BPMN(goalModel)
-              val bpmn_string = Test_NETTUNIT_DEMO.goalModelDEMO2BPMN(NETTUNITDefinitionsDEMO.initial_arianaregions,goalModel,process_name)
+              val bpmn_string = Test_NETTUNIT_DEMO.goalModelDEMO2BPMN(current_state,goalModel,process_name)
 
               val teeSymbol = "\u22A4" //true
               val teeDownSymbol = "\u22A5" //false
@@ -125,11 +131,25 @@ object NETTUNITServer {
         post {
           decodeRequest {
             // unmarshal as string
-            entity(as[String]) { capabilityServiceClass =>
+            entity(as[String]) { composite_string =>
+              val string_array = composite_string.split("|")
+              val op_type : String = string_array(0)
+              val pred_string : String = string_array(1)
+              val capabilityServiceClass : String = string_array(2)
 
-              // input -> riferimento del processo (evento) + capability fallita
+              val parser = new FormulaParser();
+              val parsed_predicate: parser.ParseResult[Predicate] = parser.parseAll(parser.predicate,pred_string)
+              val predicate: Predicate = parsed_predicate.get
+              val grounded_predicate: GroundPredicate = predicate.get_grounded.get
 
-
+              op_type.toUpperCase match {
+                case "ADD" =>
+                  val updated_current_state : List[GroundPredicate] = grounded_predicate :: current_state.statements
+                  current_state = StateOfWorld(updated_current_state)
+                case "REMOVE" =>
+                  val updated_current_state : List[GroundPredicate] = current_state.statements.filter( _ != grounded_predicate)
+                  current_state = StateOfWorld(updated_current_state)
+              }
 
               println(s"UPDATED STATE OF WORLD. Executed capability: $capabilityServiceClass")
               Test_NETTUNIT.restoreCapability(capabilityServiceClass)
