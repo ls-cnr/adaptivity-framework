@@ -8,7 +8,7 @@ object NETTUNITDefinitionsDEMO {
 
   val dom_types: Array[DomainType] = Array(
     StringEnum_DomainType("TARGET_LOCATION", Array("volcano", "alt_location1", "alt_location2")),
-    StringEnum_DomainType("EMG_COMPETENT_BODY_ROLE", Array("pcrs", "irib", "inm", "pcct", "comune", "pctn", "hama", "regions_tn", "ariana")),
+    StringEnum_DomainType("EMG_COMPETENT_BODY_ROLE", Array("pcrs", "irib", "inm", "pcct", "ct_mayor", "comune", "pctn", "hama", "regions_tn", "ariana")),
     StringEnum_DomainType("EMG_COMPETENT_BODY_ROLE_TN", Array("pctn", "hama", "regions_tn", "ariana", "inm")),
 
     StringEnum_DomainType("EMG_RESPONSE_TYPE_RESPONSIBLE", Array("pcct", "comune")),
@@ -87,6 +87,7 @@ object NETTUNITDefinitionsDEMO {
     DomainPredicate("obtained_health_risk_estimate", List()),
     DomainPredicate("updated_health_risk_data", List()),
     DomainPredicate("involved_local_authorities", List()),
+    DomainPredicate("involved_crossborder_authorities", List()),
     DomainPredicate("assessed_emergency", List()),
 
 
@@ -506,13 +507,7 @@ object NETTUNITDefinitionsDEMO {
     future = List.empty
   )
 
-  /*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-      ITALIA
-   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
-  /*
-  GOAL identifying_incident: WHEN emergency_location(volcano) AND NOT assessed_emergency THEN THE ingv ROLE SHALL ADDRESS FINALLY identified_incident
-  */
-  /* capability */
+
   val identifying_incident = AbstractCapability(
     id = "identifying_incident",
 
@@ -531,10 +526,9 @@ object NETTUNITDefinitionsDEMO {
     future = List.empty
   )
 
+
+
   val involve_pertinent_roles_pcrs = AbstractCapability(
-    /*
-    GOAL involve_pertinent_roles_pcrs: WHEN identified_incident(volcano) THEN THE pcrs ROLE SHALL ADDRESS involved_pertinent_bodies(pcrs)
-    */
     id = "involve_pertinent_roles_pcrs",
 
     params = List(),
@@ -551,9 +545,6 @@ object NETTUNITDefinitionsDEMO {
   )
 
   val evaluate_incident_scenario = AbstractCapability(
-    /*
-    GOAL evaluate_incident_scenario: WHEN involved_pertinent_bodies_pcrs THEN THE pcrs ROLE SHALL ADDRESS FINALLY scenario_evaluated
-    */
     id = "evaluate_incident_scenario",
 
     params = List(),
@@ -568,30 +559,27 @@ object NETTUNITDefinitionsDEMO {
     future = List.empty
   )
 
-  val ask_for_airborne_dispersion_estimate = AbstractCapability(
-    /*
-    GOAL ask_for_airborne_dispersion_estimate: WHEN scenario_evaluated THEN THE pcrs ROLE SHALL ADDRESS FINALLY obtained_airborne_estimate
-    */
-    id = "ask_for_airborne_dispersion_estimate",
+  val involve_pertinent_roles_ct_mayor = AbstractCapability(
+    id = "involve_pertinent_roles_ct_mayor",
 
     params = List(),
+
     pre = GroundPredicate("scenario_evaluated", List()),
-    post = GroundPredicate("obtained_airborne_estimate", List()),
+    post = GroundPredicate("involved_pertinent_bodies", List(AtomTerm("ct_mayor"))),
 
     effects = Array(
-      EvolutionGrounding("get_estimate", Array[EvoOperator](
-        AddOperator(Predicate("obtained_airborne_estimate", List())),
+      EvolutionGrounding("involve_bodies", Array[EvoOperator](
+        AddOperator(Predicate("involved_pertinent_bodies", List(AtomTerm("ct_mayor")))),
       )),
     ),
     future = List.empty
   )
 
   val involve_pertinent_roles_inm = AbstractCapability(
-    /*GOAL involve_pertinent_roles_inm: WHEN obtained_airborne_estimate THEN THE inm ROLE SHALL ADDRESS FINALLY involved_pertinent_bodies_inm*/
     id = "involve_pertinent_roles_inm",
 
     params = List(),
-    pre = GroundPredicate("obtained_airborne_estimate", List()),
+    pre = GroundPredicate("scenario_evaluated", List()),
     post = GroundPredicate("involved_pertinent_bodies", List(AtomTerm("inm"))),
 
     effects = Array(
@@ -603,9 +591,6 @@ object NETTUNITDefinitionsDEMO {
   )
 
   val update_airborne_dispersion_data = AbstractCapability(
-    /*
-    GOAL update_airborne_dispersion_data: WHEN involved_pertinent_bodies_inm THEN THE inm ROLE SHALL ADDRESS FINALLY updated_airborne_dispersion_data
-    */
     id = "update_airborne_dispersion_data",
 
     params = List(),
@@ -620,32 +605,11 @@ object NETTUNITDefinitionsDEMO {
     future = List.empty
   )
 
-  val ask_for_health_risk_estimate = AbstractCapability(
-    /*
-    GOAL ask_for_health_risk_estimate: WHEN updated_airborne_dispersion_data THEN THE pcrs ROLE SHALL ADDRESS FINALLY obtained_health_risk_estimate
-    */
-    id = "ask_for_health_risk_estimate",
-
-    params = List(),
-    pre = GroundPredicate("updated_airborne_dispersion_data", List()),
-    post = GroundPredicate("obtained_health_risk_estimate", List()),
-
-    effects = Array(
-      EvolutionGrounding("get_estimate_health", Array[EvoOperator](
-        AddOperator(Predicate("obtained_health_risk_estimate", List())),
-      )),
-    ),
-    future = List.empty
-  )
-
   val involve_pertinent_roles_irib = AbstractCapability(
-    /*
-    GOAL involve_pertinent_roles_irib: WHEN obtained_health_risk_estimate THEN THE irib ROLE SHALL ADDRESS FINALLY involved_pertinent_bodies_irib
-    */
     id = "involve_pertinent_roles_irib",
 
     params = List(),
-    pre = GroundPredicate("obtained_health_risk_estimate", List()),
+    pre = GroundPredicate("updated_airborne_dispersion_data", List()),
     post = GroundPredicate("involved_pertinent_bodies", List(AtomTerm("irib"))),
 
     effects = Array(
@@ -657,9 +621,6 @@ object NETTUNITDefinitionsDEMO {
   )
 
   val update_health_risk_data = AbstractCapability(
-    /*
-    GOAL update_health_risk_data: WHEN involved_pertinent_bodies_irib THEN THE irib ROLE SHALL ADDRESS FINALLY updated_health_risk_data
-    */
     id = "update_health_risk_data",
 
     params = List(),
@@ -675,9 +636,6 @@ object NETTUNITDefinitionsDEMO {
   )
 
   val inform_involved_local_authorities = AbstractCapability(
-    /*
-    GOAL inform_involved_local_authorities: WHEN updated_health_risk_data THEN THE pcrs ROLE SHALL ADDRESS FINALLY involved_local_authorities
-    */
     id = "inform_involved_local_authorities",
 
     params = List(),
@@ -691,6 +649,31 @@ object NETTUNITDefinitionsDEMO {
     ),
     future = List.empty
   )
+
+  val inform_involved_crossborder_authorities = AbstractCapability(
+    id = "inform_involved_crossborder_authorities",
+
+    params = List(),
+    pre = GroundPredicate("updated_health_risk_data", List()),
+    post = GroundPredicate("involved_crossborder_authorities", List()),
+
+    effects = Array(
+      EvolutionGrounding("involve_auths", Array[EvoOperator](
+        AddOperator(Predicate("involved_crossborder_authorities", List())),
+      )),
+    ),
+    future = List.empty
+  )
+
+
+
+
+
+
+
+
+
+
 
   /*----------------------------------------------------------------------------*/
   /*                         SUBPROCESS COMUNI                                  */
@@ -883,13 +866,17 @@ object NETTUNITDefinitionsDEMO {
     identifying_incident,
     involve_pertinent_roles_pcrs,
     evaluate_incident_scenario,
-    ask_for_airborne_dispersion_estimate,
+    involve_pertinent_roles_ct_mayor,
+    //ask_for_airborne_dispersion_estimate,
     involve_pertinent_roles_inm,
     update_airborne_dispersion_data,
-    ask_for_health_risk_estimate,
+    //ask_for_health_risk_estimate,
     involve_pertinent_roles_irib,
     update_health_risk_data,
     inform_involved_local_authorities,
+    inform_involved_crossborder_authorities,
+
+
 
     comune_involve_competent_roles,
     comune_decide_response_type,

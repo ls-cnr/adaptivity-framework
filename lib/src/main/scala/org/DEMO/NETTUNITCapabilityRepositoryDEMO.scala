@@ -3,6 +3,8 @@ package org.DEMO
 import org.icar.grounding.{CapabilityRepository, ConcreteCapability}
 
 object NETTUNITRepositoryDEMO extends CapabilityRepository {
+
+
   add("identifying_incident",
     ConcreteCapability(0,
       "Identifying Incident",
@@ -33,12 +35,21 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
 
-  add("ask_for_airborne_dispersion_estimate",
-    ConcreteCapability(3,
-      "Ask For Airborne Dispersion Estimate",
+  add("involve_pertinent_roles_ct_mayor",
+    ConcreteCapability(1,
+      "Involve Pertinent Roles CT Mayor",
       false,
-      "ask_for_airborne_dispersion_estimate",
-      "nettunit.handler.demo.it.ask_for_airborne_dispersion_estimate",
+      "involve_pertinent_roles_ct_mayor",
+      "nettunit.handler.demo.it.involve_pertinent_roles_ct_mayor",
+      Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
+      Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
+  )
+  add("involve_pertinent_roles_ct_vicemayor",
+    ConcreteCapability(1,
+      "Involve Pertinent Roles CT Vice Mayor",
+      false,
+      "involve_pertinent_roles_ct_mayor",
+      "nettunit.handler.demo.it.involve_pertinent_roles_ct_vice_mayor",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
@@ -59,16 +70,6 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       false,
       "update_airborne_dispersion_data",
       "nettunit.handler.demo.it.update_airborne_dispersion_data",
-      Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
-      Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
-  )
-
-  add("ask_for_health_risk_estimate",
-    ConcreteCapability(6,
-      "Ask For Health Risk Estimate",
-      false,
-      "ask_for_health_risk_estimate",
-      "nettunit.handler.demo.it.ask_for_health_risk_estimate",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
@@ -102,6 +103,20 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
+
+  add("inform_involved_crossborder_authorities",
+    ConcreteCapability(9,
+      "Inform Involved Crossborder Authorities",
+      false,
+      "inform_involved_crossborder_authorities",
+      "nettunit.handler.demo.it.inform_involved_crossborder_authorities",
+      Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
+      Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
+  )
+
+
+
+
 
   add("comune_involve_competent_roles",
     ConcreteCapability(10,
