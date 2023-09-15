@@ -5,7 +5,7 @@ import org.icar.grounding.NETTUNIT.NETTUNITProcessDecoratorStrategy.adaptationRe
 
 class TimerBoundaryEventDecorator extends NETTUNITProcessDecorator {
 
-  val dummyTimeCondition = "PT5S"
+  val dummyTimeCondition = "PT20S"
 
   /**
    * Decorate all ServiceTask with a BoundaryEvent

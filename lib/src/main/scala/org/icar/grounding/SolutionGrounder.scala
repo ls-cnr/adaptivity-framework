@@ -155,7 +155,11 @@ class SolutionGrounder(repository: CapabilityRepository, groundingStrategy: Grou
    */
   def groundSolutionTasks(solutionTasks: List[SolutionTask], applyConstraints: Boolean): List[Item] = {
     //groundHumanTasks(solutionTasks.filter(task => task.grounding.capability.isHuman)) ++
-    // groundNonHumanTasks(solutionTasks.filter(task => !task.grounding.capability.isHuman), applyConstraints)
+    //groundNonHumanTasks(solutionTasks.filter(task => !task.grounding.capability.isHuman), applyConstraints)
+
+
+
+    //working 12_9_2023
     groundNonHumanTasks(solutionTasks, applyConstraints)
   }
 

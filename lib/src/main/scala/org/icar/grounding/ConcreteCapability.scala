@@ -1,6 +1,6 @@
 package org.icar.grounding
 
-import org.icar.bpmn2goal.{EventType, FlowableExecutionListener, FlowableExtentionElements, Item, ServiceTask, Task}
+import org.icar.bpmn2goal.{EventType, FlowableExecutionListener, FlowableExtentionElements, Item, ServiceTask, Task, TriggerableServiceTask}
 
 /**
  * A concrete capability specifies the realization of a service described by an abstract capability in MUSA
@@ -48,7 +48,8 @@ case class ConcreteCapability(id: Int, // the ID of this concrete capability.
     }
 
     isHuman match {
-      case true => Task(s"st_${id}", title, tasktype = "human")
+      //case true => Task(s"st_${id}", title, tasktype = "human")
+      case true => TriggerableServiceTask(s"st_${id}", title, className, Some(FlowableExtentionElements(listeners)))
       case false => ServiceTask(s"st_${id}", title, className, Some(FlowableExtentionElements(listeners)))
     }
 

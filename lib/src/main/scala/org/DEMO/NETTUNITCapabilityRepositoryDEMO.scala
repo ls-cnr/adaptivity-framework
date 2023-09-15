@@ -6,7 +6,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
   add("identifying_incident",
     ConcreteCapability(0,
       "Identifying Incident",
-      false,
+      true,
       "identifying_incident",
       "nettunit.handler.demo.it.identifying_incident",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),

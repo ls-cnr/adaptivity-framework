@@ -931,14 +931,13 @@ object NETTUNITDefinitionsDEMO {
   val env_action: Array[AbstractCapability] = Array.empty
 
   /* the problem */
-  val initial = StateOfWorld(List(GroundPredicate("emergency_location", List(AtomTerm("volcano")))))
+  val initial = StateOfWorld(List(GroundPredicate("emergency_location", List(AtomTerm("volcano"))),
+                                  GroundPredicate("emergency_location_tn", List(AtomTerm("volcano")))))
   //val initial = Conjunction(List(GroundPredicate("emergency_location", List(AtomTerm("volcano"))),GroundPredicate("emergency_location_tn", List(AtomTerm("volcano")))))
 
   val initial_comunepcct = StateOfWorld(List(GroundPredicate("involved_local_authorities", List())))
 
   val initial_arianaregions = StateOfWorld(List(GroundPredicate("involved_local_authorities_tn", List())))
-
-
 
   val availableActions = AvailableActions(sys_action, env_action)
 }

@@ -29,7 +29,18 @@ object Goal2BPMN {
 
   /*Service task------------------------------------------*/
   def serviceTask(task: ServiceTask): Elem = {
-    <serviceTask id={task.id} name={task.label} flowable:class={scala.xml.Unparsed(task.className)}>
+    <serviceTask id={task.id} name={task.label} flowable:triggerable="false" flowable:class={scala.xml.Unparsed(task.className)}>
+      <extensionElements>
+        {if (task.extElems.isDefined) {
+        task.extElems.get.listeners.map(executionListener)
+        //        extensionElements(task.extElems.get)
+      }}
+      </extensionElements>
+    </serviceTask>
+  }
+
+  def triggerableServiceTask(task: TriggerableServiceTask): Elem = {
+    <serviceTask id={task.id} name={task.label} flowable:triggerable="true" flowable:class={scala.xml.Unparsed(task.className)}>
       <extensionElements>
         {if (task.extElems.isDefined) {
         task.extElems.get.listeners.map(executionListener)
@@ -66,7 +77,8 @@ object Goal2BPMN {
   def userTask(task: Task): Elem = <userTask id={task.id} name={task.label} flowable:candidateGroups=""></userTask>
 
   def writeItem(item: Item): Elem = item match {
-    case t: Task => userTask(t)
+    //case t: Task => userTask(t)
+    case t: TriggerableServiceTask => triggerableServiceTask(t)
     case st: ServiceTask => serviceTask(st)
     case gt: Gateway => gateway(gt)
     case ev: Event => event(ev)

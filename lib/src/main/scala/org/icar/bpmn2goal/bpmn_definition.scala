@@ -65,6 +65,8 @@ object GatewayType extends Enumeration {
 
 case class ServiceTask(override val id: String, label: String, className: String, extElems: Option[FlowableExtentionElements]) extends Item(id)
 
+case class TriggerableServiceTask(override val id: String, label: String, className: String, extElems: Option[FlowableExtentionElements]) extends Item(id)
+
 case class FlowableExtentionElements(listeners: List[FlowableExecutionListener])
 
 /**
