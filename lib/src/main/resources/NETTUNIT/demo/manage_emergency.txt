@@ -17,7 +17,11 @@ GOAL managing_emergency IS AND OF {
     }
 
     GOAL involve_authorities IS AND OF {
-    	GOAL inform_local_authorities: WHEN updated_health_risk_data THEN THE SYSTEM ROLE SHALL ADDRESS FINALLY involved_local_authorities
+    	GOAL inform_local_authorities IS AND OF {
+    	    GOAL inform_pcct: WHEN updated_health_risk_data THEN THE SYSTEM ROLE SHALL ADDRESS FINALLY involved_competent_roles(pcct)
+            GOAL inform_territory: WHEN updated_health_risk_data THEN THE SYSTEM ROLE SHALL ADDRESS FINALLY involved_competent_roles(comune)
+    	}
+
     	GOAL inform_crossboarder_authorities: WHEN updated_health_risk_data THEN THE SYSTEM ROLE SHALL ADDRESS FINALLY involved_crossborder_authorities
     }
 }

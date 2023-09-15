@@ -94,12 +94,22 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
 
-  add("inform_involved_local_authorities",
+  add("inform_pcct",
     ConcreteCapability(9,
-      "Inform Involved Local Authorities",
+      "Inform PCCT",
       false,
-      "inform_involved_local_authorities",
-      "nettunit.handler.demo.it.inform_involved_local_authorities",
+      "inform_pcct",
+      "nettunit.handler.demo.it.inform_pcct",
+      Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
+      Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
+  )
+
+  add("inform_territory",
+    ConcreteCapability(9,
+      "Inform Territory",
+      false,
+      "inform_territory",
+      "nettunit.handler.demo.it.inform_territory",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
@@ -168,6 +178,9 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
 
+
+
+
   add("pcct_involve_competent_roles",
     ConcreteCapability(15,
       "Pc Ct Involve Competent Roles",
@@ -217,6 +230,8 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
+
+
 
   /** ******************************************** */
   /** ******************************************** */

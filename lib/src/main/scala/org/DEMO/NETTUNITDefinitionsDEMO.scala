@@ -635,16 +635,31 @@ object NETTUNITDefinitionsDEMO {
     future = List.empty
   )
 
-  val inform_involved_local_authorities = AbstractCapability(
-    id = "inform_involved_local_authorities",
+  val inform_pcct = AbstractCapability(
+    id = "inform_pcct",
 
     params = List(),
     pre = GroundPredicate("updated_health_risk_data", List()),
-    post = GroundPredicate("involved_local_authorities", List()),
+    post = GroundPredicate("involved_competent_roles", List(AtomTerm("pcct"))),
 
     effects = Array(
       EvolutionGrounding("involve_auths", Array[EvoOperator](
-        AddOperator(Predicate("involved_local_authorities", List())),
+        AddOperator(Predicate("involved_competent_roles", List(AtomTerm("pcct")))),
+      )),
+    ),
+    future = List.empty
+  )
+
+  val inform_territory = AbstractCapability(
+    id = "inform_territory",
+
+    params = List(),
+    pre = GroundPredicate("updated_health_risk_data", List()),
+    post = GroundPredicate("involved_competent_roles", List(AtomTerm("comune"))),
+
+    effects = Array(
+      EvolutionGrounding("involve_auths", Array[EvoOperator](
+        AddOperator(Predicate("involved_competent_roles", List(AtomTerm("comune")))),
       )),
     ),
     future = List.empty
@@ -873,7 +888,8 @@ object NETTUNITDefinitionsDEMO {
     //ask_for_health_risk_estimate,
     involve_pertinent_roles_irib,
     update_health_risk_data,
-    inform_involved_local_authorities,
+    inform_pcct,
+    inform_territory,
     inform_involved_crossborder_authorities,
 
 
@@ -922,7 +938,8 @@ object NETTUNITDefinitionsDEMO {
                                   GroundPredicate("emergency_location_tn", List(AtomTerm("volcano")))))
   //val initial = Conjunction(List(GroundPredicate("emergency_location", List(AtomTerm("volcano"))),GroundPredicate("emergency_location_tn", List(AtomTerm("volcano")))))
 
-  val initial_comunepcct = StateOfWorld(List(GroundPredicate("involved_local_authorities", List())))
+  val initial_comune = StateOfWorld(List(GroundPredicate("involved_competent_roles", List(AtomTerm("comune")))))
+  val initial_pcct = StateOfWorld(List(GroundPredicate("involved_competent_roles", List(AtomTerm("pcct")))))
 
   val initial_arianaregions = StateOfWorld(List(GroundPredicate("involved_local_authorities_tn", List())))
 

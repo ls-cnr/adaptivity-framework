@@ -1,180 +1,148 @@
 <definitions typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:activiti="http://activiti.org/bpmn" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:flowable="http://flowable.org/bpmn">
       <process id="CrossBorderEmergencyPlan" name="CrossBorderEmergencyPlan" isExecutable="true">
-        <serviceTask id="st_5" name="Update Airborne Dispersion Data" activiti:class="nettunit.handler.demo.it.update_airborne_dispersion_data">
+        <serviceTask id="st_10" name="Inform Territory" flowable:triggerable="false" activiti:class="nettunit.handler.demo.it.inform_territory">
       <extensionElements>
         <activiti:executionListener event="start" class="nettunit.listener.TaskStartedExecutionListenerImpl"></activiti:executionListener><activiti:executionListener event="end" class="nettunit.listener.TaskEndedExecutionListenerImpl"></activiti:executionListener>
       </extensionElements>
-    </serviceTask><boundaryEvent id="boundaryTimer_st_5" name="boundaryTimer_Update Airborne Dispersion Data" attachedToRef="st_5">
+    </serviceTask><boundaryEvent id="boundaryTimer_st_10" name="boundaryTimer_Inform Territory" attachedToRef="st_10">
         <timerEventDefinition>
         <timeDuration>
-          PT5S
+          PT3H
         </timeDuration>
       </timerEventDefinition>
-      </boundaryEvent><boundaryEvent id="boundaryError_st_5" name="boundaryError_Update Airborne Dispersion Data" attachedToRef="st_5">
+      </boundaryEvent><boundaryEvent id="boundaryError_st_10" name="boundaryError_Inform Territory" attachedToRef="st_10">
         <errorEventDefinition errorRef="REQUIRE_ORCHESTRATION"></errorEventDefinition>
-      </boundaryEvent><serviceTask id="st_3" name="Evaluate Incident Scenario" activiti:class="nettunit.handler.demo.it.evaluate_incident_scenario">
+      </boundaryEvent><serviceTask id="st_3" name="Evaluate Incident Scenario" flowable:triggerable="false" activiti:class="nettunit.handler.demo.it.evaluate_incident_scenario">
       <extensionElements>
         <activiti:executionListener event="start" class="nettunit.listener.TaskStartedExecutionListenerImpl"></activiti:executionListener><activiti:executionListener event="end" class="nettunit.listener.TaskEndedExecutionListenerImpl"></activiti:executionListener>
       </extensionElements>
     </serviceTask><boundaryEvent id="boundaryTimer_st_3" name="boundaryTimer_Evaluate Incident Scenario" attachedToRef="st_3">
         <timerEventDefinition>
         <timeDuration>
-          PT5S
+          PT3H
         </timeDuration>
       </timerEventDefinition>
       </boundaryEvent><boundaryEvent id="boundaryError_st_3" name="boundaryError_Evaluate Incident Scenario" attachedToRef="st_3">
         <errorEventDefinition errorRef="REQUIRE_ORCHESTRATION"></errorEventDefinition>
-      </boundaryEvent><serviceTask id="st_10" name="Comune Involve Competent Roles" activiti:class="nettunit.handler.demo.it.comune_involve_competent_roles">
-      <extensionElements>
-        <activiti:executionListener event="start" class="nettunit.listener.TaskStartedExecutionListenerImpl"></activiti:executionListener><activiti:executionListener event="end" class="nettunit.listener.TaskEndedExecutionListenerImpl"></activiti:executionListener>
-      </extensionElements>
-    </serviceTask><boundaryEvent id="boundaryTimer_st_10" name="boundaryTimer_Comune Involve Competent Roles" attachedToRef="st_10">
-        <timerEventDefinition>
-        <timeDuration>
-          PT5S
-        </timeDuration>
-      </timerEventDefinition>
-      </boundaryEvent><boundaryEvent id="boundaryError_st_10" name="boundaryError_Comune Involve Competent Roles" attachedToRef="st_10">
-        <errorEventDefinition errorRef="REQUIRE_ORCHESTRATION"></errorEventDefinition>
-      </boundaryEvent><serviceTask id="st_8" name="Involve Pertinent Roles CT Mayor" activiti:class="nettunit.handler.demo.it.involve_pertinent_roles_ct_mayor">
-      <extensionElements>
-        <activiti:executionListener event="start" class="nettunit.listener.TaskStartedExecutionListenerImpl"></activiti:executionListener><activiti:executionListener event="end" class="nettunit.listener.TaskEndedExecutionListenerImpl"></activiti:executionListener>
-      </extensionElements>
-    </serviceTask><boundaryEvent id="boundaryTimer_st_8" name="boundaryTimer_Involve Pertinent Roles CT Mayor" attachedToRef="st_8">
-        <timerEventDefinition>
-        <timeDuration>
-          PT5S
-        </timeDuration>
-      </timerEventDefinition>
-      </boundaryEvent><boundaryEvent id="boundaryError_st_8" name="boundaryError_Involve Pertinent Roles CT Mayor" attachedToRef="st_8">
-        <errorEventDefinition errorRef="REQUIRE_ORCHESTRATION"></errorEventDefinition>
-      </boundaryEvent><serviceTask id="st_4" name="Involve Pertinent Roles Inm" activiti:class="nettunit.handler.demo.it.involve_pertinent_roles_inm">
-      <extensionElements>
-        <activiti:executionListener event="start" class="nettunit.listener.TaskStartedExecutionListenerImpl"></activiti:executionListener><activiti:executionListener event="end" class="nettunit.listener.TaskEndedExecutionListenerImpl"></activiti:executionListener>
-      </extensionElements>
-    </serviceTask><boundaryEvent id="boundaryTimer_st_4" name="boundaryTimer_Involve Pertinent Roles Inm" attachedToRef="st_4">
-        <timerEventDefinition>
-        <timeDuration>
-          PT5S
-        </timeDuration>
-      </timerEventDefinition>
-      </boundaryEvent><boundaryEvent id="boundaryError_st_4" name="boundaryError_Involve Pertinent Roles Inm" attachedToRef="st_4">
-        <errorEventDefinition errorRef="REQUIRE_ORCHESTRATION"></errorEventDefinition>
-      </boundaryEvent><serviceTask id="st_2" name="Involve Pertinent Roles Pcrs" activiti:class="nettunit.handler.demo.it.involve_pertinent_roles_pcrs">
-      <extensionElements>
-        <activiti:executionListener event="start" class="nettunit.listener.TaskStartedExecutionListenerImpl"></activiti:executionListener><activiti:executionListener event="end" class="nettunit.listener.TaskEndedExecutionListenerImpl"></activiti:executionListener>
-      </extensionElements>
-    </serviceTask><boundaryEvent id="boundaryTimer_st_2" name="boundaryTimer_Involve Pertinent Roles Pcrs" attachedToRef="st_2">
-        <timerEventDefinition>
-        <timeDuration>
-          PT5S
-        </timeDuration>
-      </timerEventDefinition>
-      </boundaryEvent><boundaryEvent id="boundaryError_st_2" name="boundaryError_Involve Pertinent Roles Pcrs" attachedToRef="st_2">
-        <errorEventDefinition errorRef="REQUIRE_ORCHESTRATION"></errorEventDefinition>
-      </boundaryEvent><serviceTask id="st_6" name="Involve Pertinent Roles Irib" activiti:class="nettunit.handler.demo.it.involve_pertinent_roles_irib">
-      <extensionElements>
-        <activiti:executionListener event="start" class="nettunit.listener.TaskStartedExecutionListenerImpl"></activiti:executionListener><activiti:executionListener event="end" class="nettunit.listener.TaskEndedExecutionListenerImpl"></activiti:executionListener>
-      </extensionElements>
-    </serviceTask><boundaryEvent id="boundaryTimer_st_6" name="boundaryTimer_Involve Pertinent Roles Irib" attachedToRef="st_6">
-        <timerEventDefinition>
-        <timeDuration>
-          PT5S
-        </timeDuration>
-      </timerEventDefinition>
-      </boundaryEvent><boundaryEvent id="boundaryError_st_6" name="boundaryError_Involve Pertinent Roles Irib" attachedToRef="st_6">
-        <errorEventDefinition errorRef="REQUIRE_ORCHESTRATION"></errorEventDefinition>
-      </boundaryEvent><serviceTask id="st_1" name="Identifying Incident" activiti:class="nettunit.handler.demo.it.identifying_incident">
+      </boundaryEvent><serviceTask id="st_1" name="Identifying Incident" flowable:triggerable="true" activiti:class="nettunit.handler.demo.it.identifying_incident">
       <extensionElements>
         <activiti:executionListener event="start" class="nettunit.listener.TaskStartedExecutionListenerImpl"></activiti:executionListener><activiti:executionListener event="end" class="nettunit.listener.TaskEndedExecutionListenerImpl"></activiti:executionListener>
       </extensionElements>
     </serviceTask><boundaryEvent id="boundaryTimer_st_1" name="boundaryTimer_Identifying Incident" attachedToRef="st_1">
         <timerEventDefinition>
         <timeDuration>
-          PT5S
+          PT3H
         </timeDuration>
       </timerEventDefinition>
       </boundaryEvent><boundaryEvent id="boundaryError_st_1" name="boundaryError_Identifying Incident" attachedToRef="st_1">
         <errorEventDefinition errorRef="REQUIRE_ORCHESTRATION"></errorEventDefinition>
-      </boundaryEvent><serviceTask id="st_9" name="Inform Involved Local Authorities" activiti:class="nettunit.handler.demo.it.inform_involved_local_authorities">
+      </boundaryEvent><serviceTask id="st_9" name="Inform PCCT" flowable:triggerable="false" activiti:class="nettunit.handler.demo.it.inform_pcct">
       <extensionElements>
         <activiti:executionListener event="start" class="nettunit.listener.TaskStartedExecutionListenerImpl"></activiti:executionListener><activiti:executionListener event="end" class="nettunit.listener.TaskEndedExecutionListenerImpl"></activiti:executionListener>
       </extensionElements>
-    </serviceTask><boundaryEvent id="boundaryTimer_st_9" name="boundaryTimer_Inform Involved Local Authorities" attachedToRef="st_9">
+    </serviceTask><boundaryEvent id="boundaryTimer_st_9" name="boundaryTimer_Inform PCCT" attachedToRef="st_9">
         <timerEventDefinition>
         <timeDuration>
-          PT5S
+          PT3H
         </timeDuration>
       </timerEventDefinition>
-      </boundaryEvent><boundaryEvent id="boundaryError_st_9" name="boundaryError_Inform Involved Local Authorities" attachedToRef="st_9">
+      </boundaryEvent><boundaryEvent id="boundaryError_st_9" name="boundaryError_Inform PCCT" attachedToRef="st_9">
         <errorEventDefinition errorRef="REQUIRE_ORCHESTRATION"></errorEventDefinition>
-      </boundaryEvent><serviceTask id="st_12" name="Inform Involved Crossborder Authorities" activiti:class="nettunit.handler.demo.it.inform_involved_crossborder_authorities">
+      </boundaryEvent><serviceTask id="st_2" name="Involve Pertinent Roles Pcrs" flowable:triggerable="false" activiti:class="nettunit.handler.demo.it.involve_pertinent_roles_pcrs">
       <extensionElements>
         <activiti:executionListener event="start" class="nettunit.listener.TaskStartedExecutionListenerImpl"></activiti:executionListener><activiti:executionListener event="end" class="nettunit.listener.TaskEndedExecutionListenerImpl"></activiti:executionListener>
       </extensionElements>
-    </serviceTask><boundaryEvent id="boundaryTimer_st_12" name="boundaryTimer_Inform Involved Crossborder Authorities" attachedToRef="st_12">
+    </serviceTask><boundaryEvent id="boundaryTimer_st_2" name="boundaryTimer_Involve Pertinent Roles Pcrs" attachedToRef="st_2">
         <timerEventDefinition>
         <timeDuration>
-          PT5S
+          PT3H
         </timeDuration>
       </timerEventDefinition>
-      </boundaryEvent><boundaryEvent id="boundaryError_st_12" name="boundaryError_Inform Involved Crossborder Authorities" attachedToRef="st_12">
+      </boundaryEvent><boundaryEvent id="boundaryError_st_2" name="boundaryError_Involve Pertinent Roles Pcrs" attachedToRef="st_2">
         <errorEventDefinition errorRef="REQUIRE_ORCHESTRATION"></errorEventDefinition>
-      </boundaryEvent><serviceTask id="st_11" name="Comune Decide Response Type" activiti:class="nettunit.handler.demo.it.comune_decide_response_type">
+      </boundaryEvent><serviceTask id="st_5" name="Update Airborne Dispersion Data" flowable:triggerable="false" activiti:class="nettunit.handler.demo.it.update_airborne_dispersion_data">
       <extensionElements>
         <activiti:executionListener event="start" class="nettunit.listener.TaskStartedExecutionListenerImpl"></activiti:executionListener><activiti:executionListener event="end" class="nettunit.listener.TaskEndedExecutionListenerImpl"></activiti:executionListener>
       </extensionElements>
-    </serviceTask><boundaryEvent id="boundaryTimer_st_11" name="boundaryTimer_Comune Decide Response Type" attachedToRef="st_11">
+    </serviceTask><boundaryEvent id="boundaryTimer_st_5" name="boundaryTimer_Update Airborne Dispersion Data" attachedToRef="st_5">
         <timerEventDefinition>
         <timeDuration>
-          PT5S
+          PT3H
         </timeDuration>
       </timerEventDefinition>
-      </boundaryEvent><boundaryEvent id="boundaryError_st_11" name="boundaryError_Comune Decide Response Type" attachedToRef="st_11">
+      </boundaryEvent><boundaryEvent id="boundaryError_st_5" name="boundaryError_Update Airborne Dispersion Data" attachedToRef="st_5">
         <errorEventDefinition errorRef="REQUIRE_ORCHESTRATION"></errorEventDefinition>
-      </boundaryEvent><serviceTask id="st_7" name="Update Health Risk Data" activiti:class="nettunit.handler.demo.it.update_health_risk_data">
+      </boundaryEvent><serviceTask id="st_6" name="Involve Pertinent Roles Irib" flowable:triggerable="false" activiti:class="nettunit.handler.demo.it.involve_pertinent_roles_irib">
+      <extensionElements>
+        <activiti:executionListener event="start" class="nettunit.listener.TaskStartedExecutionListenerImpl"></activiti:executionListener><activiti:executionListener event="end" class="nettunit.listener.TaskEndedExecutionListenerImpl"></activiti:executionListener>
+      </extensionElements>
+    </serviceTask><boundaryEvent id="boundaryTimer_st_6" name="boundaryTimer_Involve Pertinent Roles Irib" attachedToRef="st_6">
+        <timerEventDefinition>
+        <timeDuration>
+          PT3H
+        </timeDuration>
+      </timerEventDefinition>
+      </boundaryEvent><boundaryEvent id="boundaryError_st_6" name="boundaryError_Involve Pertinent Roles Irib" attachedToRef="st_6">
+        <errorEventDefinition errorRef="REQUIRE_ORCHESTRATION"></errorEventDefinition>
+      </boundaryEvent><serviceTask id="st_4" name="Involve Pertinent Roles Inm" flowable:triggerable="false" activiti:class="nettunit.handler.demo.it.involve_pertinent_roles_inm">
+      <extensionElements>
+        <activiti:executionListener event="start" class="nettunit.listener.TaskStartedExecutionListenerImpl"></activiti:executionListener><activiti:executionListener event="end" class="nettunit.listener.TaskEndedExecutionListenerImpl"></activiti:executionListener>
+      </extensionElements>
+    </serviceTask><boundaryEvent id="boundaryTimer_st_4" name="boundaryTimer_Involve Pertinent Roles Inm" attachedToRef="st_4">
+        <timerEventDefinition>
+        <timeDuration>
+          PT3H
+        </timeDuration>
+      </timerEventDefinition>
+      </boundaryEvent><boundaryEvent id="boundaryError_st_4" name="boundaryError_Involve Pertinent Roles Inm" attachedToRef="st_4">
+        <errorEventDefinition errorRef="REQUIRE_ORCHESTRATION"></errorEventDefinition>
+      </boundaryEvent><serviceTask id="st_7" name="Update Health Risk Data" flowable:triggerable="false" activiti:class="nettunit.handler.demo.it.update_health_risk_data">
       <extensionElements>
         <activiti:executionListener event="start" class="nettunit.listener.TaskStartedExecutionListenerImpl"></activiti:executionListener><activiti:executionListener event="end" class="nettunit.listener.TaskEndedExecutionListenerImpl"></activiti:executionListener>
       </extensionElements>
     </serviceTask><boundaryEvent id="boundaryTimer_st_7" name="boundaryTimer_Update Health Risk Data" attachedToRef="st_7">
         <timerEventDefinition>
         <timeDuration>
-          PT5S
+          PT3H
         </timeDuration>
       </timerEventDefinition>
       </boundaryEvent><boundaryEvent id="boundaryError_st_7" name="boundaryError_Update Health Risk Data" attachedToRef="st_7">
         <errorEventDefinition errorRef="REQUIRE_ORCHESTRATION"></errorEventDefinition>
-      </boundaryEvent><startEvent id="startEv_0" name="start_0"></startEvent><endEvent id="endEv_1" name="endEvent_1"></endEvent><serviceTask id="adaptationTask" name="adaptationTask" activiti:class="nettunit.handler.adaptation.MUSAOrchestrationHandler">
+      </boundaryEvent><serviceTask id="st_11" name="Inform Involved Crossborder Authorities" flowable:triggerable="false" activiti:class="nettunit.handler.demo.it.inform_involved_crossborder_authorities">
+      <extensionElements>
+        <activiti:executionListener event="start" class="nettunit.listener.TaskStartedExecutionListenerImpl"></activiti:executionListener><activiti:executionListener event="end" class="nettunit.listener.TaskEndedExecutionListenerImpl"></activiti:executionListener>
+      </extensionElements>
+    </serviceTask><boundaryEvent id="boundaryTimer_st_11" name="boundaryTimer_Inform Involved Crossborder Authorities" attachedToRef="st_11">
+        <timerEventDefinition>
+        <timeDuration>
+          PT3H
+        </timeDuration>
+      </timerEventDefinition>
+      </boundaryEvent><boundaryEvent id="boundaryError_st_11" name="boundaryError_Inform Involved Crossborder Authorities" attachedToRef="st_11">
+        <errorEventDefinition errorRef="REQUIRE_ORCHESTRATION"></errorEventDefinition>
+      </boundaryEvent><serviceTask id="st_8" name="Involve Pertinent Roles CT Mayor" flowable:triggerable="false" activiti:class="nettunit.handler.demo.it.involve_pertinent_roles_ct_mayor">
+      <extensionElements>
+        <activiti:executionListener event="start" class="nettunit.listener.TaskStartedExecutionListenerImpl"></activiti:executionListener><activiti:executionListener event="end" class="nettunit.listener.TaskEndedExecutionListenerImpl"></activiti:executionListener>
+      </extensionElements>
+    </serviceTask><boundaryEvent id="boundaryTimer_st_8" name="boundaryTimer_Involve Pertinent Roles CT Mayor" attachedToRef="st_8">
+        <timerEventDefinition>
+        <timeDuration>
+          PT3H
+        </timeDuration>
+      </timerEventDefinition>
+      </boundaryEvent><boundaryEvent id="boundaryError_st_8" name="boundaryError_Involve Pertinent Roles CT Mayor" attachedToRef="st_8">
+        <errorEventDefinition errorRef="REQUIRE_ORCHESTRATION"></errorEventDefinition>
+      </boundaryEvent><startEvent id="startEv_0" name="start_0"></startEvent><endEvent id="endEv_1" name="endEvent_1"></endEvent><serviceTask id="adaptationTask" name="adaptationTask" flowable:triggerable="false" activiti:class="nettunit.handler.adaptation.MUSAOrchestrationHandler">
       <extensionElements>
         
       </extensionElements>
-    </serviceTask><endEvent id="failureEndEvent" name="failureEndEvent"></endEvent><sequenceFlow id="flow_boundaryTimer_boundaryTimer_st_5" sourceRef="boundaryTimer_st_5" targetRef="adaptationTask">
+    </serviceTask><endEvent id="failureEndEvent" name="failureEndEvent"></endEvent><sequenceFlow id="flow_boundaryTimer_boundaryTimer_st_10" sourceRef="boundaryTimer_st_10" targetRef="adaptationTask">
       
-    </sequenceFlow><sequenceFlow id="flow_boundaryTimer_boundaryError_st_5" sourceRef="boundaryError_st_5" targetRef="adaptationTask">
+    </sequenceFlow><sequenceFlow id="flow_boundaryTimer_boundaryError_st_10" sourceRef="boundaryError_st_10" targetRef="adaptationTask">
       
     </sequenceFlow><sequenceFlow id="flow_boundaryTimer_boundaryTimer_st_3" sourceRef="boundaryTimer_st_3" targetRef="adaptationTask">
       
     </sequenceFlow><sequenceFlow id="flow_boundaryTimer_boundaryError_st_3" sourceRef="boundaryError_st_3" targetRef="adaptationTask">
-      
-    </sequenceFlow><sequenceFlow id="flow_boundaryTimer_boundaryTimer_st_10" sourceRef="boundaryTimer_st_10" targetRef="adaptationTask">
-      
-    </sequenceFlow><sequenceFlow id="flow_boundaryTimer_boundaryError_st_10" sourceRef="boundaryError_st_10" targetRef="adaptationTask">
-      
-    </sequenceFlow><sequenceFlow id="flow_boundaryTimer_boundaryTimer_st_8" sourceRef="boundaryTimer_st_8" targetRef="adaptationTask">
-      
-    </sequenceFlow><sequenceFlow id="flow_boundaryTimer_boundaryError_st_8" sourceRef="boundaryError_st_8" targetRef="adaptationTask">
-      
-    </sequenceFlow><sequenceFlow id="flow_boundaryTimer_boundaryTimer_st_4" sourceRef="boundaryTimer_st_4" targetRef="adaptationTask">
-      
-    </sequenceFlow><sequenceFlow id="flow_boundaryTimer_boundaryError_st_4" sourceRef="boundaryError_st_4" targetRef="adaptationTask">
-      
-    </sequenceFlow><sequenceFlow id="flow_boundaryTimer_boundaryTimer_st_2" sourceRef="boundaryTimer_st_2" targetRef="adaptationTask">
-      
-    </sequenceFlow><sequenceFlow id="flow_boundaryTimer_boundaryError_st_2" sourceRef="boundaryError_st_2" targetRef="adaptationTask">
-      
-    </sequenceFlow><sequenceFlow id="flow_boundaryTimer_boundaryTimer_st_6" sourceRef="boundaryTimer_st_6" targetRef="adaptationTask">
-      
-    </sequenceFlow><sequenceFlow id="flow_boundaryTimer_boundaryError_st_6" sourceRef="boundaryError_st_6" targetRef="adaptationTask">
       
     </sequenceFlow><sequenceFlow id="flow_boundaryTimer_boundaryTimer_st_1" sourceRef="boundaryTimer_st_1" targetRef="adaptationTask">
       
@@ -184,47 +152,57 @@
       
     </sequenceFlow><sequenceFlow id="flow_boundaryTimer_boundaryError_st_9" sourceRef="boundaryError_st_9" targetRef="adaptationTask">
       
-    </sequenceFlow><sequenceFlow id="flow_boundaryTimer_boundaryTimer_st_12" sourceRef="boundaryTimer_st_12" targetRef="adaptationTask">
+    </sequenceFlow><sequenceFlow id="flow_boundaryTimer_boundaryTimer_st_2" sourceRef="boundaryTimer_st_2" targetRef="adaptationTask">
       
-    </sequenceFlow><sequenceFlow id="flow_boundaryTimer_boundaryError_st_12" sourceRef="boundaryError_st_12" targetRef="adaptationTask">
+    </sequenceFlow><sequenceFlow id="flow_boundaryTimer_boundaryError_st_2" sourceRef="boundaryError_st_2" targetRef="adaptationTask">
       
-    </sequenceFlow><sequenceFlow id="flow_boundaryTimer_boundaryTimer_st_11" sourceRef="boundaryTimer_st_11" targetRef="adaptationTask">
+    </sequenceFlow><sequenceFlow id="flow_boundaryTimer_boundaryTimer_st_5" sourceRef="boundaryTimer_st_5" targetRef="adaptationTask">
       
-    </sequenceFlow><sequenceFlow id="flow_boundaryTimer_boundaryError_st_11" sourceRef="boundaryError_st_11" targetRef="adaptationTask">
+    </sequenceFlow><sequenceFlow id="flow_boundaryTimer_boundaryError_st_5" sourceRef="boundaryError_st_5" targetRef="adaptationTask">
+      
+    </sequenceFlow><sequenceFlow id="flow_boundaryTimer_boundaryTimer_st_6" sourceRef="boundaryTimer_st_6" targetRef="adaptationTask">
+      
+    </sequenceFlow><sequenceFlow id="flow_boundaryTimer_boundaryError_st_6" sourceRef="boundaryError_st_6" targetRef="adaptationTask">
+      
+    </sequenceFlow><sequenceFlow id="flow_boundaryTimer_boundaryTimer_st_4" sourceRef="boundaryTimer_st_4" targetRef="adaptationTask">
+      
+    </sequenceFlow><sequenceFlow id="flow_boundaryTimer_boundaryError_st_4" sourceRef="boundaryError_st_4" targetRef="adaptationTask">
       
     </sequenceFlow><sequenceFlow id="flow_boundaryTimer_boundaryTimer_st_7" sourceRef="boundaryTimer_st_7" targetRef="adaptationTask">
       
     </sequenceFlow><sequenceFlow id="flow_boundaryTimer_boundaryError_st_7" sourceRef="boundaryError_st_7" targetRef="adaptationTask">
       
-    </sequenceFlow><sequenceFlow id="flow_boundaryError_boundaryError_st_5" sourceRef="boundaryError_st_5" targetRef="adaptationTask">
+    </sequenceFlow><sequenceFlow id="flow_boundaryTimer_boundaryTimer_st_11" sourceRef="boundaryTimer_st_11" targetRef="adaptationTask">
       
-    </sequenceFlow><sequenceFlow id="flow_boundaryError_boundaryError_st_3" sourceRef="boundaryError_st_3" targetRef="adaptationTask">
+    </sequenceFlow><sequenceFlow id="flow_boundaryTimer_boundaryError_st_11" sourceRef="boundaryError_st_11" targetRef="adaptationTask">
+      
+    </sequenceFlow><sequenceFlow id="flow_boundaryTimer_boundaryTimer_st_8" sourceRef="boundaryTimer_st_8" targetRef="adaptationTask">
+      
+    </sequenceFlow><sequenceFlow id="flow_boundaryTimer_boundaryError_st_8" sourceRef="boundaryError_st_8" targetRef="adaptationTask">
       
     </sequenceFlow><sequenceFlow id="flow_boundaryError_boundaryError_st_10" sourceRef="boundaryError_st_10" targetRef="adaptationTask">
       
-    </sequenceFlow><sequenceFlow id="flow_boundaryError_boundaryError_st_8" sourceRef="boundaryError_st_8" targetRef="adaptationTask">
-      
-    </sequenceFlow><sequenceFlow id="flow_boundaryError_boundaryError_st_4" sourceRef="boundaryError_st_4" targetRef="adaptationTask">
-      
-    </sequenceFlow><sequenceFlow id="flow_boundaryError_boundaryError_st_2" sourceRef="boundaryError_st_2" targetRef="adaptationTask">
-      
-    </sequenceFlow><sequenceFlow id="flow_boundaryError_boundaryError_st_6" sourceRef="boundaryError_st_6" targetRef="adaptationTask">
+    </sequenceFlow><sequenceFlow id="flow_boundaryError_boundaryError_st_3" sourceRef="boundaryError_st_3" targetRef="adaptationTask">
       
     </sequenceFlow><sequenceFlow id="flow_boundaryError_boundaryError_st_1" sourceRef="boundaryError_st_1" targetRef="adaptationTask">
       
     </sequenceFlow><sequenceFlow id="flow_boundaryError_boundaryError_st_9" sourceRef="boundaryError_st_9" targetRef="adaptationTask">
       
-    </sequenceFlow><sequenceFlow id="flow_boundaryError_boundaryError_st_12" sourceRef="boundaryError_st_12" targetRef="adaptationTask">
+    </sequenceFlow><sequenceFlow id="flow_boundaryError_boundaryError_st_2" sourceRef="boundaryError_st_2" targetRef="adaptationTask">
       
-    </sequenceFlow><sequenceFlow id="flow_boundaryError_boundaryError_st_11" sourceRef="boundaryError_st_11" targetRef="adaptationTask">
+    </sequenceFlow><sequenceFlow id="flow_boundaryError_boundaryError_st_5" sourceRef="boundaryError_st_5" targetRef="adaptationTask">
+      
+    </sequenceFlow><sequenceFlow id="flow_boundaryError_boundaryError_st_6" sourceRef="boundaryError_st_6" targetRef="adaptationTask">
+      
+    </sequenceFlow><sequenceFlow id="flow_boundaryError_boundaryError_st_4" sourceRef="boundaryError_st_4" targetRef="adaptationTask">
       
     </sequenceFlow><sequenceFlow id="flow_boundaryError_boundaryError_st_7" sourceRef="boundaryError_st_7" targetRef="adaptationTask">
       
-    </sequenceFlow><sequenceFlow id="SequenceFlow_12" sourceRef="st_12" targetRef="endEv_1">
-      <conditionExpression xsi:type="tFormalExpression">
-      <![CDATA[${⊤}]]>
-    </conditionExpression>
-    </sequenceFlow><sequenceFlow id="SequenceFlow_11" sourceRef="st_11" targetRef="st_12">
+    </sequenceFlow><sequenceFlow id="flow_boundaryError_boundaryError_st_11" sourceRef="boundaryError_st_11" targetRef="adaptationTask">
+      
+    </sequenceFlow><sequenceFlow id="flow_boundaryError_boundaryError_st_8" sourceRef="boundaryError_st_8" targetRef="adaptationTask">
+      
+    </sequenceFlow><sequenceFlow id="SequenceFlow_11" sourceRef="st_11" targetRef="endEv_1">
       <conditionExpression xsi:type="tFormalExpression">
       <![CDATA[${⊤}]]>
     </conditionExpression>
