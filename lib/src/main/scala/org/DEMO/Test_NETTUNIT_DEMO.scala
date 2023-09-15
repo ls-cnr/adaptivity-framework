@@ -44,24 +44,24 @@ object Test_NETTUNIT_DEMO /*extends App */ {
     val goalModelDEMO = NETTUNITParser.loadGoalModelFromFile(goalModelDEMOPath)
     var string_model = goalModelDEMO2BPMN(NETTUNITDefinitionsDEMO.initial, goalModelDEMO)
 
-    val goalModelComune = NETTUNITParser.loadGoalModelFromFile(goalModelCOMUNEPath)
-    var string_model_comune = goalModelDEMO2BPMN(NETTUNITDefinitionsDEMO.initial_comunepcct, goalModelComune)
+    //val goalModelComune = NETTUNITParser.loadGoalModelFromFile(goalModelCOMUNEPath)
+    //var string_model_comune = goalModelDEMO2BPMN(NETTUNITDefinitionsDEMO.initial_comunepcct, goalModelComune)
 
-    val goalModelPCCT = NETTUNITParser.loadGoalModelFromFile(goalModelPCCTPath)
-    var string_model_pcct = goalModelDEMO2BPMN(NETTUNITDefinitionsDEMO.initial_comunepcct, goalModelPCCT)
+    //val goalModelPCCT = NETTUNITParser.loadGoalModelFromFile(goalModelPCCTPath)
+    //var string_model_pcct = goalModelDEMO2BPMN(NETTUNITDefinitionsDEMO.initial_comunepcct, goalModelPCCT)
 
     string_model = string_model.replace("flowable:executionListener", "activiti:executionListener")
     string_model = string_model.replace("flowable:class", "activiti:class")
 
-    string_model_comune = string_model_comune.replace("flowable:executionListener", "activiti:executionListener")
-    string_model_comune = string_model_comune.replace("flowable:class", "activiti:class")
+    //string_model_comune = string_model_comune.replace("flowable:executionListener", "activiti:executionListener")
+    //string_model_comune = string_model_comune.replace("flowable:class", "activiti:class")
 
-    string_model_pcct = string_model_pcct.replace("flowable:executionListener", "activiti:executionListener")
-    string_model_pcct = string_model_pcct.replace("flowable:class", "activiti:class")
+    //string_model_pcct = string_model_pcct.replace("flowable:executionListener", "activiti:executionListener")
+    //string_model_pcct = string_model_pcct.replace("flowable:class", "activiti:class")
 
     Files.write(Paths.get("main_demo_process.bpmn"), string_model.getBytes(StandardCharsets.UTF_8))
-    Files.write(Paths.get("pcct_demo_process.bpmn"), string_model_pcct.getBytes(StandardCharsets.UTF_8))
-    Files.write(Paths.get("comune_demo_process.bpmn"), string_model_comune.getBytes(StandardCharsets.UTF_8))
+    //Files.write(Paths.get("pcct_demo_process.bpmn"), string_model_pcct.getBytes(StandardCharsets.UTF_8))
+    //Files.write(Paths.get("comune_demo_process.bpmn"), string_model_comune.getBytes(StandardCharsets.UTF_8))
 
     println(string_model)
   }
@@ -131,6 +131,12 @@ object Test_NETTUNIT_DEMO /*extends App */ {
       val wts = solver.solution_set.full_wts(0) //Get first working WTS
 
       val converter = new WTS2Solution(wts, my_problem.I)
+
+      println("DOT")
+      println("")
+      println(converter.to_graphviz())
+      println("")
+      println("")
 
       // Abstract WF to BPMN
       val solution = grounder.groundSolution(converter)

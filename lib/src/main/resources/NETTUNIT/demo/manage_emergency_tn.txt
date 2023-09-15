@@ -1,12 +1,13 @@
-GOAL managing_emergency_tn IS AND OF {
-    GOAL identifying_incident_tn: WHEN emergency_location_tn(volcano) AND NOT assessed_emergency_tn THEN THE pctn ROLE SHALL ADDRESS FINALLY identified_incident_tn(volcano)
-    GOAL involve_pctn_tn: WHEN identified_incident_tn(volcano) THEN THE pctn ROLE SHALL ADDRESS FINALLY involved_pertinent_bodies_tn(pctn)
-    GOAL evaluate_incident_scenario_tn: WHEN involved_pertinent_bodies_tn(pctn) THEN THE pctn ROLE SHALL ADDRESS FINALLY scenario_evaluated_tn
-    GOAL ask_for_airborne_dispersion_estimate_tn: WHEN scenario_evaluated_tn THEN THE pctn ROLE SHALL ADDRESS FINALLY obtained_airborne_estimate_tn
-    GOAL involve_pertinent_roles_inm_tn: WHEN obtained_airborne_estimate_tn THEN THE inm ROLE SHALL ADDRESS FINALLY involved_pertinent_bodies_tn(inm)
-    GOAL update_airborne_dispersion_data_tn: WHEN involved_pertinent_bodies_tn(inm) THEN THE inm ROLE SHALL ADDRESS FINALLY updated_airborne_dispersion_data_tn
-    GOAL ask_for_health_risk_estimate_tn: WHEN updated_airborne_dispersion_data_tn THEN THE pctn ROLE SHALL ADDRESS FINALLY obtained_health_risk_estimate_tn
-    GOAL involve_pertinent_roles_hama_tn: WHEN obtained_health_risk_estimate_tn THEN THE hama ROLE SHALL ADDRESS FINALLY involved_pertinent_bodies_tn(hama)
-    GOAL update_health_risk_data_tn: WHEN involved_pertinent_bodies_tn(hama) THEN THE hama ROLE SHALL ADDRESS FINALLY updated_health_risk_data_tn
-    GOAL inform_involved_local_authorities_tn: WHEN updated_health_risk_data_tn THEN THE pctn ROLE SHALL ADDRESS FINALLY involved_local_authorities_tn
-}
+ GOAL managing_emergency_tn IS AND OF {
+     GOAL identifying_incident_tn: WHEN emergency_location_tn(volcano) AND NOT assessed_emergency_tn THEN THE pctn ROLE SHALL ADDRESS FINALLY identified_incident_tn(volcano)
+     GOAL involve_pctn_tn: WHEN identified_incident_tn(volcano) THEN THE pctn ROLE SHALL ADDRESS FINALLY involved_pertinent_bodies_tn(pctn)
+     GOAL evaluate_incident_scenario_tn: WHEN involved_pertinent_bodies_tn(pctn) THEN THE pctn ROLE SHALL ADDRESS FINALLY scenario_evaluated_tn
+     GOAL ask_for_airborne_dispersion_estimate_tn: WHEN scenario_evaluated_tn THEN THE pctn ROLE SHALL ADDRESS FINALLY obtained_airborne_estimate_tn
+     GOAL involve_pertinent_roles_inm_tn: WHEN obtained_airborne_estimate_tn THEN THE inm ROLE SHALL ADDRESS FINALLY involved_pertinent_bodies_tn(inm)
+     GOAL update_airborne_dispersion_data_tn: WHEN involved_pertinent_bodies_tn(inm) THEN THE inm ROLE SHALL ADDRESS FINALLY updated_airborne_dispersion_data_tn
+     GOAL ask_for_health_risk_estimate_tn: WHEN updated_airborne_dispersion_data_tn THEN THE pctn ROLE SHALL ADDRESS FINALLY obtained_health_risk_estimate_tn
+     GOAL involve_pertinent_roles_hama_tn: WHEN obtained_health_risk_estimate_tn THEN THE hama ROLE SHALL ADDRESS FINALLY involved_pertinent_bodies_tn(hama)
+     GOAL update_health_risk_data_tn: WHEN involved_pertinent_bodies_tn(hama) THEN THE hama ROLE SHALL ADDRESS FINALLY updated_health_risk_data_tn
+     GOAL inform_involved_local_authorities_tn: WHEN updated_health_risk_data_tn THEN THE pctn ROLE SHALL ADDRESS FINALLY involved_local_authorities_tn
+ }
+
