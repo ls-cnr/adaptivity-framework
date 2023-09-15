@@ -24,6 +24,14 @@ class TimerBoundaryEventDecorator extends NETTUNITProcessDecorator {
 
         head :: ev :: decorateItemsAux(tail, itemID + 1)
       }
+      case (head: TriggerableServiceTask) :: tail => {
+        val ev = Event(s"boundaryTimer_${head.id}",
+          s"boundaryTimer_${head.label}",
+          EventType.Boundary.toString,
+          FlowableTimerEventDefinition(head.id, dummyTimeCondition))
+
+        head :: ev :: decorateItemsAux(tail, itemID + 1)
+      }
       case (head: Item) :: tail => head :: decorateItemsAux(tail, itemID + 1)
       case Nil => List()
     }

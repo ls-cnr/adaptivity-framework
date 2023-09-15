@@ -25,6 +25,13 @@ class BoundaryErrorEventDecorator extends NETTUNITProcessDecorator {
           FlowableErrorEventDefinition(head.id, boundaryErrorEventErrCode))
         head :: ev :: decorateItemsAux(tail, itemID + 1)
       }
+      case (head: TriggerableServiceTask) :: tail => {
+        val ev = Event(s"boundaryError_${head.id}",
+          s"boundaryError_${head.label}",
+          EventType.Boundary.toString,
+          FlowableErrorEventDefinition(head.id, boundaryErrorEventErrCode))
+        head :: ev :: decorateItemsAux(tail, itemID + 1)
+      }
       case (head: Item) :: tail => head :: decorateItemsAux(tail, itemID + 1)
       case Nil => List()
     }
