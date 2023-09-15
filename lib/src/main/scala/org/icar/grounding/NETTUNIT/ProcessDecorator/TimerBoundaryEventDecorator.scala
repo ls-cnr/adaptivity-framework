@@ -7,6 +7,17 @@ class TimerBoundaryEventDecorator extends NETTUNITProcessDecorator {
 
   val dummyTimeCondition = "PT20S"
 
+  def getTimeConditionForTask(taskLabel: String): String = {
+    taskLabel match {
+      case "Involve Pertinent Roles Pcrs" => "PT20S"
+      //...
+
+
+      case _ => ""
+    }
+  }
+
+
   /**
    * Decorate all ServiceTask with a BoundaryEvent
    *
@@ -17,20 +28,31 @@ class TimerBoundaryEventDecorator extends NETTUNITProcessDecorator {
   def decorateItems(items: List[Item]): List[Item] = {
     def decorateItemsAux(items: List[Item], itemID: Int): List[Item] = items match {
       case (head: ServiceTask) :: tail => {
-        val ev = Event(s"boundaryTimer_${head.id}",
-          s"boundaryTimer_${head.label}",
-          EventType.Boundary.toString,
-          FlowableTimerEventDefinition(head.id, dummyTimeCondition))
+        //Do I have a time constraint for the task?
+        if (getTimeConditionForTask(head.label).isEmpty) {
+          //No, do not add any timer
+          head :: decorateItemsAux(tail, itemID + 1)
+        }
+        else {
+          //Yes, add the boundary event and decorate the task
+          val ev = Event(s"boundaryTimer_${head.id}",
+            s"boundaryTimer_${head.label}",
+            EventType.Boundary.toString,
+            FlowableTimerEventDefinition(head.id, /*dummyTimeCondition*/ getTimeConditionForTask(head.label)))
+          head :: ev :: decorateItemsAux(tail, itemID + 1)
+        }
 
-        head :: ev :: decorateItemsAux(tail, itemID + 1)
       }
       case (head: TriggerableServiceTask) :: tail => {
-        val ev = Event(s"boundaryTimer_${head.id}",
-          s"boundaryTimer_${head.label}",
-          EventType.Boundary.toString,
-          FlowableTimerEventDefinition(head.id, dummyTimeCondition))
-
-        head :: ev :: decorateItemsAux(tail, itemID + 1)
+        if (getTimeConditionForTask(head.label).isEmpty)
+          head :: decorateItemsAux(tail, itemID + 1)
+        else {
+          val ev = Event(s"boundaryTimer_${head.id}",
+            s"boundaryTimer_${head.label}",
+            EventType.Boundary.toString,
+            FlowableTimerEventDefinition(head.id, /*dummyTimeCondition*/ getTimeConditionForTask(head.label)))
+          head :: ev :: decorateItemsAux(tail, itemID + 1)
+        }
       }
       case (head: Item) :: tail => head :: decorateItemsAux(tail, itemID + 1)
       case Nil => List()
