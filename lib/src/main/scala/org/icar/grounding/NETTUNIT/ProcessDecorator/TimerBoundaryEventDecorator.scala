@@ -2,7 +2,6 @@ package org.icar.grounding.NETTUNIT.ProcessDecorator
 
 import org.DEMO.NETTUNITRepositoryDEMO
 import org.icar.bpmn2goal._
-import org.icar.grounding.ConcreteCapabilityGrounding
 import org.icar.grounding.NETTUNIT.NETTUNITProcessDecoratorStrategy.adaptationRequestTask
 
 class TimerBoundaryEventDecorator extends NETTUNITProcessDecorator {
@@ -11,11 +10,11 @@ class TimerBoundaryEventDecorator extends NETTUNITProcessDecorator {
 
   def getTimeConditionForTask(taskLabel: String): String = {
     taskLabel match {
-      case "update_health_risk_data" => "PT5M"
+      case "Involve Pertinent Roles Pcrs" => "PT20S"
       //...
 
 
-      case _ => "PT3H"
+      case _ => ""
     }
   }
 
@@ -29,13 +28,12 @@ class TimerBoundaryEventDecorator extends NETTUNITProcessDecorator {
    */
   def decorateItems(items: List[Item]): List[Item] = {
     def decorateItemsAux(items: List[Item], itemID: Int): List[Item] = items match {
-
       case (head: ServiceTask) :: tail => {
         //Do I have a time constraint for the task?
-        val concrete: ConcreteCapabilityGrounding = NETTUNITRepositoryDEMO.getFromServiceImplName(head.className).head;
-        val abstract_name = concrete.serviceName;
 
-        if (getTimeConditionForTask(abstract_name).isEmpty) {
+        val abst = NETTUNITRepositoryDEMO.getFromServiceImplName(head.className)
+        abst
+        if (getTimeConditionForTask(head.label).isEmpty) {
           //No, do not add any timer
           head :: decorateItemsAux(tail, itemID + 1)
         }
@@ -50,11 +48,7 @@ class TimerBoundaryEventDecorator extends NETTUNITProcessDecorator {
 
       }
       case (head: TriggerableServiceTask) :: tail => {
-        //Do I have a time constraint for the task?
-        val concrete: ConcreteCapabilityGrounding = NETTUNITRepositoryDEMO.getFromServiceImplName(head.className).head;
-        val abstract_name = concrete.serviceName;
-
-        if (getTimeConditionForTask(abstract_name).isEmpty)
+        if (getTimeConditionForTask(head.label).isEmpty)
           head :: decorateItemsAux(tail, itemID + 1)
         else {
           val ev = Event(s"boundaryTimer_${head.id}",

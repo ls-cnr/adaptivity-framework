@@ -46,6 +46,16 @@ object NETTUNITServer {
       .header("Content-Type", "application/xml").asString
   }
 
+  def deployToFlowable(processDefID:String, processBPMNDef: String): Unit = {
+    //replace tee with a dummy variable...
+    val teeSymbol = "\u22A4"
+    val repl = "${myVariable}"
+    val newProcessDef = processBPMNDef.replace(teeSymbol, repl)
+    val resultDeploy = scalaj.http.Http(s"http://${FlowableAddress}:${FlowablePort}/NETTUNIT/deployProcess/${processDefID}")
+      .postData(newProcessDef)
+      .header("Content-Type", "application/xml").asString
+  }
+
   def main(args: Array[String]): Unit = {
 
     implicit val system = ActorSystem("nettunit")
@@ -70,8 +80,12 @@ object NETTUNITServer {
           decodeRequest {
             // unmarshal as string
             entity(as[String]) { processDefBPMN =>
-              deployToFlowable(processDefBPMN)
-              complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "Process deployed to Flowable."))
+              val the_model = processDefBPMN.split(":", 2)
+              val processDefID = the_model(0)
+              val processBPMN = the_model(1)
+              deployToFlowable(processDefID,processBPMN)
+              //deployToFlowable(processDefBPMN)
+              complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, s"Process '${processDefID}' deployed to Flowable."))
             }
           }
         }
@@ -83,6 +97,34 @@ object NETTUNITServer {
             entity(as[String]) { str =>
               val the_model = str.split(":", 2)
               val process_name = the_model(0)
+
+              if (current_state.statements.isEmpty)
+                current_state = NETTUNITDefinitionsDEMO.initial;
+
+              val goalModel = NETTUNITParser.loadGoalModel(the_model(1))
+              //val goalModel = NETTUNITParser.loadGoalModel(str)
+
+              //val bpmn_string = Test_NETTUNIT.goalModel2BPMN(goalModel)
+              val bpmn_string = Test_NETTUNIT_DEMO.goalModelDEMO2BPMN(current_state, goalModel, process_name)
+
+              val teeSymbol = "\u22A4" //true
+              val teeDownSymbol = "\u22A5" //false
+              var correct_bpmn_def = bpmn_string.replace(teeSymbol, "myVariable")
+              correct_bpmn_def = correct_bpmn_def.replace(teeDownSymbol, "!myVariable")
+
+              complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, correct_bpmn_def))
+            }
+          }
+        }
+      },
+      path("Goal2BPMNWithState") {
+        post {
+          decodeRequest {
+            // unmarshal as string
+            entity(as[String]) { str =>
+              val the_model = str.split(":", 3)
+              val process_name = the_model(0)
+              val stateOfWorldStr = the_model(1)
 
               if (current_state.statements.isEmpty)
                 current_state = NETTUNITDefinitionsDEMO.initial;
