@@ -149,7 +149,7 @@ object NETTUNITServer {
               val op_type: String = string_array(0)
               val pred_string: String = string_array(1)
               val capabilityServiceClass: String = string_array(2)
-
+              println(s":: Received predicate (Update) ${pred_string}")
               val parser = new FormulaParser();
               val parsed_predicate: parser.ParseResult[Predicate] = parser.parseAll(parser.predicate, pred_string)
               val predicate: Predicate = parsed_predicate.get
