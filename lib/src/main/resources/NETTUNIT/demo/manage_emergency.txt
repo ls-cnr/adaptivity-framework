@@ -7,7 +7,7 @@ GOAL managing_emergency IS AND OF {
     GOAL involve_local_mayor: WHEN scenario_evaluated THEN THE SYSTEM ROLE SHALL ADDRESS FINALLY involved_pertinent_bodies(ct_mayor)
 
     GOAL estimate_airborne_dispersion IS AND OF {
-    	GOAL involve_inm: WHEN scenario_evaluated THEN THE SYSTEM ROLE SHALL ADDRESS FINALLY involved_pertinent_bodies(inm)
+    	GOAL involve_inm: WHEN involved_pertinent_bodies(ct_mayor) THEN THE SYSTEM ROLE SHALL ADDRESS FINALLY involved_pertinent_bodies(inm)
     	GOAL update_airborne_dispersion_data: WHEN involved_pertinent_bodies(inm) THEN THE inm ROLE SHALL ADDRESS FINALLY updated_airborne_dispersion_data
     }
 

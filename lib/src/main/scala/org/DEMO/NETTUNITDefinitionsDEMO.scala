@@ -11,7 +11,9 @@ object NETTUNITDefinitionsDEMO {
     StringEnum_DomainType("EMG_COMPETENT_BODY_ROLE", Array("pcrs", "irib", "inm", "pcct", "ct_mayor", "comune", "pctn", "hama", "regions_tn", "ariana")),
     StringEnum_DomainType("EMG_COMPETENT_BODY_ROLE_TN", Array("pctn", "hama", "regions_tn", "ariana", "inm")),
 
-    StringEnum_DomainType("EMG_RESPONSE_TYPE_RESPONSIBLE", Array("pcct", "comune")),
+    StringEnum_DomainType("EMG_RESPONSE_RESPONSIBLE", Array("pcct", "comune")),
+    StringEnum_DomainType("EMG_RESPONSE_TYPE", Array("opening", "closing")),
+
     StringEnum_DomainType("EMG_RESPONSE_TYPE_RESPONSIBLE_TN", Array("ariana", "regions_tn", "inm")),
     /*StringEnum_DomainType("ALARM_STATE", Array("attention", "pre_alert", "alert")),
     StringEnum_DomainType("AUTHORITY_ROLE", Array("prefect", "mayor", "questor", "municipality")),
@@ -92,23 +94,24 @@ object NETTUNITDefinitionsDEMO {
 
 
     DomainPredicate("involved_competent_roles", List(
-      DomainVariable("role", "EMG_RESPONSE_TYPE_RESPONSIBLE"),
+      DomainVariable("role", "EMG_RESPONSE_RESPONSIBLE"),
     )),
 
     DomainPredicate("decided_response_type", List(
-      DomainVariable("role", "EMG_RESPONSE_TYPE_RESPONSIBLE"),
+      DomainVariable("role", "EMG_RESPONSE_RESPONSIBLE"),
     )),
 
     DomainPredicate("informed_citizens", List(
-      DomainVariable("role", "EMG_RESPONSE_TYPE_RESPONSIBLE"),
+      DomainVariable("role", "EMG_RESPONSE_RESPONSIBLE"),
+      DomainVariable("infor_type", "EMG_RESPONSE_TYPE"),
     )),
 
     DomainPredicate("inform_via_app", List(
-      DomainVariable("role", "EMG_RESPONSE_TYPE_RESPONSIBLE"),
+      DomainVariable("role", "EMG_RESPONSE_RESPONSIBLE"),
     )),
 
     DomainPredicate("assessed_event_severity", List(
-      DomainVariable("role", "EMG_RESPONSE_TYPE_RESPONSIBLE"),
+      DomainVariable("role", "EMG_RESPONSE_RESPONSIBLE"),
     )),
 
 
@@ -713,9 +716,6 @@ object NETTUNITDefinitionsDEMO {
   )
 
   val comune_decide_response_type = AbstractCapability(
-    /*
-    GOAL comune_decide_response_type: WHEN involved_competent_roles(comune) THEN THE comune ROLE SHALL ADDRESS FINALLY decided_response_type(comune)
-    */
     id = "comune_decide_response_type",
 
     params = List(),
@@ -730,32 +730,11 @@ object NETTUNITDefinitionsDEMO {
     future = List.empty
   )
 
-  val comune_inform_citizen = AbstractCapability(
-    /*
-    GOAL comune_inform_citizen: WHEN decided_response_type(comune) THEN THE comune ROLE SHALL ADDRESS FINALLY informed_citizens(comune)
-    */
-    id = "comune_inform_citizen",
-
-    params = List(),
-    pre = GroundPredicate("decided_response_type", List(AtomTerm("comune"))),
-    post = GroundPredicate("informed_citizens", List(AtomTerm("comune"))),
-
-    effects = Array(
-      EvolutionGrounding("inform_citizen", Array[EvoOperator](
-        AddOperator(Predicate("informed_citizens", List(AtomTerm("comune")))),
-      )),
-    ),
-    future = List.empty
-  )
-
   val comune_monitor_event_severity = AbstractCapability(
-    /*
-    GOAL comune_monitor_event_severity: WHEN informed_citizens(comune) THEN THE comune ROLE SHALL ADDRESS FINALLY assessed_event_severity_comune
-    */
     id = "comune_monitor_event_severity",
 
     params = List(),
-    pre = GroundPredicate("informed_citizens", List(AtomTerm("comune"))),
+    pre = GroundPredicate("informed_citizens", List(AtomTerm("comune"),AtomTerm("opening"))),
     post = GroundPredicate("assessed_event_severity", List(AtomTerm("comune"))),
 
     effects = Array(
@@ -766,19 +745,31 @@ object NETTUNITDefinitionsDEMO {
     future = List.empty
   )
 
-  val comune_inform_citizen_via_app = AbstractCapability(
-    /*
-    GOAL comune_inform_citizen_via_app: WHEN assessed_event_severity_comune THEN THE comune ROLE SHALL ADDRESS FINALLY  inform_via_app(comune)
-    */
-    id = "comune_inform_citizen_via_app",
+  val comune_inform_citizen_opening = AbstractCapability(
+    id = "comune_inform_citizen_opening",
+
+    params = List(),
+    pre = GroundPredicate("decided_response_type", List(AtomTerm("comune"))),
+    post = GroundPredicate("informed_citizens", List(AtomTerm("comune"),AtomTerm("opening"))),
+
+    effects = Array(
+      EvolutionGrounding("inform_citizen", Array[EvoOperator](
+        AddOperator(Predicate("informed_citizens", List(AtomTerm("comune"),AtomTerm("opening")))),
+      )),
+    ),
+    future = List.empty
+  )
+
+  val comune_inform_citizen_closing = AbstractCapability(
+    id = "comune_inform_citizen_closing",
 
     params = List(),
     pre = GroundPredicate("assessed_event_severity", List(AtomTerm("comune"))),
-    post = GroundPredicate("inform_via_app", List(AtomTerm("comune"))),
+    post = GroundPredicate("informed_citizens", List(AtomTerm("comune"),AtomTerm("closing"))),
 
     effects = Array(
       EvolutionGrounding("inform", Array[EvoOperator](
-        AddOperator(Predicate("inform_via_app", List(AtomTerm("comune")))),
+        AddOperator(Predicate("informed_citizens", List(AtomTerm("comune"),AtomTerm("closing")))),
       )),
     ),
     future = List.empty
@@ -823,23 +814,38 @@ object NETTUNITDefinitionsDEMO {
     future = List.empty
   )
 
-  val pcct_inform_citizen = AbstractCapability(
-    /*
-    GOAL pcct_inform_citizen: WHEN decided_response_type(pcct) THEN THE pcct ROLE SHALL ADDRESS FINALLY informed_citizens(pcct)
-    */
-    id = "pcct_inform_citizen",
+
+  val pcct_inform_citizen_opening = AbstractCapability(
+    id = "comune_inform_citizen_opening",
 
     params = List(),
     pre = GroundPredicate("decided_response_type", List(AtomTerm("pcct"))),
-    post = GroundPredicate("informed_citizens", List(AtomTerm("pcct"))),
+    post = GroundPredicate("informed_citizens", List(AtomTerm("pcct"),AtomTerm("opening"))),
 
     effects = Array(
       EvolutionGrounding("inform_citizen", Array[EvoOperator](
-        AddOperator(Predicate("informed_citizens", List(AtomTerm("pcct")))),
+        AddOperator(Predicate("informed_citizens", List(AtomTerm("pcct"),AtomTerm("opening")))),
       )),
     ),
     future = List.empty
   )
+
+  val pcct_inform_citizen_closing = AbstractCapability(
+    id = "comune_inform_citizen_closing",
+
+    params = List(),
+    pre = GroundPredicate("assessed_event_severity", List(AtomTerm("pcct"))),
+    post = GroundPredicate("informed_citizens", List(AtomTerm("pcct"),AtomTerm("closing"))),
+
+    effects = Array(
+      EvolutionGrounding("inform", Array[EvoOperator](
+        AddOperator(Predicate("informed_citizens", List(AtomTerm("pcct"),AtomTerm("closing")))),
+      )),
+    ),
+    future = List.empty
+  )
+
+
 
   val pcct_monitor_event_severity = AbstractCapability(
     /*
@@ -848,7 +854,7 @@ object NETTUNITDefinitionsDEMO {
     id = "pcct_monitor_event_severity",
 
     params = List(),
-    pre = GroundPredicate("informed_citizens", List(AtomTerm("pcct"))),
+    pre = GroundPredicate("informed_citizens", List(AtomTerm("pcct"),AtomTerm("opening"))),
     post = GroundPredicate("assessed_event_severity", List(AtomTerm("pcct"))),
 
     effects = Array(
@@ -859,23 +865,6 @@ object NETTUNITDefinitionsDEMO {
     future = List.empty
   )
 
-  val pcct_inform_citizen_via_app = AbstractCapability(
-    /*
-    GOAL pcct_inform_citizen_via_app: WHEN assessed_event_severity_pcct THEN THE pcct ROLE SHALL ADDRESS FINALLY  inform_via_app(pcct)
-    */
-    id = "pcct_inform_citizen_via_app",
-
-    params = List(),
-    pre = GroundPredicate("assessed_event_severity", List(AtomTerm("pcct"))),
-    post = GroundPredicate("inform_via_app", List(AtomTerm("pcct"))),
-
-    effects = Array(
-      EvolutionGrounding("inform", Array[EvoOperator](
-        AddOperator(Predicate("inform_via_app", List(AtomTerm("pcct")))),
-      )),
-    ),
-    future = List.empty
-  )
 
   val sys_action = Array(
     identifying_incident,
@@ -896,15 +885,16 @@ object NETTUNITDefinitionsDEMO {
 
     comune_involve_competent_roles,
     comune_decide_response_type,
-    comune_inform_citizen,
     comune_monitor_event_severity,
-    comune_inform_citizen_via_app,
+    comune_inform_citizen_opening,
+    comune_inform_citizen_closing,
 
     pcct_involve_competent_roles,
     pcct_decide_response_type,
-    pcct_inform_citizen,
     pcct_monitor_event_severity,
-    pcct_inform_citizen_via_app,
+    pcct_inform_citizen_opening,
+    pcct_inform_citizen_closing,
+
     //----
     identifying_incident_tn,
     involve_pertinent_roles_pctn,

@@ -1,6 +1,6 @@
 GOAL process_pc_ct IS AND OF {
     GOAL pc_ct_decide_response_type: WHEN involved_competent_roles(pcct) THEN THE pcct ROLE SHALL ADDRESS FINALLY decided_response_type(pcct)
-    GOAL pc_ct_inform_citizen: WHEN decided_response_type(pcct) THEN THE pcct ROLE SHALL ADDRESS FINALLY informed_citizens(pcct)
-    GOAL pc_ct_monitor_event_severity: WHEN informed_citizens(pcct) THEN THE pcct ROLE SHALL ADDRESS FINALLY assessed_event_severity(pcct)
-    GOAL pc_ct_inform_citizen_via_app: WHEN assessed_event_severity(pcct) THEN THE pcct ROLE SHALL ADDRESS FINALLY  inform_via_app(pcct)
+    GOAL pc_ct_inform_citizen_opening_emergency: WHEN decided_response_type(pcct) THEN THE pcct ROLE SHALL ADDRESS FINALLY informed_citizens(pcct,opening)
+    GOAL pc_ct_monitor_event_severity: WHEN informed_citizens(pcct,opening) THEN THE pcct ROLE SHALL ADDRESS FINALLY assessed_event_severity(pcct)
+    GOAL pc_ct_inform_citizen_closing_emergency: WHEN assessed_event_severity(pcct) THEN THE pcct ROLE SHALL ADDRESS FINALLY  informed_citizens(pcct,closing)
 }
