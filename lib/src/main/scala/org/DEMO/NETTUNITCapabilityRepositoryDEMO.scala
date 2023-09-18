@@ -158,7 +158,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
 
-  add("comune_inform_citizen_opening_sirens",
+  add("comune_inform_citizen_opening",
     ConcreteCapability(12,
       "Comune Inform Citizen Opening Sirens",
       false,
@@ -168,7 +168,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
 
-  add("comune_inform_citizen_opening_app",
+  add("comune_inform_citizen_opening",
     ConcreteCapability(14,
       "Comune Inform Citizen Opening App",
       false,
@@ -178,7 +178,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
 
-  add("comune_inform_citizen_closing_sirens",
+  add("comune_inform_citizen_closing",
     ConcreteCapability(12,
       "Comune Inform Citizen Closing Sirens",
       false,
@@ -188,7 +188,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
 
-  add("comune_inform_citizen_closing_sirens",
+  add("comune_inform_citizen_closing",
     ConcreteCapability(14,
       "Comune Inform Citizen Closing App",
       false,
@@ -231,7 +231,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
 
-  add("pcct_inform_citizen_opening_sirens",
+  add("pcct_inform_citizen_opening",
     ConcreteCapability(12,
       "PCCT Inform Citizen Opening Sirens",
       false,
@@ -241,7 +241,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
 
-  add("pcct_inform_citizen_opening_app",
+  add("pcct_inform_citizen_opening",
     ConcreteCapability(14,
       "PCCT Inform Citizen Opening App",
       false,
@@ -251,7 +251,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
 
-  add("pcct_inform_citizen_closing_sirens",
+  add("pcct_inform_citizen_closing",
     ConcreteCapability(12,
       "PCCT Inform Citizen Closing Sirens",
       false,
@@ -261,7 +261,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
 
-  add("pcct_inform_citizen_closing_sirens",
+  add("pcct_inform_citizen_closing",
     ConcreteCapability(14,
       "PCCT Inform Citizen Closing App",
       false,

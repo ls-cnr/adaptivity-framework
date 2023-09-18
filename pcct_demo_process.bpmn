@@ -1,6 +1,18 @@
 <definitions typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:activiti="http://activiti.org/bpmn" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:flowable="http://flowable.org/bpmn">
       <process id="CrossBorderEmergencyPlan" name="CrossBorderEmergencyPlan" isExecutable="true">
-        <serviceTask id="st_1" name="Pc Ct Decide Response Type" flowable:triggerable="false" activiti:class="nettunit.handler.demo.it.pcct_decide_response_type">
+        <serviceTask id="st_2" name="Comune Inform Citizen Opening Sirens" flowable:triggerable="false" activiti:class="nettunit.handler.demo.it.comune_inform_citizen_opening_sirens">
+      <extensionElements>
+        <activiti:executionListener event="start" class="nettunit.listener.TaskStartedExecutionListenerImpl"></activiti:executionListener><activiti:executionListener event="end" class="nettunit.listener.TaskEndedExecutionListenerImpl"></activiti:executionListener>
+      </extensionElements>
+    </serviceTask><boundaryEvent id="boundaryTimer_st_2" name="boundaryTimer_Comune Inform Citizen Opening Sirens" attachedToRef="st_2">
+        <timerEventDefinition>
+        <timeDuration>
+          PT3H
+        </timeDuration>
+      </timerEventDefinition>
+      </boundaryEvent><boundaryEvent id="boundaryError_st_2" name="boundaryError_Comune Inform Citizen Opening Sirens" attachedToRef="st_2">
+        <errorEventDefinition errorRef="REQUIRE_ORCHESTRATION"></errorEventDefinition>
+      </boundaryEvent><serviceTask id="st_1" name="Pc Ct Decide Response Type" flowable:triggerable="false" activiti:class="nettunit.handler.demo.it.pcct_decide_response_type">
       <extensionElements>
         <activiti:executionListener event="start" class="nettunit.listener.TaskStartedExecutionListenerImpl"></activiti:executionListener><activiti:executionListener event="end" class="nettunit.listener.TaskEndedExecutionListenerImpl"></activiti:executionListener>
       </extensionElements>
@@ -24,11 +36,27 @@
       </timerEventDefinition>
       </boundaryEvent><boundaryEvent id="boundaryError_st_3" name="boundaryError_Pc Ct Monitor Event Severity" attachedToRef="st_3">
         <errorEventDefinition errorRef="REQUIRE_ORCHESTRATION"></errorEventDefinition>
+      </boundaryEvent><serviceTask id="st_4" name="Comune Inform Citizen Closing Sirens" flowable:triggerable="false" activiti:class="nettunit.handler.demo.it.comune_inform_citizen_closing_sirens">
+      <extensionElements>
+        <activiti:executionListener event="start" class="nettunit.listener.TaskStartedExecutionListenerImpl"></activiti:executionListener><activiti:executionListener event="end" class="nettunit.listener.TaskEndedExecutionListenerImpl"></activiti:executionListener>
+      </extensionElements>
+    </serviceTask><boundaryEvent id="boundaryTimer_st_4" name="boundaryTimer_Comune Inform Citizen Closing Sirens" attachedToRef="st_4">
+        <timerEventDefinition>
+        <timeDuration>
+          PT3H
+        </timeDuration>
+      </timerEventDefinition>
+      </boundaryEvent><boundaryEvent id="boundaryError_st_4" name="boundaryError_Comune Inform Citizen Closing Sirens" attachedToRef="st_4">
+        <errorEventDefinition errorRef="REQUIRE_ORCHESTRATION"></errorEventDefinition>
       </boundaryEvent><startEvent id="startEv_0" name="start_0"></startEvent><endEvent id="endEv_1" name="endEvent_1"></endEvent><serviceTask id="adaptationTask" name="adaptationTask" flowable:triggerable="false" activiti:class="nettunit.handler.adaptation.MUSAOrchestrationHandler">
       <extensionElements>
         
       </extensionElements>
-    </serviceTask><endEvent id="failureEndEvent" name="failureEndEvent"></endEvent><sequenceFlow id="flow_boundaryTimer_boundaryTimer_st_1" sourceRef="boundaryTimer_st_1" targetRef="adaptationTask">
+    </serviceTask><endEvent id="failureEndEvent" name="failureEndEvent"></endEvent><sequenceFlow id="flow_boundaryTimer_boundaryTimer_st_2" sourceRef="boundaryTimer_st_2" targetRef="adaptationTask">
+      
+    </sequenceFlow><sequenceFlow id="flow_boundaryTimer_boundaryError_st_2" sourceRef="boundaryError_st_2" targetRef="adaptationTask">
+      
+    </sequenceFlow><sequenceFlow id="flow_boundaryTimer_boundaryTimer_st_1" sourceRef="boundaryTimer_st_1" targetRef="adaptationTask">
       
     </sequenceFlow><sequenceFlow id="flow_boundaryTimer_boundaryError_st_1" sourceRef="boundaryError_st_1" targetRef="adaptationTask">
       
@@ -36,23 +64,31 @@
       
     </sequenceFlow><sequenceFlow id="flow_boundaryTimer_boundaryError_st_3" sourceRef="boundaryError_st_3" targetRef="adaptationTask">
       
+    </sequenceFlow><sequenceFlow id="flow_boundaryTimer_boundaryTimer_st_4" sourceRef="boundaryTimer_st_4" targetRef="adaptationTask">
+      
+    </sequenceFlow><sequenceFlow id="flow_boundaryTimer_boundaryError_st_4" sourceRef="boundaryError_st_4" targetRef="adaptationTask">
+      
+    </sequenceFlow><sequenceFlow id="flow_boundaryError_boundaryError_st_2" sourceRef="boundaryError_st_2" targetRef="adaptationTask">
+      
     </sequenceFlow><sequenceFlow id="flow_boundaryError_boundaryError_st_1" sourceRef="boundaryError_st_1" targetRef="adaptationTask">
       
     </sequenceFlow><sequenceFlow id="flow_boundaryError_boundaryError_st_3" sourceRef="boundaryError_st_3" targetRef="adaptationTask">
       
-    </sequenceFlow><sequenceFlow id="SequenceFlow_4" sourceRef="" targetRef="endEv_1">
+    </sequenceFlow><sequenceFlow id="flow_boundaryError_boundaryError_st_4" sourceRef="boundaryError_st_4" targetRef="adaptationTask">
+      
+    </sequenceFlow><sequenceFlow id="SequenceFlow_4" sourceRef="st_4" targetRef="endEv_1">
       <conditionExpression xsi:type="tFormalExpression">
       <![CDATA[${⊤}]]>
     </conditionExpression>
-    </sequenceFlow><sequenceFlow id="SequenceFlow_3" sourceRef="st_3" targetRef="">
+    </sequenceFlow><sequenceFlow id="SequenceFlow_3" sourceRef="st_3" targetRef="st_4">
       <conditionExpression xsi:type="tFormalExpression">
       <![CDATA[${⊤}]]>
     </conditionExpression>
-    </sequenceFlow><sequenceFlow id="SequenceFlow_2" sourceRef="" targetRef="st_3">
+    </sequenceFlow><sequenceFlow id="SequenceFlow_2" sourceRef="st_2" targetRef="st_3">
       <conditionExpression xsi:type="tFormalExpression">
       <![CDATA[${⊤}]]>
     </conditionExpression>
-    </sequenceFlow><sequenceFlow id="SequenceFlow_1" sourceRef="st_1" targetRef="">
+    </sequenceFlow><sequenceFlow id="SequenceFlow_1" sourceRef="st_1" targetRef="st_2">
       <conditionExpression xsi:type="tFormalExpression">
       <![CDATA[${⊤}]]>
     </conditionExpression>
