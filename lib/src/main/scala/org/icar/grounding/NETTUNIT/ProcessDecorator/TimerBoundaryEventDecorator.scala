@@ -10,7 +10,7 @@ class TimerBoundaryEventDecorator extends NETTUNITProcessDecorator {
 
   def getTimeConditionForTask(taskLabel: String): String = {
     taskLabel match {
-      case "involve_pertinent_roles_ct_mayor" => "PT30S"
+      case "Involve Pertinent Roles CT Mayor" => "PT30S"
       case _ => "PT3H"
     }
   }
@@ -29,8 +29,8 @@ class TimerBoundaryEventDecorator extends NETTUNITProcessDecorator {
         //Do I have a time constraint for the task?
 
         val abst = NETTUNITRepositoryDEMO.getFromServiceImplName(head.className)
-        abst
-        if (getTimeConditionForTask(abst.head.serviceName).isEmpty) {
+        println(s"decorate: ${head.label}")
+        if (getTimeConditionForTask(head.label).isEmpty) {
           //No, do not add any timer
           head :: decorateItemsAux(tail, itemID + 1)
         }
