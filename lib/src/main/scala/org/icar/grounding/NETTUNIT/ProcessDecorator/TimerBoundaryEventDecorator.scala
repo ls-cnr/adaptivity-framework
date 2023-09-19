@@ -10,7 +10,7 @@ class TimerBoundaryEventDecorator extends NETTUNITProcessDecorator {
 
   def getTimeConditionForTask(taskLabel: String): String = {
     taskLabel match {
-      case "involve_local_mayor" => "PT30S"
+      case "involve_pertinent_roles_ct_mayor" => "PT30S"
       case _ => "PT3H"
     }
   }
