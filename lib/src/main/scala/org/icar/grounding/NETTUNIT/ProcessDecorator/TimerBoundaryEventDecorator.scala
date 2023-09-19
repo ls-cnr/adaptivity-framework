@@ -30,7 +30,7 @@ class TimerBoundaryEventDecorator extends NETTUNITProcessDecorator {
 
         val abst = NETTUNITRepositoryDEMO.getFromServiceImplName(head.className)
         abst
-        if (getTimeConditionForTask(head.label).isEmpty) {
+        if (getTimeConditionForTask(abst.head.serviceName).isEmpty) {
           //No, do not add any timer
           head :: decorateItemsAux(tail, itemID + 1)
         }
