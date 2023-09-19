@@ -42,8 +42,9 @@ object Test_NETTUNIT_DEMO /*extends App */ {
     //val gm = goalModel2BPMN(goalModel)
 
     val goalModelDEMO = NETTUNITParser.loadGoalModelFromFile(goalModelDEMOPath)
-    var string_model = goalModelDEMO2BPMN(NETTUNITDefinitionsDEMO.initial, goalModelDEMO)
+    var string_model = goalModelDEMO2BPMN(NETTUNITDefinitionsDEMO.initial_adapt, goalModelDEMO)
 
+/*
     val goalModelComune = NETTUNITParser.loadGoalModelFromFile(goalModelCOMUNEPath)
     var string_model_comune = goalModelDEMO2BPMN(NETTUNITDefinitionsDEMO.initial_comune, goalModelComune)
 
@@ -62,6 +63,7 @@ object Test_NETTUNIT_DEMO /*extends App */ {
     Files.write(Paths.get("main_demo_process.bpmn"), string_model.getBytes(StandardCharsets.UTF_8))
     Files.write(Paths.get("comune_demo_process.bpmn"), string_model_comune.getBytes(StandardCharsets.UTF_8))
     Files.write(Paths.get("pcct_demo_process.bpmn"), string_model_pcct.getBytes(StandardCharsets.UTF_8))
+*/
 
     //println(string_model_pcct)
   }
@@ -128,15 +130,19 @@ object Test_NETTUNIT_DEMO /*extends App */ {
       //val ss_1 = solver.solution_set.partial_wts(0).to_decorated_graphviz(_.toString)
       //val ss_2 = solver.solution_set.partial_wts(0).to_graphviz(_.toString)
 
-      val wts = solver.solution_set.full_wts(0) //Get first working WTS
+      val wts_list = solver.solution_set.full_wts
+//      for (i <- wts_list) {
+//        println(i.transitions.size)
+//      }
+      val wts = wts_list.head //Get first working WTS
 
       val converter = new WTS2Solution(wts, my_problem.I)
 
-      //println("DOT")
-      //println("")
-      //println(converter.to_graphviz())
-      //println("")
-      //println("")
+//      println("DOT")
+//      println("")
+//      println(converter.to_graphviz())
+//      println("")
+//      println("")
 
       // Abstract WF to BPMN
       val solution = grounder.groundSolution(converter)
