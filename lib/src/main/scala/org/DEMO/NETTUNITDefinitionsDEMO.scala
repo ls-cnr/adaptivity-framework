@@ -517,7 +517,7 @@ object NETTUNITDefinitionsDEMO {
     params = List(),
     pre = Conjunction(List(
       GroundPredicate("emergency_location", List(AtomTerm("volcano"))),
-      //Negation(GroundPredicate("identified_incident", List(AtomTerm("volcano")))),
+      Negation(GroundPredicate("identified_incident", List(AtomTerm("volcano")))),
       //Negation(GroundPredicate("assessed_emergency", List()))
     )),
     post = GroundPredicate("identified_incident", List(AtomTerm("volcano"))),
@@ -583,7 +583,7 @@ object NETTUNITDefinitionsDEMO {
     id = "involve_pertinent_roles_inm",
 
     params = List(),
-    pre = GroundPredicate("scenario_evaluated", List()),
+    pre = GroundPredicate("involved_pertinent_bodies", List(AtomTerm("ct_mayor"))),
     post = GroundPredicate("involved_pertinent_bodies", List(AtomTerm("inm"))),
 
     effects = Array(
@@ -930,6 +930,7 @@ object NETTUNITDefinitionsDEMO {
   val initial_adapt =
     StateOfWorld(List(
       GroundPredicate("emergency_location", List(AtomTerm("volcano"))),
+      GroundPredicate("identified_incident", List(AtomTerm("volcano"))),
       GroundPredicate("scenario_evaluated", List()),
       GroundPredicate("involved_pertinent_bodies", List(AtomTerm("pcrs"))),
     ))
