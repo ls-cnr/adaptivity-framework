@@ -4,7 +4,6 @@ import org.icar.grounding.{CapabilityRepository, ConcreteCapability}
 
 object NETTUNITRepositoryDEMO extends CapabilityRepository {
 
-
   add("identifying_incident",
     ConcreteCapability(0,
       "Identifying Incident",
@@ -18,7 +17,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
   add("involve_pertinent_roles_pcrs",
     ConcreteCapability(1,
       "Involve Pertinent Roles Pcrs",
-      true,
+      false,
       "involve_pertinent_roles_pcrs",
       "nettunit.handler.demo.it.involve_pertinent_roles_pcrs",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
@@ -28,7 +27,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
   add("evaluate_incident_scenario",
     ConcreteCapability(2,
       "Evaluate Incident Scenario",
-      true,
+      false,
       "evaluate_incident_scenario",
       "nettunit.handler.demo.it.evaluate_incident_scenario",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
@@ -36,28 +35,20 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
   )
 
   add("involve_pertinent_roles_ct_mayor",
-    ConcreteCapability(1,
+    ConcreteCapability(3,
       "Involve Pertinent Roles CT Mayor",
-      true,
+      false,
       "involve_pertinent_roles_ct_mayor",
       "nettunit.handler.demo.it.involve_pertinent_roles_ct_mayor",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
-  add("involve_pertinent_roles_ct_vicemayor",
-    ConcreteCapability(1,
-      "Involve Pertinent Roles CT Vice Mayor",
-      true,
-      "involve_pertinent_roles_ct_mayor",
-      "nettunit.handler.demo.it.involve_pertinent_roles_ct_vice_mayor",
-      Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
-      Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
-  )
+
 
   add("involve_pertinent_roles_inm",
     ConcreteCapability(4,
       "Involve Pertinent Roles Inm",
-      true,
+      false,
       "involve_pertinent_roles_inm",
       "nettunit.handler.demo.it.involve_pertinent_roles_inm",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
@@ -67,7 +58,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
   add("update_airborne_dispersion_data",
     ConcreteCapability(5,
       "Update Airborne Dispersion Data",
-      true,
+      false,
       "update_airborne_dispersion_data",
       "nettunit.handler.demo.it.update_airborne_dispersion_data",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
@@ -77,7 +68,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
   add("involve_pertinent_roles_irib",
     ConcreteCapability(7,
       "Involve Pertinent Roles Irib",
-      true,
+      false,
       "involve_pertinent_roles_irib",
       "nettunit.handler.demo.it.involve_pertinent_roles_irib",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
@@ -87,7 +78,7 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
   add("update_health_risk_data",
     ConcreteCapability(8,
       "Update Health Risk Data",
-      true,
+      false,
       "update_health_risk_data",
       "nettunit.handler.demo.it.update_health_risk_data",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
@@ -97,41 +88,21 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
   add("inform_pcct",
     ConcreteCapability(9,
       "Inform PCCT",
-      true,
+      false,
       "inform_pcct",
       "nettunit.handler.demo.it.inform_pcct",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
 
-  add("inform_territory",
-    ConcreteCapability(9,
-      "Inform Territory",
-      true,
-      "inform_territory",
-      "nettunit.handler.demo.it.inform_territory",
-      Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
-      Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
-  )
-
-  add("inform_involved_crossborder_authorities",
-    ConcreteCapability(9,
-      "Inform Involved Crossborder Authorities",
-      true,
-      "inform_involved_crossborder_authorities",
-      "nettunit.handler.demo.it.inform_involved_crossborder_authorities",
-      Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
-      Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
-  )
 
 
 
-
-
+  //------- COMUNE PACHINO
   add("comune_involve_competent_roles",
     ConcreteCapability(10,
       "Comune Involve Competent Roles",
-      true,
+      false,
       "comune_involve_competent_roles",
       "nettunit.handler.demo.it.comune_involve_competent_roles",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
@@ -141,19 +112,9 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
   add("comune_decide_response_type",
     ConcreteCapability(11,
       "Comune Decide Response Type",
-      true,
+      false,
       "comune_decide_response_type",
       "nettunit.handler.demo.it.comune_decide_response_type",
-      Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
-      Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
-  )
-
-  add("comune_monitor_event_severity",
-    ConcreteCapability(13,
-      "Comune Monitor Event Severity",
-      true,
-      "comune_monitor_event_severity",
-      "nettunit.handler.demo.it.comune_monitor_event_severity",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
@@ -161,9 +122,19 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
   add("comune_inform_citizen_opening",
     ConcreteCapability(12,
       "Comune Inform Citizen Opening Sirens",
-      true,
+      false,
       "comune_inform_citizen_opening",
       "nettunit.handler.demo.it.comune_inform_citizen_opening_sirens",
+      Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
+      Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
+  )
+
+  add("comune_monitor_event_severity",
+    ConcreteCapability(13,
+      "Comune Monitor Event Severity",
+      false,
+      "comune_monitor_event_severity",
+      "nettunit.handler.demo.it.comune_monitor_event_severity",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
@@ -171,39 +142,20 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
   add("comune_inform_citizen_opening",
     ConcreteCapability(14,
       "Comune Inform Citizen Opening App",
-      true,
+      false,
       "comune_inform_citizen_opening",
       "nettunit.handler.demo.it.comune_inform_citizen_opening_app",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
 
-  add("comune_inform_citizen_closing",
-    ConcreteCapability(12,
-      "Comune Inform Citizen Closing Sirens",
-      true,
-      "comune_inform_citizen_closing",
-      "nettunit.handler.demo.it.comune_inform_citizen_closing_sirens",
-      Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
-      Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
-  )
-
-  add("comune_inform_citizen_closing",
-    ConcreteCapability(14,
-      "Comune Inform Citizen Closing App",
-      true,
-      "comune_inform_citizen_closing",
-      "nettunit.handler.demo.it.comune_inform_citizen_closing_app",
-      Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
-      Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
-  )
 
 
-
+  //PCCT
   add("pcct_involve_competent_roles",
     ConcreteCapability(15,
       "Pc Ct Involve Competent Roles",
-      true,
+      false,
       "pcct_involve_competent_roles",
       "nettunit.handler.demo.it.pcct_involve_competent_roles",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
@@ -213,18 +165,17 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
   add("pcct_decide_response_type",
     ConcreteCapability(16,
       "Pc Ct Decide Response Type",
-      true,
+      false,
       "pcct_decide_response_type",
       "nettunit.handler.demo.it.pcct_decide_response_type",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
 
-
   add("pcct_monitor_event_severity",
-    ConcreteCapability(18,
+    ConcreteCapability(17,
       "Pc Ct Monitor Event Severity",
-      true,
+      false,
       "pcct_monitor_event_severity",
       "nettunit.handler.demo.it.pcct_monitor_event_severity",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
@@ -232,9 +183,9 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
   )
 
   add("pcct_inform_citizen_opening",
-    ConcreteCapability(12,
+    ConcreteCapability(18,
       "PCCT Inform Citizen Opening Sirens",
-      true,
+      false,
       "pcct_inform_citizen_opening",
       "nettunit.handler.demo.it.pcct_inform_citizen_opening_sirens",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
@@ -242,35 +193,14 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
   )
 
   add("pcct_inform_citizen_opening",
-    ConcreteCapability(14,
+    ConcreteCapability(19,
       "PCCT Inform Citizen Opening App",
-      true,
+      false,
       "pcct_inform_citizen_opening",
       "nettunit.handler.demo.it.pcct_inform_citizen_opening_app",
       Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
-
-  add("pcct_inform_citizen_closing",
-    ConcreteCapability(12,
-      "PCCT Inform Citizen Closing Sirens",
-      true,
-      "pcct_inform_citizen_closing",
-      "nettunit.handler.demo.it.pcct_inform_citizen_closing_sirens",
-      Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
-      Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
-  )
-
-  add("pcct_inform_citizen_closing",
-    ConcreteCapability(14,
-      "PCCT Inform Citizen Closing App",
-      true,
-      "pcct_inform_citizen_closing",
-      "nettunit.handler.demo.it.pcct_inform_citizen_closing_app",
-      Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
-      Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
-  )
-
 
 
   /** ******************************************** */
@@ -479,5 +409,151 @@ object NETTUNITRepositoryDEMO extends CapabilityRepository {
       Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
   )
 
+
+
+
+
+  //------- comune GELA
+  add("comune_gela_involve_competent_roles",
+    ConcreteCapability(40,
+      "Comune Involve Competent Roles",
+      false,
+      "comune_involve_competent_roles",
+      "nettunit.handler.demo.it.comune_gela.involve_competent_roles",
+      Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
+      Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
+  )
+
+  add("comune_gela_decide_response_type",
+    ConcreteCapability(41,
+      "Comune Decide Response Type",
+      false,
+      "comune_decide_response_type",
+      "nettunit.handler.demo.it.comune_gela.decide_response_type",
+      Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
+      Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
+  )
+
+  add("comune_gela_monitor_event_severity",
+    ConcreteCapability(42,
+      "Comune Monitor Event Severity",
+      false,
+      "comune_monitor_event_severity",
+      "nettunit.handler.demo.it.comune_gela.monitor_event_severity",
+      Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
+      Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
+  )
+
+  add("comune_gela_inform_citizen_opening",
+    ConcreteCapability(43,
+      "Comune Inform Citizen Opening Sirens",
+      false,
+      "comune_inform_citizen_opening",
+      "nettunit.handler.demo.it.comune_gela.inform_citizen_opening_sirens",
+      Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
+      Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
+  )
+
+  add("comune_gela_inform_citizen_opening",
+    ConcreteCapability(44,
+      "Comune Inform Citizen Opening App",
+      false,
+      "comune_inform_citizen_opening",
+      "nettunit.handler.demo.it.comune_gela._inform_citizen_opening_app",
+      Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
+      Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
+  )
+
+  add("comune_gela_inform_citizen_closing",
+    ConcreteCapability(45,
+      "Comune Inform Citizen Closing Sirens",
+      false,
+      "comune_inform_citizen_closing",
+      "nettunit.handler.demo.it.comune_gela._inform_citizen_closing_sirens",
+      Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
+      Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
+  )
+
+  add("comune_gela_inform_citizen_closing",
+    ConcreteCapability(46,
+      "Comune Inform Citizen Closing App",
+      false,
+      "comune_inform_citizen_closing",
+      "nettunit.handler.demo.it.comune_gela.inform_citizen_closing_app",
+      Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
+      Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
+  )
+
+  add("involve_pertinent_roles_ct_mayor",
+    ConcreteCapability(47,
+      "Involve Pertinent Roles CT Vice Mayor",
+      false,
+      "involve_pertinent_roles_ct_mayor",
+      "nettunit.handler.demo.it.involve_pertinent_roles_ct_vice_mayor",
+      Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
+      Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
+  )
+
+  add("inform_territory",
+    ConcreteCapability(48,
+      "Inform Territory",
+      false,
+      "inform_territory",
+      "nettunit.handler.demo.it.inform_territory",
+      Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
+      Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
+  )
+
+  add("inform_involved_crossborder_authorities",
+    ConcreteCapability(49,
+      "Inform Involved Crossborder Authorities",
+      false,
+      "inform_involved_crossborder_authorities",
+      "nettunit.handler.demo.it.inform_involved_crossborder_authorities",
+      Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
+      Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
+  )
+
+  add("comune_inform_citizen_closing",
+    ConcreteCapability(50,
+      "Comune Inform Citizen Closing Sirens",
+      false,
+      "comune_inform_citizen_closing",
+      "nettunit.handler.demo.it.comune_inform_citizen_closing_sirens",
+      Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
+      Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
+  )
+
+  add("comune_inform_citizen_closing",
+    ConcreteCapability(51,
+      "Comune Inform Citizen Closing App",
+      false,
+      "comune_inform_citizen_closing",
+      "nettunit.handler.demo.it.comune_inform_citizen_closing_app",
+      Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
+      Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
+  )
+
+  add("pcct_inform_citizen_closing",
+    ConcreteCapability(52,
+      "PCCT Inform Citizen Closing Sirens",
+      false,
+      "pcct_inform_citizen_closing",
+      "nettunit.handler.demo.it.pcct_inform_citizen_closing_sirens",
+      Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
+      Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
+  )
+
+  add("pcct_inform_citizen_closing",
+    ConcreteCapability(53,
+      "PCCT Inform Citizen Closing App",
+      false,
+      "pcct_inform_citizen_closing",
+      "nettunit.handler.demo.it.pcct_inform_citizen_closing_app",
+      Some("nettunit.listener.TaskStartedExecutionListenerImpl"),
+      Some("nettunit.listener.TaskEndedExecutionListenerImpl"))
+  )
+
+  //----
 
 }
