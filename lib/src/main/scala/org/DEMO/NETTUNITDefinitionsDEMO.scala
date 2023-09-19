@@ -639,26 +639,26 @@ object NETTUNITDefinitionsDEMO {
     future = List.empty
   )
 
-  val inform_pcct = AbstractCapability(
-    id = "inform_pcct",
-
-    params = List(),
-    pre = GroundPredicate("updated_health_risk_data", List()),
-    post = GroundPredicate("involved_competent_roles", List(AtomTerm("pcct"))),
-
-    effects = Array(
-      EvolutionGrounding("involve_auths", Array[EvoOperator](
-        AddOperator(Predicate("involved_competent_roles", List(AtomTerm("pcct")))),
-      )),
-    ),
-    future = List.empty
-  )
+//  val inform_pcct = AbstractCapability(
+//    id = "inform_pcct",
+//
+//    params = List(),
+//    pre = GroundPredicate("updated_health_risk_data", List()),
+//    post = GroundPredicate("involved_competent_roles", List(AtomTerm("pcct"))),
+//
+//    effects = Array(
+//      EvolutionGrounding("involve_auths", Array[EvoOperator](
+//        AddOperator(Predicate("involved_competent_roles", List(AtomTerm("pcct")))),
+//      )),
+//    ),
+//    future = List.empty
+//  )
 
   val inform_territory = AbstractCapability(
     id = "inform_territory",
 
     params = List(),
-    pre = GroundPredicate("updated_health_risk_data", List()),
+    pre = GroundPredicate("involved_crossborder_authorities", List()),
     post = GroundPredicate("involved_competent_roles", List(AtomTerm("comune"))),
 
     effects = Array(
@@ -878,7 +878,7 @@ object NETTUNITDefinitionsDEMO {
     //ask_for_health_risk_estimate,
     involve_pertinent_roles_irib,
     update_health_risk_data,
-    inform_pcct,
+    //inform_pcct,
     inform_territory,
     inform_involved_crossborder_authorities,
 

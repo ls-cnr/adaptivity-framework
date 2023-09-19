@@ -17,12 +17,19 @@ GOAL managing_emergency IS AND OF {
     }
 
     GOAL involve_authorities IS AND OF {
-    	GOAL inform_local_authorities IS AND OF {
-    	    GOAL inform_pcct: WHEN updated_health_risk_data THEN THE SYSTEM ROLE SHALL ADDRESS FINALLY involved_competent_roles(pcct)
-            GOAL inform_territory: WHEN updated_health_risk_data THEN THE SYSTEM ROLE SHALL ADDRESS FINALLY involved_competent_roles(comune)
-    	}
-
     	GOAL inform_crossboarder_authorities: WHEN updated_health_risk_data THEN THE SYSTEM ROLE SHALL ADDRESS FINALLY involved_crossborder_authorities
+
+    	GOAL inform_local_authorities IS AND OF {
+    	    GOAL inform_territory: WHEN involved_crossborder_authorities THEN THE SYSTEM ROLE SHALL ADDRESS FINALLY involved_competent_roles(comune)
+     	}
+
+    }
+
+    GOAL process_comune IS AND OF {
+        GOAL comune_decide_response_type: WHEN involved_competent_roles(comune) THEN THE comune ROLE SHALL ADDRESS FINALLY decided_response_type(comune)
+        GOAL comune_inform_citizen: WHEN decided_response_type(comune) THEN THE comune ROLE SHALL ADDRESS FINALLY informed_citizens(comune,opening)
+        GOAL comune_monitor_event_severity: WHEN informed_citizens(comune,opening) THEN THE comune ROLE SHALL ADDRESS FINALLY assessed_event_severity(comune)
+        GOAL comune_inform_citizen_via_app: WHEN assessed_event_severity(comune) THEN THE comune ROLE SHALL ADDRESS FINALLY  informed_citizens(comune,closing)
     }
 }
 

@@ -42,7 +42,7 @@ object Test_NETTUNIT_DEMO /*extends App */ {
     //val gm = goalModel2BPMN(goalModel)
 
     val goalModelDEMO = NETTUNITParser.loadGoalModelFromFile(goalModelDEMOPath)
-    var string_model = goalModelDEMO2BPMN(NETTUNITDefinitionsDEMO.initial_adapt, goalModelDEMO)
+    var string_model = goalModelDEMO2BPMN(NETTUNITDefinitionsDEMO.initial, goalModelDEMO)
 
 /*
     val goalModelComune = NETTUNITParser.loadGoalModelFromFile(goalModelCOMUNEPath)
@@ -138,11 +138,11 @@ object Test_NETTUNIT_DEMO /*extends App */ {
 
       val converter = new WTS2Solution(wts, my_problem.I)
 
-//      println("DOT")
-//      println("")
-//      println(converter.to_graphviz())
-//      println("")
-//      println("")
+      println("DOT")
+      println("")
+      println(converter.to_graphviz())
+      println("")
+      println("")
 
       // Abstract WF to BPMN
       val solution = grounder.groundSolution(converter)
