@@ -26,7 +26,7 @@ object NETTUNITServer {
   val MUSAAddress = "localhost"
   val MUSAPort = 8081 //please, set different from rabbitMQ port, which by default is on 8080
 
-  var current_state: StateOfWorld = StateOfWorld(List.empty);
+  var current_state: StateOfWorld = StateOfWorld(List.empty)
 
   def executeProcess(opeartorName: String, requestDescription: String): Unit = {
 

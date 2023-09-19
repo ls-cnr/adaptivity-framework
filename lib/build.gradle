@@ -6,7 +6,7 @@
  * User Manual available at https://docs.gradle.org/7.3/userguide/building_java_projects.html
  */
 
-import com.github.jengelman.gradle.plugins.shadow.transformers.AppendingTransformer
+//import com.github.jengelman.gradle.plugins.shadow.transformers.AppendingTransformer
 
 
 plugins {
